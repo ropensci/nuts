@@ -6,7 +6,8 @@ Authors@R: c(person("Moritz", "Hennicke", email = "AAoritz@posteo.de", role = c(
 	     person("Werner", "Krause", email = "werner.krause@uni-potsdam.de", role = c("aut"),
 		   comment = c(ORCID = "0000-0002-5069-7964")))
 Description: Motivated by changing administrative boundaries over time, this package can convert European regional data with NUTS codes between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1, NUTS 2 and NUTS 3). The package uses spatial interpolation based on granular (100mx100m) population and land use data provided by the European Commission's Joint Research Center.  
-URL: https://AAoritz.github.io/nuts/
+URL: https://AAoritz.github.io/nuts/,
+    https://aaoritz.github.io/nuts/
 BugReports: https://github.com/AAoritz/nuts/
 License: MIT + file LICENSE
 Encoding: UTF-8

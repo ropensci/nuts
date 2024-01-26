@@ -1,9 +1,8 @@
+# nuts <img src="man/figures/logo.png" align="right" height="200"/>
+
   <!-- badges: start -->
   [![R-CMD-check](https://github.com/AAoritz/nuts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AAoritz/nuts/actions/workflows/R-CMD-check.yaml)
   <!-- badges: end -->
-
-
-# nuts <img src="man/figures/logo.png" align="right" height="200"/>
 
 Changing administrative regional boundaries over time complicates the construction of consistent regional panel data. The `nuts` package can transform European regional NUTS codes between different versions and levels with the aim to harmonize and link data sets at the regional NUTS level.
 
