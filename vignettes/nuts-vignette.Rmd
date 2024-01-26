@@ -24,12 +24,9 @@ output:
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
-  #collapse = TRUE,
-  #comment = "#>",
   dpi=300,
   fig.width = 8,
   fig.height = 5,
-  #fig.asp = 0.8,
   out.width = "100%",
   R.options = list(width = 70)
 )
@@ -103,7 +100,8 @@ See the Section [*Spatial interpolation in detail*](#method) for an in-depth des
 
 
 ```{r echo = FALSE , warning=F , message=F,results='hide'}
-library(nuts)
+#library(nuts)
+devtools::load_all()
 library(sf)
 library(ggplot2)
 library(dplyr)
@@ -298,9 +296,8 @@ pat.converted <- convert_nuts_version(
 ```
 
 ```{r,  echo=FALSE,include=FALSE, fig.cap="Converting patent data between versions"}
-library(sf)
 library(terra)
-library(ggplot2)
+
 no_2006 <-
   read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(LEVL_CODE == 2 & CNTR_CODE == "NO") %>%
@@ -661,7 +658,6 @@ This section describes the spatial interpolation procedure. We first cover the l
 Below, Norwegian NUTS-2 regions for the versions 2016 and 2021 are shown. All regions apart from Norway's most Northern region have been reorganized in this period.
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap="Norwegian NUTS-2 regions with boundary changes"}
-library(sf)
 library(ggpubr)
 
 no_2016 <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
@@ -782,29 +778,11 @@ To illustrate the main idea, the map below showcases **population densities** ac
 library(raster)
 library(ggrepel)
 
-no_merged <- bind_rows(no_2016, no_2021)
-
-no_inter <- st_intersection(no_2016, no_2021) %>%
-  dplyr::select(NUTS_ID, NUTS_ID.1) %>%
-  st_make_valid(.) %>%
-  st_collection_extract("POLYGON")
-
-for(i in 1:nrow(no_inter)){
-  no_inter$area[i] <- st_area(no_inter[i,])
-}
-no_inter <- no_inter %>%
-  arrange(desc(area)) %>%
-  slice(1:11) %>%
-  arrange(NUTS_ID) %>%
-  mutate(nuts_flow = paste0(NUTS_ID, "→", NUTS_ID.1)) %>%
-  st_make_valid(.)
-
 pop <- raster("JRC_1K_POP_2018.tif")
-no_inter <- no_inter %>% st_transform(crs(pop))
 no_2016_1 <- no_2016 %>% st_transform(crs(pop))
 no_2021_1 <- no_2021 %>% st_transform(crs(pop))
-no_pop <- crop(x = pop, y = as_Spatial(no_inter))
-no_pop <- mask(no_pop, as_Spatial(no_inter))
+no_pop <- crop(x = pop, y = as_Spatial(no_2016_1))
+no_pop <- mask(no_pop, as_Spatial(no_2016_1))
 no_pop_df <- as.data.frame(no_pop, xy = TRUE) %>%
   filter(!is.na(JRC_1K_POP_2018))
 
