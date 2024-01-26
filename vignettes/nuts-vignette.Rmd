@@ -1,0 +1,1117 @@
+---
+title: "nuts: Convert European Regional Data in R"
+author:
+  - name: "Moritz Hennicke"
+    url: https://hennicke.science/
+    orcid_id: 0000-0001-6811-1821
+  - name: "Werner Krause"
+    url: https://krausewe.github.io/ 
+    orcid_id: 0000-0002-5069-7964
+vignette: >
+  %\VignetteIndexEntry{nuts: Convert European Regional Data in R}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteEncoding{UTF-8}
+output: 
+  distill::distill_article:
+    theme: theme.css
+    toc: true
+    number_sections: true
+    toc_depth: 4
+  toc_float: 
+    collapsed: false
+    smooth_scroll: true
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  #collapse = TRUE,
+  #comment = "#>",
+  dpi=300,
+  fig.width = 8,
+  fig.height = 5,
+  #fig.asp = 0.8,
+  out.width = "100%",
+  R.options = list(width = 70)
+)
+
+# Needed to fix issues with phantom.js
+Sys.setenv(OPENSSL_CONF="/dev/null")
+```
+
+```{css, echo=FALSE}
+pre code {
+  white-space: pre-wrap;
+}
+```
+
+<!-- # Overview -->
+
+<!-- The `nuts` package simplifies the analysis of European regional data by providing an efficient offline solution for converting data between NUTS versions and levels. Leveraging the methodology and conversion matrices of the European Commission's [Joint Research Center (JRC)](https://urban.jrc.ec.europa.eu/nutsconverter/#/), this package is designed to address the challenges posed by time-varying boundaries of European regions. -->
+
+
+# Key Features
+
+:::float-image
+
+```{r out.width='150px', out.extra='style="float:left; padding:30px"', echo=FALSE}
+knitr::include_graphics("logo.png")
+```
+
+
+-   Efficient **offline conversion** of European regional data.
+
+-   Conversion between five NUTS **versions**: 2006, 2010, 2013, 2016, 2021.
+
+-   Conversion between three regional **levels**: NUTS-1, NUTS-2, NUTS-3.
+
+-   Ability to convert **multiple** NUTS versions at once when e.g. NUTS versions differ across countries and years. This scenario is common when working with data sourced from EUROSTAT.
+
+-   (Dasymetric) **Spatial interpolation** based on five **weights** (regional area size, 2011 and 2018 population size, 2012 and 2018 built-up area) built from granular [100m x 100m] geodata by the European Commission's [Joint Research Center (JRC)](https://urban.jrc.ec.europa.eu/nutsconverter/#/).
+
+:::
+
+
+
+# NUTS Codes
+
+The Nomenclature of Territorial Units for Statistics (NUTS) is a geocode standard for referencing the administrative divisions of European countries. A NUTS code starts with a two-letter combination indicating the country.[^1] The administrative subdivisions, or **levels**, are referred to with an additional number or a capital letter (NUTS-1). A second (NUTS-2) or third (NUTS-3) subdivision level is referred to with another digit each.
+
+For example, the German district *Northern Saxony* (*Nordsachsen*) is located within the region *Leipzig* and the federate state Saxony.
+
+-   NUTS-1: States
+    -   DED: Saxony
+-   NUTS-2: States/Government Regions
+    -   DED5: Leipzig
+-   NUTS-3: Districts
+    -   DED53: Northern Saxony
+
+Since administrative boundaries in Europe change for demographic, economic, political or others reasons, there are five different **versions** of the NUTS Nomenclature (2006, 2010, 2013, 2016, and 2021). The current version, effective from 1 January 2021, lists 104 regions at NUTS-1, 283 regions at NUTS-2, 1 345 regions at NUTS-3 level[^2].
+
+[^1]: [European Interinstitutional Style Guide](https://publications.europa.eu/code/en/en-5000600.htm) In the case of Greece for instance this code was changed from GR to EL in 2011. 
+
+[^2]: [2022 report of the European Union](https://ec.europa.eu/eurostat/documents/3859598/15193590/KS-GQ-22-010-EN-N.pdf)
+
+## Spatial interpolation in a nutshell
+
+When administrative units are restructured, regional data measured within old boundaries can be converted to the new boundaries under reasonable assumptions. The main task of this package is to use (**dasymetric**) **spatial interpolation** to accomplish this.
+
+Let's take the example of the German state Saxony in the figures below. Here, the NUTS-2 regions *Leipzig* (`DED3` &rarr; `DED5`) and *Chemnitz* (`DED1` &rarr; `DED4`) were reorganized. We are interested in the number of manure storage facilities in 2003 provided by [EUROSTAT](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table) based on the 2006 NUTS version. A part of *Leipzig* was reassigned to *Chemnitz* (center plot), prompting us to recalculate the number of storage facilities in the 2010 version (right plot).
+
+A simple approach is to redistribute manure storage facilities proportional to the transferred area, assuming equal distribution of manure storages across space. In a dasymetric approach, we could make use of built-up area, assuming that manure deposits are more likely to be found close to residential areas and economic sites. In our example, *Leipzig* lost about 7.7% ($\frac{5574}{72360}$) of its built-up area. We re-calculate the number of manure storage facilities by computing 7.7% of *Leipzig's* manure storages $\frac{5574}{72360} * 700 = 54$, subtracting them from Leipzig and adding them to *Chemnitz*.
+
+See the Section [*Spatial interpolation in detail*](#method) for an in-depth description of the weighting procedure.
+
+
+```{r echo = FALSE , warning=F , message=F,results='hide'}
+library(nuts)
+library(sf)
+library(ggplot2)
+library(dplyr)
+library(stringr)
+library(formatR)
+
+data(manure, package = "nuts")
+
+manure_indic <- manure %>%
+  filter(nchar(geo) == 4) %>%
+  filter(indic_ag == "I07A_EQ_Y") %>%
+  dplyr::select(-indic_ag ) %>%
+  filter( str_detect(geo, "^DE")) %>%
+  filter( time == 2003 )
+
+class <- manure_indic %>%
+  distinct(geo, .keep_all = T) %>%
+  classify_nuts(data = ., nuts_code = "geo")
+
+transf <- class %>% convert_nuts_version( to_version = "2010" , variables = c( 'values' = 'absolute' ) , weight = 'artif_surf12' )
+
+small <- manure_indic %>% filter( geo %in% c( 'DED1' , 'DED3' ) )
+small <- small %>% mutate( artif_surf12 = case_when( geo == "DED1" ~ 98648
+                                             , geo == "DED3" ~ 66786 + 5574
+))
+
+shape_06_n3 <- read_sf("NUTS_RG_20M_2006_3857.shp/NUTS_RG_20M_2006_3857.shp") %>%
+  filter(LEVL_CODE == 3 & CNTR_CODE == "DE") %>%
+  full_join( manure_indic , by = c("NUTS_ID" = "geo")) %>%
+  filter( str_detect( NUTS_ID , '^DED1|^DED3' ))
+
+shape_06_n2 <- read_sf("NUTS_RG_20M_2006_3857.shp/NUTS_RG_20M_2006_3857.shp") %>%
+  filter(LEVL_CODE == 2 & CNTR_CODE == "DE") %>%
+  full_join( manure_indic , by = c("NUTS_ID" = "geo")) %>%
+  filter( str_detect( NUTS_ID , '^DED1|^DED3' ))
+
+shape_06_n2_centr <- shape_06_n2 %>% st_centroid( )  %>% left_join( small , by = c("NUTS_ID" = "geo"))
+
+p_initial = ggplot() +
+  geom_sf(data = shape_06_n2 ,  linewidth = 1 , aes( fill = NUTS_ID )) +
+  geom_sf(data = shape_06_n3 , color = 'grey' , linewidth = .5 , fill = NA ) +
+  geom_sf_label( data = shape_06_n2_centr
+                 , aes( label = paste0( NUTS_ID , ': ' , NUTS_NAME , '\n' , values.x , ' facilties' , '\n' , 'BU: ' , artif_surf12 ))
+                 , size = 3
+  ) +
+  scale_fill_manual( values = c( "#177e89" , "#ffc857" )) +
+  theme_minimal( ) +
+  facet_wrap(~"2003 data\n\n(NUTS VERSION 2006)") +
+  theme(legend.position = "none"
+        , axis.text = element_blank( )
+        , axis.ticks = element_blank( )
+        , axis.title = element_blank( )
+  )
+
+DED33_centr <- shape_06_n3 %>% filter( NUTS_ID == "DED33" )  %>% st_centroid( ) %>% mutate( artif_surf12 = 5574 )
+
+shape_06_n2_step <- shape_06_n2 %>%
+  mutate( artif_surf12 = case_when( NUTS_ID == 'DED3' ~ 66786
+                            , NUTS_ID == 'DED1' ~ 98648 )
+          , NUTS_ID = case_when( NUTS_ID == 'DED3' ~ "DED5"
+                                 , NUTS_ID == 'DED1' ~ "DED4" )
+  )
+
+p_step = ggplot() +
+  geom_sf(data = shape_06_n2 ,  linewidth = 1 , aes( fill = NUTS_ID )) +
+  geom_sf(data = shape_06_n3 , color = 'grey' , fill = NA , linewidth = .5 ) +
+
+  geom_sf_label( data = shape_06_n2_step , aes( label = paste0( NUTS_ID , ': ' , NUTS_NAME , '\n' , '??? facilities' , '\n' , 'BU: ' , artif_surf12 ))
+                 , size = 3) +
+  geom_sf(data = shape_06_n3 %>% filter( NUTS_ID %in% c("DED33")), color = 'red' , fill = NA , linewidth = 1 ) +
+  geom_sf_text( data = DED33_centr , aes( label = paste0( "BU: \n" ,  artif_surf12 )), size = 3 , lineheight = .75 ) +
+  scale_fill_manual( values = c( "#177e89" , "#ffc857" )) +
+  theme_minimal( ) +
+  facet_wrap(~"2003 data\n\n(NUTS VERSION 2006 → 2010)") +
+  theme(legend.position = "none"
+        , axis.text = element_blank( )
+        , axis.ticks = element_blank( )
+        , axis.title = element_blank( ))
+
+moved <- 700 * (5574 / 72360)
+DED5 <- 700 - 54
+DED4 <- 2600 + 54
+
+shape_06_n2_final <- shape_06_n2_step %>%
+  mutate( artif_surf12 = case_when( NUTS_ID == 'DED5' ~ 66786
+                            , NUTS_ID == 'DED4' ~ 98648 + 5574 )
+          , values.x = case_when( NUTS_ID == 'DED5' ~ DED5
+                                  , NUTS_ID == 'DED4' ~ DED4 )
+  )
+
+p_final = ggplot() +
+  geom_sf(data = shape_06_n2 ,  linewidth = 1 , aes( fill = NUTS_ID )) +
+  geom_sf(data = shape_06_n3 , color = 'grey' , fill = NA , linewidth = .5 ) +
+  geom_sf_label( data = shape_06_n2_final
+                 , aes( label = paste0( NUTS_ID , ': ' , NUTS_NAME , '\n' , round( values.x , 1 ) , ' facilties' , '\n' , 'BU: ' , artif_surf12 ))
+                 , size = 3 ) +
+  geom_sf(data = shape_06_n3 %>% filter( NUTS_ID %in% c("DED33")), color = 'red' , fill = "#177e89" , linewidth = 1 ) +
+  scale_fill_manual( values = c( "#177e89" , "#ffc857" )) +
+  theme_minimal( ) +
+  facet_wrap(~"2003 data\n\n(NUTS VERSION 2010)") +
+  theme(legend.position = "none"
+        , axis.text = element_blank( )
+        , axis.ticks = element_blank( )
+        , axis.title = element_blank( ))
+```
+
+```{r,  echo=FALSE, fig.cap="Holdings with Manure Storage Facilities; BU = Built-Up Area in $m^{2}$"}
+gridExtra::grid.arrange( p_initial, p_step , p_final , nrow = 1 )
+```
+
+
+# Usage
+
+The package comes with three main functions:
+
+-   `classify_nuts()` detects the NUTS version(s) and level(s) of a data set. Its output can be directly fed into the two other functions.
+
+-   `convert_nuts_version()` converts your data to a desired NUTS version (2006, 2010, 2013, 2016, 2021). This transformation works in any direction.
+
+-   `convert_nuts_level()` aggregates data to some upper-level NUTS code, i.e., it transforms NUTS-3 data to the NUTS-2 or NUTS-1 level (but not vice versa).
+
+## Workflow
+
+The conversion can only be conducted after classifying the NUTS version(s) and level(s) of your data using the function `classify_nuts()`. This step ensures the validity and completeness of your NUTS codes before proceeding with the conversion.
+
+```{r , echo=FALSE, out.width='60%', fig.align="center", fig.cap="Sequential workflow to convert regional NUTS data"}
+knitr::include_graphics("flow.png")
+```
+
+
+
+## Identifying NUTS version and level
+
+The `classify_nuts()` function's main purpose is to find the most suitable NUTS **version** and to identify the **level** of the data set. Below, you see an example using patent application data (per one million inhabitants) for Norway in 2012 at the NUTS-2 level. This data is provided by EUROSTAT.
+
+```{r}
+# Load package
+library(nuts)
+
+# Loading and subsetting Eurostat data
+data(patents, package = "nuts")
+
+pat.n2 <- patents %>% filter(nchar(geo) == 4) # NUTS-2 values
+
+pat.n2.mhab.12.no <- pat.n2 %>%
+  filter(unit == "P_MHAB") %>% # Patents per one million inhabitants
+  filter(time == 2012) %>% # 2012
+  filter(str_detect(geo, "^NO")) %>%  # Norway
+  select(-unit)
+
+# Classifying the Data
+pat.classified <- classify_nuts(data = pat.n2.mhab.12.no,
+                                nuts_code = "geo")
+```
+
+The function returns a list with three items:
+
+1. The first item gives the **original data set** augmented with the columns `from_version`, `from_level`, and `country`, indicating the NUTS version that best suits the data. All functions of the package always group NUTS codes across **country names** which are automatically generated from the provided NUTS codes.
+
+Below, you see that all data entries correspond to the 2016 NUTS version.
+
+```{r}
+pat.classified[[1]]
+```
+
+2. The second item provides an overview of the share of matching NUTS codes for each of the five existing NUTS versions. The **overlap** is computed within country and possibly additional groups (if provided via the `group_vars` argument).  
+
+```{r}
+pat.classified[[2]]
+```
+
+3. The third item gives all NUTS codes that are **missing** across groups. Such missing codes might lead to conversion errors and are, by default, omitted from all conversion procedures. In our example, no NUTS codes are missing. 
+<!-- We recommend to check whether missing values for these NUTS codes can be replaced, perhaps with 0.  -->
+
+```{r}
+pat.classified[[3]]
+```
+
+
+## Converting data between NUTS versions
+
+Once the NUTS version and level are identified, you can easily **convert** the data to any other **NUTS version**. Here is an example of transforming the 2013 Norwegian data to the 2021 NUTS version. Between 2016 and 2021, the number of NUTS-2 regions in Norway decreased by one as the borders of six regions were transformed. The maps below show the affected regions. 
+We provide the classified NUTS data, specify the target NUTS version for data transformation, and supply the variable containing the values to be interpolated. It is important to indicate the **variable type** in the named input-vector since the interpolation approaches differ for [absolute and relative values](https://urban.jrc.ec.europa.eu/nutsconverter/docs/2022_08_04_NUTS_converter.pdf).
+
+```{r}
+# Converting Data to 2021 NUTS version
+pat.converted <- convert_nuts_version(
+  data = pat.classified,
+  to_version = "2021",
+  variables = c("values" = "relative")
+)
+```
+
+```{r,  echo=FALSE,include=FALSE, fig.cap="Converting patent data between versions"}
+library(sf)
+library(terra)
+library(ggplot2)
+no_2006 <-
+  read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  filter(LEVL_CODE == 2 & CNTR_CODE == "NO") %>%
+  full_join(pat.n2.mhab.12.no , by = c("NUTS_ID" = "geo"))
+
+no_changes <- cross_walks %>%
+  filter(
+    nchar(from_code) == 4,
+    from_version == 2016,
+    to_version == 2021,
+    grepl("^NO", from_code),
+    from_code != to_code
+  )
+
+no_changes <- unique(c(no_changes$from_code, no_changes$to_code))
+
+gg_2006 = ggplot() +
+  geom_sf(
+    data = no_2006,
+    aes(fill = values) ,
+    color = 'grey' ,
+    linewidth = .5
+  ) +
+  geom_sf(
+    data = no_2006 %>% filter(NUTS_ID %in% no_changes),
+    color = 'red' ,
+    fill = "#00000000"
+  ) +
+  scale_fill_continuous(high = "#132B43",
+                        low = "#56B1F7",
+                        name = "Patents per 1 M habitants") +
+  theme_minimal() +
+  facet_wrap( ~ "Original 2012 data\n\n(NUTS VERSION 2016)")
+
+no_2021 <-
+  read_sf("NUTS_RG_20M_2021_3857.shp/NUTS_RG_20M_2021_3857.shp") %>%
+  filter(LEVL_CODE == 2 & CNTR_CODE == "NO") %>%
+  full_join(pat.converted , by = c("NUTS_ID" = "to_code")) %>%
+  filter(NUTS_ID != "NO0B")
+
+gg_2021 = ggplot() +
+  geom_sf(
+    data = no_2021,
+    aes(fill = values) ,
+    color = 'grey' ,
+    linewidth = .5
+  ) +
+  geom_sf(
+    data = no_2021 %>% filter(NUTS_ID %in% no_changes),
+    color = 'red' ,
+    fill = "#00000000"
+  ) +
+  scale_fill_continuous(high = "#132B43",
+                        low = "#56B1F7",
+                        name = "Patents per 1 M habitants") +
+  theme_minimal() +
+  facet_wrap( ~ "Transformed data\n\n(NUTS VERSION 2021)")
+
+```
+
+```{r,  echo=FALSE}
+ggpubr::ggarrange( gg_2006 , gg_2021 , nrow = 1 , common.legend = T, legend = "bottom")
+```
+
+The output below displays the corresponding data frames based on the original and converted NUTS codes. The original data set comprises of seven observations, whereas the converted data set contains six. The regions `NO01`, `NO03`, `NO04`, and `NO05` are lost, while `NO08`, `NO09`, and `NO0A` are now listed.
+
+```{r}
+pat.n2.mhab.12.no
+```
+
+```{r}
+pat.converted
+```
+
+
+### Converting multiple variables simultaneously
+
+You can also convert **multiple variables** at once. Below, we add the number of patent applications per 1000 inhabitants as a second variable:
+
+```{r}
+# Converting Multiple Variables
+pat.n2.mhab.12.no %>%
+  mutate(values_per_thous = values * 1000) %>%
+  classify_nuts(
+    data = .,
+    nuts_code = "geo"
+    ) %>%
+  convert_nuts_version(
+    data = .,
+    to_version = "2021",
+    variables = c("values" = "relative",
+                  "values_per_thous" = "relative")
+  )
+```
+
+### Converting grouped data
+
+Longitudinal regional data, as commonly supplied by EUROSTAT, often comes with varying NUTS versions across countries and years (and other dimensions). It is possible to harmonize data across such **groups** using `convert_nuts_version()` with the `group_vars` argument. Below, we transform data within country and year groups for Sweden, Slovenia, and Croatia to the 2021 NUTS version.
+
+```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+# Classifying grouped data (time)
+pat.n2.mhab.sesihr <- pat.n2 %>%
+  filter(unit == "P_MHAB") %>%
+  filter(str_detect(geo, "^SE|^SI|^HR"))
+
+pat.classified <- classify_nuts(
+  nuts_code = "geo",
+  data = pat.n2.mhab.sesihr,
+  group_vars = "time"
+  )
+```
+
+Note that the detected best-fitting NUTS versions differ countries:
+
+```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
+pat.classified[[1]] %>%
+  group_by(country, from_version) %>%
+  tally()
+```
+
+The grouping is stored and passed on to the conversion function:
+
+```{r}
+# Converting grouped data (Time)
+pat.converted <- convert_nuts_version(
+  data = pat.classified,
+  to_version = "2021",
+  variables = c("values" = "relative")
+)
+```
+
+Conveniently, the group argument can also be used to transform higher dimensional data. Below, we include two indicators for patent applications to convert data that varies at the indicator-year-country-NUTS code level.
+
+```{r}
+# Classifying and converting multi-group data
+pat.n2.mhabmact.12.sesihr <- pat.n2 %>%
+  filter(unit %in% c("P_MHAB", "P_MACT")) %>%
+  filter(str_detect(geo, "^SE|^SI|^HR"))
+
+pat.converted <- pat.n2.mhabmact.12.sesihr %>%
+  classify_nuts(
+    data = .,
+    nuts_code = "geo",
+    group_vars = c("time", "unit")
+  ) %>%
+  convert_nuts_version(
+    data = .,
+    to_version = "2021",
+    variables = c("values" = "relative")
+  )
+```
+
+## Converting data between NUTS levels
+
+The `convert_nuts_level()` function facilitates the **aggregation** of data from lower NUTS **levels** to higher ones using spatial weights. This enables users to summarize variables upward from the NUTS-3 level to NUTS-2 or NUTS-1 levels. It is important to note that this function does not support disaggregation since this comes with strong assumptions about the spatial distribution of a variable's values.
+
+In the following example, we illustrate how to aggregate the total number of patent applications in Sweden from NUTS-3 to higher levels. The functions below return a warning concerning non-identifiable NUTS codes. See [*Non-identified NUTS codes*](#nuts_not_identified) for further information.
+
+```{r}
+data("patents", package = "nuts")
+# Aggregating data from NUTS-3 to NUTS-2 and NUTS-1
+pat.n3 <- patents %>% filter(nchar(geo) == 5)
+
+pat.n3.nr.12.se <- pat.n3 %>%
+  filter(unit %in% c("NR")) %>%
+  filter(time == 2012) %>%
+  filter(str_detect(geo, "^SE"))
+
+pat.classified <- classify_nuts(data = pat.n3.nr.12.se,
+                                nuts_code = "geo")
+
+pat.level2 <- convert_nuts_level(
+  data = pat.classified,
+  to_level = 2,
+  variables = c("values" = "absolute")
+)
+
+pat.level1 <- convert_nuts_level(
+  data = pat.classified,
+  to_level = 1,
+  variables = c("values" = "absolute")
+)
+```
+
+```{r,  echo=FALSE, fig.cap="Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1"}
+eu_nuts3 <-
+  read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  filter(LEVL_CODE == 3) %>%
+  full_join(pat.n3.nr.12.se , by = c("NUTS_ID" = "geo")) %>%
+  filter(str_detect(NUTS_ID, "^SE"))
+
+eu_nuts2 <-
+  read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  filter(LEVL_CODE == 2) %>%
+  full_join(pat.level2 , by = c("NUTS_ID" = "to_code")) %>%
+  filter(str_detect(NUTS_ID, "^SE"))
+
+eu_nuts1 <-
+  read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  filter(LEVL_CODE == 1) %>%
+  full_join(pat.level1 , by = c("NUTS_ID" = "to_code")) %>%
+  filter(str_detect(NUTS_ID, "^SE"))
+
+gg_nuts3 = ggplot() +
+  geom_sf(
+    data = eu_nuts3,
+    aes(fill = values) ,
+    color = 'grey' ,
+    linewidth = .25
+  ) +
+  scale_fill_continuous(high = "#132B43", low = "#56B1F7") +
+  theme_minimal() + theme(legend.position = "bottom") +
+  facet_wrap( ~ "NUTS-3 data")
+
+gg_nuts2 = ggplot() +
+  geom_sf(
+    data = eu_nuts2,
+    aes(fill = values) ,
+    color = 'grey' ,
+    linewidth = .25
+  ) +
+  scale_fill_continuous(high = "#132B43", low = "#56B1F7") +
+  theme_minimal() + theme(legend.position = "bottom") +
+  facet_wrap( ~ "NUTS-2 data")
+
+gg_nuts1 = ggplot() +
+  geom_sf(
+    data = eu_nuts1,
+    aes(fill = values) ,
+    color = 'grey' ,
+    linewidth = .25
+  ) +
+  scale_fill_continuous(high = "#132B43", low = "#56B1F7") +
+  theme_minimal() + theme(legend.position = "bottom") +
+  facet_wrap( ~ "NUTS-1 data")
+
+ggpubr::ggarrange(gg_nuts3 , gg_nuts2 , gg_nuts1 , nrow = 1)
+
+```
+
+## Inconsistent versions and levels
+
+### Non-identified NUTS codes {#nuts_not_identified}
+
+If the input data contains NUTS codes that cannot be identified in any NUTS version, the output of `classifiy_nuts` lists all of these codes. All conversion procedures (`convert_nuts_version()` and `convert_nuts_level()`) will work as expected while ignoring values for these regions.
+
+The example below classifies 2012 patent data from Denmark. The original EUROSTAT data contains the codes `DKZZZ` and `DKXXX`, which are not part of the conversion matrices. Codes ending with the letter Z refer to "[Extra-Regio](https://stat.gov.pl/en/regional-statistics/classification-of-territorial-units/classification-of-territorial-units-for-statistics-nuts/principles-for-creation-and-development-of-nuts-units/)" territories. These codes collect statistics for territories that cannot be attached to a certain region.[^3] Codes ending with the letter X refer to observations with unknown regions.
+
+[^3]: Such as air-space, territorial waters and the continental shelf, embassies, consulates, military bases and deposits of oil, natural gas, etc. in international waters.
+
+```{r}
+pat.n3.nr.12.dk <- pat.n3 %>%
+  filter(unit %in% c("NR")) %>%
+  filter(time == 2012) %>%
+  filter(str_detect(geo, "^DK"))
+
+pat.classified <- classify_nuts(data = pat.n3.nr.12.dk, nuts_code = "geo")
+```
+
+### Missing NUTS codes
+
+`classify_nuts()` also checks whether the NUTS codes provided are complete. Missing values in the input data will, by default, result in missing values for all affected transformed regions in the output data. 
+
+The example below illustrates this case.
+
+```{r}
+pat.n3.nr.12.si <- pat.n3 %>%
+  filter(unit %in% c("NR")) %>%
+  filter(time == 2012) %>%
+  filter(str_detect(geo, "^SI"))
+
+pat.classified <- classify_nuts(data = pat.n3.nr.12.si, nuts_code = "geo")
+```
+
+`classify_nuts()` returns a warning that NUTS codes are missing in the input data. These codes can be inspected by calling `pat.classified[3]`. 
+
+```{r}
+pat.classified[3]
+```
+
+The resulting conversion returns three missing values as the source code `SI011` transformed into `SI031` and the region `SI016` was split into `SI036` and `SI037`.
+
+```{r}
+convert_nuts_version(data = pat.classified, 
+                     to_version = "2021", 
+                     variables = c("values" = "absolute")) %>% 
+  filter(is.na(values))
+```
+
+Users have three options to overcome this problem.
+
+  1. The warning can be ignored and the conversion proceeds while returning `NA`s (see above).
+
+  2. Users check whether the missing values can be replaced by, e.g., using alternative sources or imputing missing values.
+
+  3. The argument `missing_rm` can be set to `TRUE`. In this case, missing values will be removed from the input data. Effectively, the interpolation procedures assume that missing values can be replaced with `0`, which may be a very strong assumption depending on the context.
+
+```{r}
+convert_nuts_version(
+  data = pat.classified, 
+  to_version = "2021", 
+  variables = c("values" = "absolute"),
+  missing_rm = TRUE
+  ) %>% 
+  filter(to_code %in% c("SI031", "SI036", "SI037"))
+```
+
+
+### Multiple NUTS levels within groups
+
+The package does not allow for the conversion of **multiple NUTS levels** at once. The classification function will throw an error in this case. The conversion needs to be conducted for every level separately. 
+
+```{r, error=TRUE}
+patents %>% 
+  filter(nchar(geo) %in% c(4, 5), grepl("^EL", geo)) %>% 
+  distinct(geo, .keep_all = T) %>% 
+  classify_nuts(nuts_code = "geo", data = .)
+```
+
+### Multiple NUTS versions within groups
+
+Converting **multiple NUTS versions** within groups might lead to erroneous spatial interpolations since overlaps between regions of different versions are possible.
+
+The example below illustrates this problem. We classify German and Italian manure storage facility data from EUROSTAT without specifying `group_vars`. Instead, we keep all unique NUTS codes to artificially create a data set containing different NUTS versions. `classify_nuts()` returns a warning and by inspecting the identified versions, we see that there are mixed versions within groups (the countries).
+
+```{r}
+man.deit <- manure %>% 
+  filter(grepl("^DE|^IT", geo)) %>%
+  filter(nchar(geo) == 4, ) %>% 
+  distinct(geo, .keep_all = T) %>% 
+  classify_nuts(nuts_code = "geo", data = .)
+
+man.deit[[1]] %>% group_by(country, from_version) %>% tally()
+```
+
+When proceeding to the conversion with either `convert_nuts_version()` or `convert_nuts_level()`, both functions will throw an error. For convenience, we added the option `multiple_versions` that subsets the supplied data to the dominant version within groups when specified with `most_frequent`. Hence, all codes from other, non-dominant versions are discarded. 
+
+Once we convert this data set, all NUTS regions unrecognized acoording to the 2006 (Germany) and 2021 (Italy) version are dropped automatically. 
+
+```{r}
+man.deit.converted <- convert_nuts_version(
+  data = man.deit,
+  to_version = 2021,
+  variables = c("values" = "relative"),
+  multiple_versions = "most_frequent"
+)
+
+man.deit.converted %>% group_by(country, to_version) %>% tally()
+```
+
+
+# Spatial interpolation in detail {#method}
+
+This section describes the spatial interpolation procedure. We first cover the logic of conversion tables and then explain the methods used in the package for converting versions and levels.
+
+## Changes in administrative boundaries
+
+Below, Norwegian NUTS-2 regions for the versions 2016 and 2021 are shown. All regions apart from Norway's most Northern region have been reorganized in this period.
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap="Norwegian NUTS-2 regions with boundary changes"}
+library(sf)
+library(ggpubr)
+
+no_2016 <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  filter(grepl("^NO", NUTS_ID), nchar(NUTS_ID) == 4) %>%
+  mutate(nuts = paste0(NUTS_ID, "\n", NUTS_NAME))
+
+no_2021 <- read_sf("NUTS_RG_20M_2021_3857.shp/NUTS_RG_20M_2021_3857.shp") %>%
+  filter(grepl("^NO", NUTS_ID), nchar(NUTS_ID) == 4, NUTS_ID != "NO0B") %>%
+  mutate(nuts = paste0(NUTS_ID, "\n", NUTS_NAME))
+
+no_codes <- unique(c(no_2016$NUTS_ID, no_2021$NUTS_ID))
+colorz = RColorBrewer::brewer.pal(length(no_codes), "Set3")
+names(colorz) <- no_codes
+
+b = 1700000
+gg_2016 = ggplot() +
+  geom_sf(data = no_2016, aes(fill = NUTS_ID ) , color = 'grey' , linewidth = .5 ) +
+  scale_fill_manual(values = colorz) +
+  geom_sf_text(data = no_2016, aes(label = NUTS_ID)) +
+  theme_minimal( ) +
+  labs(subtitle = "2016 version") +
+  xlab("") + ylab("") +
+  coord_sf(xlim = c(504756.9,3441975-b), ylim = c(7965649,11442790-b))
+
+gg_2021 = ggplot() +
+  geom_sf(data = no_2021, aes(fill = NUTS_ID ) , color = 'grey' , linewidth = .5 ) +
+  scale_fill_manual(values = colorz) +
+  geom_sf_text(data = no_2021, aes(label = NUTS_ID)) +
+  theme_minimal( ) +
+  labs(subtitle = "2021 version") +
+  xlab("") + ylab("") +
+  coord_sf(xlim = c(504756.9,3441975-b), ylim = c(7965649,11442790-b))
+
+gg = ggarrange( gg_2016 , gg_2021 , nrow = 1 ,  legend = "none")
+annotate_figure(gg) #, top = text_grob("Norwegian NUTS-2 regions with boundary changes"))
+```
+
+The changes between the two versions can be summarized as follows:
+
+1. Boundary changes of regions with **continued** NUTS codes
+- `NO02` ceases a small area to the new `NO08`
+- `NO06` makes small area gains from `NO05`
+
+2. Changes to regions with **discontinued** NUTS codes
+- `NO01` is absorbed by `NO08`
+- `NO03` is split up between `NO08` and `NO09`
+- `NO04` divides into `NO0A` and `NO09`
+- `NO05` largely becomes the new `NO0A`, and gives a small area to `NO06`
+
+
+## Spatial interpolation and conversion tables
+
+To keep track of these changes, the `nuts` package uses regional flows between different NUTS versions. The package ships with a **conversion table** that can be called with `data(cross_walks)` based on [data provided by the JRC](https://urban.jrc.ec.europa.eu/nutsconverter/#/). It documents all boundary changes of NUTS regions.
+
+For Norway going from version 2016 to 2021, the table looks as follows:
+
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE}
+library(kableExtra)
+
+no_walks <- cross_walks %>%
+  filter(nchar(from_code) == 4,
+         from_version == 2016,
+         to_version == 2021,
+         grepl("^NO", from_code))
+
+kable(no_walks, "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, background = 'azure') %>%
+  column_spec(2, background = 'aquamarine') %>%
+  column_spec(3, background = 'azure') %>%
+  column_spec(4, background = 'aquamarine') %>%
+  scroll_box(width = "100%") 
+```
+
+In addition to tracing the evolution of NUTS codes, the table contains **flows** of area, population and artificial surfaces between regions and versions. These flows were computed by the JRC with granular [100m x 100m] geographic data. The `ggalluvial` plot below visualizes the flows of area size between the NUTS-2 regions mapped above.
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap= "Alluvial plot illustrating area size flows"}
+library(ggalluvial)
+
+# Add names
+no_2016_names <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  select(from_code = NUTS_ID, from_name = NUTS_NAME) %>%
+  st_set_geometry(NULL)
+no_2021_names <- read_sf("NUTS_RG_20M_2021_3857.shp/NUTS_RG_20M_2021_3857.shp") %>%
+  select(to_code = NUTS_ID, to_name = NUTS_NAME) %>%
+  st_set_geometry(NULL)
+
+no_walks <- no_walks %>%
+  inner_join(no_2016_names) %>%
+  inner_join(no_2021_names)
+
+gg_pop_flows <- no_walks %>%
+  mutate(from = paste0(from_code, "\n", from_name),
+         to = paste0(to_code, "\n", to_name)) %>%
+  arrange(desc(to_code)) %>%
+  ggplot(data = .,
+       aes(axis1 = from, axis2 = to,
+           y = areaKm ^ 0.3)) +
+  geom_alluvium(aes(fill = from)) +
+  geom_stratum() +
+    scale_x_discrete(limits = c("v2016", "v2021")) +
+    ggfittext::geom_fit_text(stat = "stratum", width = 1/4, min.size = 3, aes(label = after_stat(stratum))) +
+    theme_minimal() +
+    theme(axis.text.y=element_blank(),
+          axis.ticks.y=element_blank())+
+    ylab("Area (sqkm)") +
+  theme(legend.position = "none")+
+  labs(title = "NUTS-2 Area Flows in Norway from versions 2016 to 2021",
+       caption = "Flow size is scaled for improved readability")
+gg_pop_flows
+```
+
+
+To illustrate the main idea, the map below showcases **population densities** across NUTS-2 regions. As population is not uniformly distributed across space, weighting regions dependent on their size might come with strong assumptions. For instance, region `NO01` in version 2016, that contains the city of Oslo, makes a relatively modest geographical contribution to the new region `NO08`, but significantly bolsters the population of the latter. Assuming that the variable to be converted is correlated with population across space, the conversion can thus be refined using population weights to account for flows between different versions.
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, out.width = "100%", fig.width = 7, fig.cap= "Spatial distribution of population and boundary changes"}
+library(raster)
+library(ggrepel)
+
+no_merged <- bind_rows(no_2016, no_2021)
+
+no_inter <- st_intersection(no_2016, no_2021) %>%
+  dplyr::select(NUTS_ID, NUTS_ID.1) %>%
+  st_make_valid(.) %>%
+  st_collection_extract("POLYGON")
+
+for(i in 1:nrow(no_inter)){
+  no_inter$area[i] <- st_area(no_inter[i,])
+}
+no_inter <- no_inter %>%
+  arrange(desc(area)) %>%
+  slice(1:11) %>%
+  arrange(NUTS_ID) %>%
+  mutate(nuts_flow = paste0(NUTS_ID, "→", NUTS_ID.1)) %>%
+  st_make_valid(.)
+
+pop <- raster("JRC_1K_POP_2018.tif")
+no_inter <- no_inter %>% st_transform(crs(pop))
+no_2016_1 <- no_2016 %>% st_transform(crs(pop))
+no_2021_1 <- no_2021 %>% st_transform(crs(pop))
+no_pop <- crop(x = pop, y = as_Spatial(no_inter))
+no_pop <- mask(no_pop, as_Spatial(no_inter))
+no_pop_df <- as.data.frame(no_pop, xy = TRUE) %>%
+  filter(!is.na(JRC_1K_POP_2018))
+
+c=500000
+d=500000
+no_2016_no01 <- no_2016_1 %>% filter( NUTS_ID %in% c( 'NO01' , 'NO03' ))
+no_2021_no08 <- no_2021_1 %>% filter( NUTS_ID %in% c( 'NO08' ))
+gg_pop = ggplot() +
+  geom_raster(data = no_pop_df, aes(x = x, y = y, fill = JRC_1K_POP_2018)) +
+  geom_sf(data = no_2016_1, color = "#636363", fill = NA, lwd = .5 ) +
+  geom_sf(data = no_2016_no01 , aes( color = NUTS_ID ) , fill = NA, lwd = .5 ) +
+  scale_fill_gradientn(name = "2018 Population", colors = terrain.colors(10),
+                       na.value = NA) +
+  geom_label_repel(data = no_2016_no01, aes(label = NUTS_ID, geometry = geometry , color = NUTS_ID )
+                   , stat = "sf_coordinates", size = 3.5
+                   , point.padding = 15
+                   , fill = alpha(c("white"),0.9)) +
+  scale_color_manual( values = c( 'orange' , 'red' )) +
+  coord_sf(xlim = c(4023000,5130000-c), ylim = c(3879000,5411000-d))+
+  theme_minimal()+
+  theme(legend.position = "none"
+        , axis.text = element_blank( )
+        , axis.ticks = element_blank( )
+        , axis.title = element_blank( ))+
+  xlab("") + ylab("")+
+  labs(title = "2016 NUTS version")
+
+gg_pop2 = ggplot() +
+  geom_raster(data = no_pop_df, aes(x = x, y = y, fill = JRC_1K_POP_2018)) +
+  geom_sf(data = no_2021_1, color = "#636363", fill = NA, lwd = .5 ) +
+  geom_sf(data = no_2021_1 %>% filter( NUTS_ID %in% c( 'NO08' )), color = "blueviolet", fill = NA, lwd = .5 ) +
+  scale_fill_gradientn(name = "2018 Population", colors = terrain.colors(10),
+                       na.value = NA) +
+  geom_label_repel(data = no_2021_no08, aes(label = NUTS_ID, geometry = geometry )
+                   , stat = "sf_coordinates", size = 3.5
+                   , point.padding = 15
+                   , color = "blueviolet"
+                   , fill = alpha(c("white"),0.9)) +
+  coord_sf(xlim = c(4023000,5130000-c), ylim = c(3879000,5411000-d))+
+  theme_minimal()+
+  theme(legend.position = "none"
+        , axis.text = element_blank( )
+        , axis.ticks = element_blank( )
+        , axis.title = element_blank( ))+
+  xlab("") + ylab("")+
+  labs(title = "2021 NUTS version")
+ggpubr::ggarrange( gg_pop , gg_pop2 )
+```
+
+## Conversion methods
+
+The following subsections describe the method used to convert absolute and relative values between versions and levels.
+
+### Conversion of absolute values between versions
+
+In this example, we transform **absolute** values, the number of patent applications (`NR`) in Norway, from **version** 2016 to 2021, utilizing spatial interpolation based on the population distribution in 2018.
+
+The conversion employs the `cross_walks` table, which includes population flow data (expressed in thousands) between two NUTS-2 regions from the source version to the target version. The function joins the our variable of interest, `NR`, which varies across the departing NUTS-2 codes (`from_code`). The function initially calculates a **weight** (`w`) equal to the population flow's share of the total population in the departing region in version 2016 (`from_code`):
+
+```{r,  include = F}
+pat.n2.nrmhab.12.no <- patents %>%
+  filter(nchar(geo) == 4) %>%  # NUTS-2 values
+  filter(unit %in% c("NR", "P_MHAB")) %>%
+  filter(time == 2012) %>% # 2012
+  filter(str_detect(geo, "^NO")) %>%  # Norway
+  dplyr::select(-"time") %>%
+  tidyr::pivot_wider(id_cols = c("geo"), names_from = "unit",
+              values_from = "values")
+
+classification <- pat.n2.nrmhab.12.no %>%
+  classify_nuts(nuts_code = "geo")
+
+conversion_m_long <- classification[[1]] %>%
+  filter(!is.na(from_version)) %>%
+  inner_join(filter(cross_walks, to_version == 2021),
+             by = c("from_code", "from_version")) %>%
+  mutate(pop18 = round(pop18 / 1000, 2)) %>%
+  mutate_at(vars(NR, P_MHAB, pop18), list(~as.integer(.))) %>%
+  dplyr::select(from_code, to_code, from_version , to_version, NR, P_MHAB, pop18)
+
+convert_abs <- conversion_m_long %>%
+  group_by(from_code, from_version) %>%
+  mutate(w = round(pop18 / sum(pop18), 2)) %>%
+  ungroup()
+
+# Illustrate calculation
+from_code_vec = unique(convert_abs$from_code)
+calcs = list()
+for(i in seq_along(from_code_vec)){
+  print(i)
+  convert_abs_sub = convert_abs %>%
+  filter(from_code %in% from_code_vec[i])
+  calcs[[i]] = paste(convert_abs_sub$pop18, collapse = " + ")
+}
+calcs <- data.frame(from_code = from_code_vec, denom = unlist(calcs))
+convert_abs_calc <- convert_abs %>%
+  inner_join(calcs) %>%
+  mutate(w = paste0(pop18, "/(", denom, ") = ", w)) %>%
+  dplyr::select(-denom, -P_MHAB)
+```
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE}
+kable(convert_abs_calc, "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, background = 'azure') %>%
+  column_spec(2, background = 'aquamarine') %>%
+  column_spec(3, background = 'azure') %>%
+  column_spec(4, background = 'aquamarine') %>%
+  column_spec(7, background = '#FFBBFF') %>%
+  scroll_box(width = "100%") 
+```
+
+
+To obtain the number of patent applications at the desired 2021 version, the function summarizes the data for the new NUTS regions in version 2021 (`to_code`) by taking the **population-weighted sum** of all flows.
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE}
+to_code_vec = unique(convert_abs$to_code)
+calcs = list()
+for (i in seq_along(to_code_vec)) {
+  convert_abs_sub = convert_abs %>%
+    filter(to_code %in% to_code_vec[i])
+  calcs[[i]] = paste(paste0(convert_abs_sub$NR, "*", convert_abs_sub$w),
+                     collapse = " + ")
+}
+calcs <- data.frame(to_code = to_code_vec, NR = unlist(calcs))
+
+converted_abs <- convert_abs %>%
+  group_by(to_code, to_version) %>%
+  summarise(NR_res = sum(NR * w)) %>%
+  ungroup()
+
+converted_abs_calc <- inner_join(converted_abs, calcs) %>%
+  mutate(NR = paste0(NR, " = " , NR_res)) %>%
+  dplyr::select(-NR_res)
+
+kable(converted_abs_calc, "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, background = 'aquamarine') %>%
+  column_spec(2, background = 'aquamarine') %>%
+  column_spec(3, background = '#FFF0F5') %>%
+  scroll_box(width = "100%")
+```
+
+
+### Conversion of relative values between versions
+
+To convert **relative** values, such as the number of patent applications per 1000 inhabitants, `convert_nuts_version()` departs again from the conversion table seen above. We focus on the variable `P_MHAB`, patent applications per one million inhabitants. The function summarizes these relative values by computing the **weighted average** with respect to 2018 population flows.
+
+```{r,  include = F}
+convert_rel <- conversion_m_long %>%
+  group_by(to_code, to_version) %>%
+  summarise(P_MHAB_conv = round(sum(P_MHAB * pop18) / sum(pop18), 0)) %>%
+  ungroup()
+
+# Illustrate calculation
+to_code_vec = unique(convert_abs$to_code)
+nums = list()
+denoms = list()
+for (i in seq_along(to_code_vec)) {
+  print(i)
+  convert_abs_sub = convert_abs %>%
+    filter(to_code %in% to_code_vec[i])
+  nums[[i]] = paste0(paste0(convert_abs_sub$pop18, "*", convert_abs_sub$P_MHAB) ,
+                     collapse = " + ")
+  denoms[[i]] = paste0(convert_abs_sub$pop18 , collapse = " + ")
+}
+
+calcs <- data.frame(to_code = to_code_vec,
+                    denom = unlist(denoms),
+                    num = unlist(nums))
+
+converted_rel_calc <- convert_rel %>%
+  inner_join(calcs) %>%
+  mutate(P_MHAB_calc = paste0("(", num, ")/(" , denom, ") = ", P_MHAB_conv)) %>%
+  dplyr::select(-denom,-num,-P_MHAB_conv) %>%
+  rename(P_MHAB = P_MHAB_calc)
+```
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE}
+kable(converted_rel_calc, "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, background = 'aquamarine') %>%
+  column_spec(2, background = 'aquamarine') %>%
+  column_spec(3, background = '#FFF0F5') %>%
+  scroll_box(width = "100%")
+```
+
+### Conversion of absolute values between NUTS levels
+
+The function `convert_nuts_level()` aggregates from lower to higher order **levels**, e.g. from NUTS-3 to NUTS-2. Since higher order regions are perfectly split into lower order regions in the NUTS system, the function takes simply the sum of the values in case of **absolute** variables.
+
+### Conversion of relative values between NUTS levels
+
+**Relative** values are aggregated in `convert_nuts_level()` by computing the weighted mean of all lower order regional **levels**. To convert, for example, the number of patent applications per one million inhabitants from NUTS-3 to NUTS-2, the function adds the population size in 2018.
+
+```{r,  include = FALSE}
+pat.n3.nrmhab.12.no <- patents %>%
+  filter(nchar(geo) == 5) %>%  # NUTS-2 values
+  filter(unit %in% c("NR", "P_MHAB")) %>%
+  filter(time == 2012) %>% # 2012
+  filter(str_detect(geo, "^NO")) %>%  # Norway
+  dplyr::select(-"time") %>%
+  tidyr::pivot_wider(
+    id_cols = c("geo"),
+    names_from = "unit",
+    values_from = "values"
+  )
+
+classification <- pat.n3.nrmhab.12.no %>%
+  classify_nuts(nuts_code = "geo")
+classification[[1]] %>%
+  group_by(from_version) %>%
+  tally()
+
+conversion_m_long <- classification[[1]] %>%
+  filter(!is.na(from_version)) %>%
+  inner_join(filter(cross_walks, to_version == 2021),
+             by = c("from_code", "from_version")) %>%
+  mutate(pop18 = round(pop18 / 1000, 2)) %>%
+  mutate_at(vars(NR, P_MHAB, pop18), list( ~ as.integer(.))) %>%
+  #dplyr::select(!matches("version")) %>%
+  dplyr::select(from_code, to_code, from_version, to_version, NR, P_MHAB, pop18)
+
+convert_rel <- conversion_m_long %>%
+  group_by(from_code) %>%
+  summarise(pop18 = sum(pop18)) %>%
+  ungroup() %>%
+  mutate(nuts_3 = from_code,
+         nuts_2 = substr(from_code, 1, 4)) %>%
+  dplyr::select(nuts_3, nuts_2, pop18) %>%
+  inner_join(dplyr::select(pat.n3.nrmhab.12.no, nuts_3 = geo, P_MHAB)) %>%
+  mutate_at(vars(P_MHAB, pop18), list( ~ as.integer(.)))
+```
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE}
+kable(convert_rel, "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, background = 'azure') %>%
+  column_spec(2, background = 'aquamarine') %>%
+  scroll_box(width = "100%")
+```
+
+The number of patent applications at the NUTS-2 level is computed by the **weighted average** using NUTS-3 population numbers.
+
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE}
+converted_rel <- convert_rel %>%
+  group_by(nuts_2) %>%
+  summarize(P_MHAB_conv = as.integer(sum(P_MHAB * pop18) / sum(pop18))) %>%
+  ungroup()
+
+# Illustrate calculation
+nuts_2_vec = unique(convert_rel$nuts_2)
+nums = list()
+denoms = list()
+for (i in seq_along(nuts_2_vec)) {
+  convert_rel_sub = convert_rel %>%
+    filter(nuts_2 %in% nuts_2_vec[i])
+  nums[[i]] = paste0(paste0(convert_rel_sub$pop18, "*", convert_rel_sub$P_MHAB) ,
+                     collapse = " + ")
+  denoms[[i]] = paste0(convert_rel_sub$pop18 , collapse = " + ")
+}
+
+calcs <- data.frame(nuts_2 = nuts_2_vec,
+                    denom = unlist(denoms),
+                    num = unlist(nums))
+
+convert_rel_calc <- converted_rel %>%
+  inner_join(calcs) %>%
+  mutate(P_MHAB_calc = paste0("(", num, ")/(" , denom, ") = ", P_MHAB_conv)) %>%
+  dplyr::select(-denom,-num,-P_MHAB_conv) %>%
+  rename(P_MHAB = P_MHAB_calc)
+
+kable(convert_rel_calc, "html") %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, background = 'aquamarine') %>%
+  column_spec(2, background = '#FFF0F5') %>%
+  scroll_box(width = "100%")
+```
+
+# Citation
+
+Please support the development of open science by citing the JRC and us in your work. The [certified random](https://www.aeaweb.org/articles?id=10.1257/aer.20161492) symbol ⓡ indicates that both authors contributed equally to the package and that author order was randomized.
+
+-   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/nutsconverter>
+
+-   Krause, Werner ⓡ Hennicke, Moritz (2023). nuts: Convert between European NUTS versions and levels in R.
+
+
+Bibtex Users:
+
+```
+@Manual{,
+  title = {NUTS converter},
+  author = {Joint Research Centre},
+  year = {2022},
+  url = {https://urban.jrc.ec.europa.eu/nutsconverter},
+}
+
+@Manual{,
+  title = {nuts: Convert between European NUTS versions and levels in R},
+  author = {Hennicke, Moritz and Krause, Werner},
+  year = {2024},
+  note = {R package version 1.0},
+  url = {https://AAoritz.github.io/nuts},
+}
+```
+
+
+
