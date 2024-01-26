@@ -100,10 +100,10 @@ See the Section [*Spatial interpolation in detail*](#method) for an in-depth des
 
 
 ```{r echo = FALSE , warning=F , message=F,results='hide'}
-#library(nuts)
-devtools::load_all()
+library(nuts)
 library(sf)
 library(ggplot2)
+library(ggpubr)
 library(dplyr)
 library(stringr)
 library(formatR)
@@ -359,7 +359,7 @@ gg_2021 = ggplot() +
 ```
 
 ```{r,  echo=FALSE}
-ggpubr::ggarrange( gg_2006 , gg_2021 , nrow = 1 , common.legend = T, legend = "bottom")
+ggarrange( gg_2006 , gg_2021 , nrow = 1 , common.legend = T, legend = "bottom")
 ```
 
 The output below displays the corresponding data frames based on the original and converted NUTS codes. The original data set comprises of seven observations, whereas the converted data set contains six. The regions `NO01`, `NO03`, `NO04`, and `NO05` are lost, while `NO08`, `NO09`, and `NO0A` are now listed.
@@ -534,8 +534,8 @@ gg_nuts1 = ggplot() +
   theme_minimal() + theme(legend.position = "bottom") +
   facet_wrap( ~ "NUTS-1 data")
 
-ggpubr::ggarrange(gg_nuts3 , gg_nuts2 , gg_nuts1 , nrow = 1)
-
+gg = ggpubr::ggarrange(gg_nuts3 , gg_nuts2 , gg_nuts1 , nrow = 1)
+annotate_figure(gg, top = text_grob("Patent applications across Swedish NUTS regions"))
 ```
 
 ## Inconsistent versions and levels
@@ -658,8 +658,6 @@ This section describes the spatial interpolation procedure. We first cover the l
 Below, Norwegian NUTS-2 regions for the versions 2016 and 2021 are shown. All regions apart from Norway's most Northern region have been reorganized in this period.
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap="Norwegian NUTS-2 regions with boundary changes"}
-library(ggpubr)
-
 no_2016 <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(grepl("^NO", NUTS_ID), nchar(NUTS_ID) == 4) %>%
   mutate(nuts = paste0(NUTS_ID, "\n", NUTS_NAME))
