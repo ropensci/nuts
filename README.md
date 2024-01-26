@@ -8,13 +8,7 @@
 
 Changing administrative regional boundaries over time complicates the construction of consistent regional panel data. The `nuts` package can transform European regional NUTS codes between different versions and levels with the aim to harmonize and link data sets at the regional NUTS level.
 
-The package converts data between three regional hierarchical levels
-
--   NUTS1
--   NUTS2
--   NUTS3
-
-and between five NUTS versions
+The packages main task is to convert data between five NUTS versions
 
 -   2006
 -   2010
@@ -22,7 +16,7 @@ and between five NUTS versions
 -   2016
 -   2021
 
-These conversions can be performed in any direction based on spatial interpolation using five different weights (regional area in square kilometers, 2011 and 2018 population size, 2012 and 2018 built-up area). The weights are based on conversion tables provided by the [Joint Research Center (JRC) of the European Commission (EC)](<https://urban.jrc.ec.europa.eu/nutsconverter/#/>) that are used in their online converter. This R package permits to do the same conversion offline with additional advantages such as conversion within groups, enabling the conversion of datasets with multiple NUTS versions efficiently.
+These conversions can be performed in any direction based on spatial interpolation using five different weights (regional area in square kilometers, 2011 and 2018 population size, 2012 and 2018 built-up area). The weights are based on conversion tables provided by the [Joint Research Center (JRC) of the European Commission (EC)](<https://urban.jrc.ec.europa.eu/nutsconverter/#/>) that are used in their online converter. This R package permits to do the same conversion offline with additional advantages such as conversion within groups, enabling the conversion of datasets with multiple NUTS versions efficiently. 
 
 ### Installation
 
