@@ -1,6 +1,6 @@
 bibentry(
   bibtype  = "Manual",
-  title    = "nuts: Convert between European regional NUTS versions and levels in R",
+  title    = "nuts: Convert European Regional Data in R",
   author   = "Moritz Hennicke, Werner Krause",
   year     = "2024",
   note 	   = "R package version 0.0.0.9000",
