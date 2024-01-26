@@ -1,15 +1,42 @@
 Package: nuts
-Title: What the Package Does (One Line, Title Case)
+Title: Convert European Regional Data in R
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Authors@R: c(person("Moritz", "Hennicke", email = "AAoritz@posteo.de", role = c("aut", "cre"),
+		   comment = c(ORCID = "0000-0001-6811-1821")),
+	     person("Werner", "Krause", email = "werner.krause@uni-potsdam.de", role = c("aut"),
+		   comment = c(ORCID = "0000-0002-5069-7964")))
+Description: Motivated by changing administrative boundaries over time, this package can convert European regional data with NUTS codes between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1, NUTS 2 and NUTS 3). The package uses spatial interpolation based on granular (100mx100m) population and land use data provided by the European Commission's Joint Research Center.  
+URL: https://AAoritz.github.io/nuts/
+BugReports: https://github.com/AAoritz/nuts/
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
-    testthat (>= 3.0.0)
+    eurostat,
+    formatR,
+    ggalluvial,
+    ggfittext,
+    ggplot2,
+    ggpubr,
+    ggrepel,
+    gridExtra,
+    kableExtra,
+    knitr,
+    raster,
+    RColorBrewer,
+    readr,
+    rmarkdown,
+    sf,
+    terra,
+    testthat,
+    tidyr
 Config/testthat/edition: 3
+VignetteBuilder: knitr
+Imports:
+	crayon,
+	dplyr,
+	stringr
+Depends: 
+    R (>= 3.5.0)
+LazyData: true
