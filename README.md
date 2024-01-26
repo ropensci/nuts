@@ -32,7 +32,7 @@ remotes::install_github("AAoritz/nuts/", force=TRUE)
 
 ### Usage
 
-Check out the [articles](https://AAoritz.github.io/nuts/docs/articles/nuts-vignette.html) on our [website](https://AAoritz.github.io/nuts/) for example usage and further details.
+Check out the [vignette](https://aaoritz.github.io/nuts/articles/nuts-vignette.html) for example usage and further details.
 
 ### Citation
 
