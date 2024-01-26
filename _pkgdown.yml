@@ -1,4 +1,5 @@
 url: https://aaoritz.github.io/nuts/
 template:
   bootstrap: 5
-
+home:
+  title: Convert European Regional Data in R

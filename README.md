@@ -2,8 +2,9 @@
 
   <!-- badges: start -->
   [![R-CMD-check](https://github.com/AAoritz/nuts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AAoritz/nuts/actions/workflows/R-CMD-check.yaml)
+  [![codecov](https://codecov.io/gh/AAoritz/nuts/graph/badge.svg?token=UXSUFJOD2U)](https://codecov.io/gh/AAoritz/nuts)
   <!-- badges: end -->
-  
+
 Changing administrative regional boundaries over time complicates the construction of consistent regional panel data. The `nuts` package can transform European regional NUTS codes between different versions and levels with the aim to harmonize and link data sets at the regional NUTS level.
 
 The package converts data between three regional hierarchical levels
@@ -40,7 +41,7 @@ Please support the development of open science and data by citing the JRC and us
 
 -   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/nutsconverter>
 
--   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data in R_. R package version 0.0.0.9000, <https://AAoritz.github.io/nuts/>.
+-   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 0.0.0.9000, <https://AAoritz.github.io/nuts/>.
 
 
 Bibtex Users:
@@ -54,7 +55,7 @@ Bibtex Users:
 }
 
 @Manual{,
-  title = {nuts: Convert European Regional Data in R},
+  title = {nuts: Convert European Regional Data},
   author = {Moritz Hennicke and Werner Krause},
   year = {2024},
   note = {R package version 0.0.0.9000},
