@@ -1063,12 +1063,12 @@ kable(convert_rel_calc, "html") %>%
 
 # Citation
 
-Please support the development of open science by citing the JRC and us in your work. The [certified random](https://www.aeaweb.org/articles?id=10.1257/aer.20161492) symbol ⓡ indicates that both authors contributed equally to the package and that author order was randomized.
+Please support the development of open science by citing the JRC and us in your work. 
 
 -   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/nutsconverter>
 
--   Krause, Werner ⓡ Hennicke, Moritz (2023). nuts: Convert between European NUTS versions and levels in R.
-
+-   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 0.0.0.9000,
+  <https://AAoritz.github.io/nuts/>
 
 Bibtex Users:
 
@@ -1081,11 +1081,11 @@ Bibtex Users:
 }
 
 @Manual{,
-  title = {nuts: Convert between European NUTS versions and levels in R},
-  author = {Hennicke, Moritz and Krause, Werner},
+  title = {nuts: Convert European Regional Data},
+  author = {Moritz Hennicke and Werner Krause},
   year = {2024},
-  note = {R package version 1.0},
-  url = {https://AAoritz.github.io/nuts},
+  note = {R package version 0.0.0.9000},
+  url = {https://AAoritz.github.io/nuts/},
 }
 ```
 
