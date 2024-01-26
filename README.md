@@ -6,17 +6,9 @@
   [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
   <!-- badges: end -->
 
-Changing administrative regional boundaries over time complicates the construction of consistent regional panel data. The `nuts` package can transform European regional NUTS codes between different versions and levels with the aim to harmonize and link data sets at the regional NUTS level.
+Changing administrative regional boundaries over time complicates the construction of consistent regional panel data. The `nuts` package can transform **European regional data** identified by **NUTS codes** between different **versions** and **subdivision levels** with the aim to harmonize and link data sets. 
 
-The packages main task is to convert data between five NUTS versions
-
--   2006
--   2010
--   2013
--   2016
--   2021
-
-These conversions can be performed in any direction based on spatial interpolation using five different weights (regional area in square kilometers, 2011 and 2018 population size, 2012 and 2018 built-up area). The weights are based on conversion tables provided by the [Joint Research Center (JRC) of the European Commission (EC)](<https://urban.jrc.ec.europa.eu/nutsconverter/#/>) that are used in their online converter. This R package permits to do the same conversion offline with additional advantages such as conversion within groups, enabling the conversion of datasets with multiple NUTS versions efficiently. 
+The package's main task is to convert data between all NUTS versions in use: 2006, 2010, 2013, 2016 and 2021. These conversions can be performed in any direction based on **spatial interpolation** using five different weights (regional area in square kilometers, 2011 and 2018 population size, 2012 and 2018 built-up area). The weights are based on conversion tables provided by the [Joint Research Center (JRC) of the European Commission (EC)](<https://urban.jrc.ec.europa.eu/nutsconverter/#/>) that are used in their online converter. The `nuts` package permits to do the same conversion offline with additional advantages such as the conversion within groups, enabling the conversion of datasets with multiple NUTS versions efficiently.
 
 ### Installation
 
@@ -28,7 +20,7 @@ remotes::install_github("AAoritz/nuts/", force=TRUE)
 
 ### Usage
 
-Check out the [vignette](https://aaoritz.github.io/nuts/articles/nuts-vignette.html) for example usage and further details.
+Check out the [website](https://aaoritz.github.io/nuts/articles/nuts-vignette.html) for example usage and further details.
 
 ### Citation
 
