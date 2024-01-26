@@ -20,7 +20,7 @@ and between five NUTS versions
 -   2016
 -   2021
 
-These conversions can be performed in any direction based on spatial interpolation using five different weights (regional area in square kilometers, 2011 and 2018 population size, 2012 and 2018 built-up area). The weights are based on conversion matrices provided by the [Joint Research Center (JRC) of the European Commission (EC)](<https://urban.jrc.ec.europa.eu/nutsconverter/#/>) that are used in their online converter. This R package permits to do the same conversion offline with additional advantages such as conversion within groups, enabling the conversion of datasets with multiple NUTS versions efficiently.
+These conversions can be performed in any direction based on spatial interpolation using five different weights (regional area in square kilometers, 2011 and 2018 population size, 2012 and 2018 built-up area). The weights are based on conversion tables provided by the [Joint Research Center (JRC) of the European Commission (EC)](<https://urban.jrc.ec.europa.eu/nutsconverter/#/>) that are used in their online converter. This R package permits to do the same conversion offline with additional advantages such as conversion within groups, enabling the conversion of datasets with multiple NUTS versions efficiently.
 
 ### Installation
 
@@ -40,7 +40,7 @@ Please support the development of open science and data by citing the JRC and us
 
 -   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/nutsconverter>
 
--   Hennicke M, Krause W (2024). _nuts: Convert between European regional NUTS versions and levels in R_. R package version 0.0.0.9000, <https://AAoritz.github.io/nuts/>.
+-   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data in R_. R package version 0.0.0.9000, <https://AAoritz.github.io/nuts/>.
 
 
 Bibtex Users:
@@ -54,7 +54,7 @@ Bibtex Users:
 }
 
 @Manual{,
-  title = {nuts: Convert between European regional NUTS versions and levels in R},
+  title = {nuts: Convert European Regional Data in R},
   author = {Moritz Hennicke and Werner Krause},
   year = {2024},
   note = {R package version 0.0.0.9000},
