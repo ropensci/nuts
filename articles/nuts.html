@@ -98,7 +98,7 @@ pre code {
 <h2 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
 </h2>
 <div class="float-image">
-<p><img src="logo.png" width="150px" style="float:left; padding:30px"></p>
+<p><img src="logo.png" alt="Package logo of a squirrel holdling a walnut colored with the flag of Europe" width="150px" style="float:left; padding:30px"></p>
 <ul>
 <li><p>Efficient <strong>offline conversion</strong> of European
 regional data.</p></li>
@@ -187,7 +187,7 @@ subtracting them from Leipzig and adding them to <em>Chemnitz</em>.</p>
 detail</em></a> for an in-depth description of the weighting
 procedure.</p>
 <div class="figure">
-<img src="nuts_files/figure-html/unnamed-chunk-5-1.png" alt="Holdings with Manure Storage Facilities; BU = Built-Up Area in $m^{2}$" width="100%"><p class="caption">
+<img src="nuts_files/figure-html/unnamed-chunk-5-1.png" alt="Maps of NUTS 3 regions Chemnitz and Leipzig in NUTS version 2003, between 2003 and 2006 and 2006. They visualize the example in the text in which Chemnitz contributes a part of its area to Leipzig." width="100%"><p class="caption">
 Holdings with Manure Storage Facilities; BU = Built-Up Area in <span class="math inline">\(m^{2}\)</span>
 </p>
 </div>
@@ -217,7 +217,7 @@ version(s) and level(s) of your data using the function
 completeness of your NUTS codes before proceeding with the
 conversion.</p>
 <div class="figure" style="text-align: center">
-<img src="flow.png" alt="Sequential workflow to convert regional NUTS data" width="60%"><p class="caption">
+<img src="flow.png" alt="Flow diagram that shows that conversion functions are run after classification." width="60%"><p class="caption">
 Sequential workflow to convert regional NUTS data
 </p>
 </div>
@@ -237,7 +237,8 @@ at the NUTS-2 level. This data is provided by EUROSTAT.</p>
 <span><span class="co"># Loading and subsetting Eurostat data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">patents</span>, package <span class="op">=</span> <span class="st">"nuts"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pat.n2</span> <span class="op">&lt;-</span> <span class="va">patents</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">geo</span><span class="op">)</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># NUTS-2 values</span></span>
+<span><span class="va">pat.n2</span> <span class="op">&lt;-</span> <span class="va">patents</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">geo</span><span class="op">)</span> <span class="op">==</span> <span class="fl">4</span><span class="op">)</span> <span class="co"># NUTS-2 values</span></span>
 <span></span>
 <span><span class="va">pat.n2.mhab.12.no</span> <span class="op">&lt;-</span> <span class="va">pat.n2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">unit</span> <span class="op">==</span> <span class="st">"P_MHAB"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="co"># Patents per one million inhabitants</span></span>
@@ -338,7 +339,11 @@ and relative values</a>.</p>
 <span><span class="co"><span style="color: #0000BB;">## =&gt; All NUTS codes can be converted.</span></span></span>
 <span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
 <span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
-<p><img src="nuts_files/figure-html/unnamed-chunk-13-1.png" width="100%"></p>
+<div class="figure">
+<img src="nuts_files/figure-html/unnamed-chunk-13-1.png" alt="Two maps of patents per 1M habitants in Norwegian NUTS 2 regions in NUTS version 2016 and converted to NUTS version 2021" width="100%"><p class="caption">
+Converting patent data between versions
+</p>
+</div>
 <p>The output below displays the corresponding data frames based on the
 original and converted NUTS codes. The original data set comprises of
 seven observations, whereas the converted data set contains six. The
@@ -514,7 +519,8 @@ codes</em></a> for further information.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"patents"</span>, package <span class="op">=</span> <span class="st">"nuts"</span><span class="op">)</span></span>
 <span><span class="co"># Aggregating data from NUTS-3 to NUTS-2 and NUTS-1</span></span>
-<span><span class="va">pat.n3</span> <span class="op">&lt;-</span> <span class="va">patents</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">geo</span><span class="op">)</span> <span class="op">==</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">pat.n3</span> <span class="op">&lt;-</span> <span class="va">patents</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">geo</span><span class="op">)</span> <span class="op">==</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pat.n3.nr.12.se</span> <span class="op">&lt;-</span> <span class="va">pat.n3</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">unit</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NR"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -556,7 +562,7 @@ codes</em></a> for further information.</p>
 <span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
 <span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
 <div class="figure">
-<img src="nuts_files/figure-html/unnamed-chunk-22-1.png" alt="Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1" width="100%"><p class="caption">
+<img src="nuts_files/figure-html/unnamed-chunk-22-1.png" alt="Three maps of Sweden with patent applications at the NUTS 3 level and aggregated to NUTS level 2 and 1." width="100%"><p class="caption">
 Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1
 </p>
 </div>
@@ -727,7 +733,9 @@ identified versions, we see that there are mixed versions within groups
 <span><span class="co"><span style="color: #0000BB;">## ==&gt; Classified</span><span style="color: #BB0000;"> multiple </span><span style="color: #0000BB;">NUTS code versions. See the tibble 'Overlap of each NUTS version...' in the output.</span></span></span>
 <span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'Missing NUTS codes...' in the output.</span></span></span></code></pre>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">man.deit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">from_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">man.deit</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">from_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 3</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   country [3]</span></span></span>
 <span><span class="co">##   country from_version     n</span></span>
@@ -763,7 +771,9 @@ automatically.</p>
 <span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Multiple </span><span style="color: #0000BB;">NUTS code versions. Choosing most frequent version within group and</span><span style="color: #BB0000;"> dropping </span><span style="color: #0000BB;">12 row(s).</span></span></span>
 <span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.</span></span></span></code></pre>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">man.deit.converted</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">to_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">man.deit.converted</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">to_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   country [2]</span></span></span>
 <span><span class="co">##   country to_version     n</span></span>
@@ -786,7 +796,7 @@ in the package for converting versions and levels.</p>
 shown. All regions apart from Norway’s most Northern region have been
 reorganized in this period.</p>
 <div class="figure">
-<img src="nuts_files/figure-html/unnamed-chunk-31-1.png" alt="Norwegian NUTS-2 regions with boundary changes" width="100%"><p class="caption">
+<img src="nuts_files/figure-html/unnamed-chunk-31-1.png" alt="Two maps of Norwegian NUTS-2 regions in version 2016 and 2021. The most Eastern and Southern regions have been affected most by administrative redistricting." width="100%"><p class="caption">
 Norwegian NUTS-2 regions with boundary changes
 </p>
 </div>
@@ -1270,7 +1280,7 @@ JRC with granular [100m x 100m] geographic data. The
 <code>ggalluvial</code> plot below visualizes the flows of area size
 between the NUTS-2 regions mapped above.</p>
 <div class="figure">
-<img src="nuts_files/figure-html/unnamed-chunk-33-1.png" alt="Alluvial plot illustrating area size flows" width="100%"><p class="caption">
+<img src="nuts_files/figure-html/unnamed-chunk-33-1.png" alt="The alluvial plot shows population flows from NUTS version 2016 to 2021." width="100%"><p class="caption">
 Alluvial plot illustrating area size flows
 </p>
 </div>
@@ -1285,7 +1295,7 @@ of the latter. Assuming that the variable to be converted is correlated
 with population across space, the conversion can thus be refined using
 population weights to account for flows between different versions.</p>
 <div class="figure">
-<img src="nuts_files/figure-html/unnamed-chunk-34-1.png" alt="Spatial distribution of population and boundary changes" width="100%"><p class="caption">
+<img src="nuts_files/figure-html/unnamed-chunk-34-1.png" alt="Two maps of Southern Norway with very granular population density and administrative boundaries of the 2016 and 2021 NUTS version. The region with the capital Olso and its adjacent region are highlighted in version 2016 that both contribute to a larger single region in version 2021." width="100%"><p class="caption">
 Spatial distribution of population and boundary changes
 </p>
 </div>
