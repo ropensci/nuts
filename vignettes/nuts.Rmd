@@ -121,10 +121,13 @@ class <- manure_indic %>%
   distinct(geo, .keep_all = T) %>%
   classify_nuts(data = ., nuts_code = "geo")
 
-transf <- class %>% convert_nuts_version( to_version = "2010" , variables = c( 'values' = 'absolute' ) , weight = 'artif_surf12' )
+transf <- class %>% 
+  convert_nuts_version( to_version = "2010" , variables = c( 'values' = 'absolute' ) , weight = 'artif_surf12' )
 
-small <- manure_indic %>% filter( geo %in% c( 'DED1' , 'DED3' ) )
-small <- small %>% mutate( artif_surf12 = case_when( geo == "DED1" ~ 98648
+small <- manure_indic %>% 
+  filter( geo %in% c( 'DED1' , 'DED3' ) )
+small <- small %>% 
+  mutate( artif_surf12 = case_when( geo == "DED1" ~ 98648
                                              , geo == "DED3" ~ 66786 + 5574
 ))
 
@@ -138,7 +141,9 @@ shape_06_n2 <- read_sf("NUTS_RG_20M_2006_3857.shp/NUTS_RG_20M_2006_3857.shp") %>
   full_join( manure_indic , by = c("NUTS_ID" = "geo")) %>%
   filter( str_detect( NUTS_ID , '^DED1|^DED3' ))
 
-shape_06_n2_centr <- shape_06_n2 %>% st_centroid( )  %>% left_join( small , by = c("NUTS_ID" = "geo"))
+shape_06_n2_centr <- shape_06_n2 %>% 
+  st_centroid( )  %>% 
+  left_join( small , by = c("NUTS_ID" = "geo"))
 
 p_initial = ggplot() +
   geom_sf(data = shape_06_n2 ,  linewidth = 1 , aes( fill = NUTS_ID )) +
@@ -156,7 +161,10 @@ p_initial = ggplot() +
         , axis.title = element_blank( )
   )
 
-DED33_centr <- shape_06_n3 %>% filter( NUTS_ID == "DED33" )  %>% st_centroid( ) %>% mutate( artif_surf12 = 5574 )
+DED33_centr <- shape_06_n3 %>% 
+  filter( NUTS_ID == "DED33" )  %>% 
+  st_centroid( ) %>% 
+  mutate( artif_surf12 = 5574 )
 
 shape_06_n2_step <- shape_06_n2 %>%
   mutate( artif_surf12 = case_when( NUTS_ID == 'DED3' ~ 66786
@@ -244,7 +252,8 @@ library(nuts)
 # Loading and subsetting Eurostat data
 data(patents, package = "nuts")
 
-pat.n2 <- patents %>% filter(nchar(geo) == 4) # NUTS-2 values
+pat.n2 <- patents %>% 
+  filter(nchar(geo) == 4) # NUTS-2 values
 
 pat.n2.mhab.12.no <- pat.n2 %>%
   filter(unit == "P_MHAB") %>% # Patents per one million inhabitants
@@ -322,7 +331,7 @@ gg_2006 = ggplot() +
     linewidth = .5
   ) +
   geom_sf(
-    data = no_2006 %>% filter(NUTS_ID %in% no_changes),
+    data = filter(no_2006, NUTS_ID %in% no_changes),
     color = 'red' ,
     fill = "#00000000"
   ) +
@@ -346,7 +355,7 @@ gg_2021 = ggplot() +
     linewidth = .5
   ) +
   geom_sf(
-    data = no_2021 %>% filter(NUTS_ID %in% no_changes),
+    data = filter(no_2021, NUTS_ID %in% no_changes),
     color = 'red' ,
     fill = "#00000000"
   ) +
@@ -459,7 +468,8 @@ In the following example, we illustrate how to aggregate the total number of pat
 ```{r}
 data("patents", package = "nuts")
 # Aggregating data from NUTS-3 to NUTS-2 and NUTS-1
-pat.n3 <- patents %>% filter(nchar(geo) == 5)
+pat.n3 <- patents %>% 
+  filter(nchar(geo) == 5)
 
 pat.n3.nr.12.se <- pat.n3 %>%
   filter(unit %in% c("NR")) %>%
@@ -630,7 +640,9 @@ man.deit <- manure %>%
   distinct(geo, .keep_all = T) %>% 
   classify_nuts(nuts_code = "geo", data = .)
 
-man.deit[[1]] %>% group_by(country, from_version) %>% tally()
+man.deit[[1]] %>% 
+  group_by(country, from_version) %>% 
+  tally()
 ```
 
 When proceeding to the conversion with either `convert_nuts_version()` or `convert_nuts_level()`, both functions will throw an error. For convenience, we added the option `multiple_versions` that subsets the supplied data to the dominant version within groups when specified with `most_frequent`. Hence, all codes from other, non-dominant versions are discarded. 
@@ -645,7 +657,9 @@ man.deit.converted <- convert_nuts_version(
   multiple_versions = "most_frequent"
 )
 
-man.deit.converted %>% group_by(country, to_version) %>% tally()
+man.deit.converted %>% 
+  group_by(country, to_version) %>% 
+  tally()
 ```
 
 
@@ -785,8 +799,8 @@ no_pop_df <- as.data.frame(no_pop, xy = TRUE) %>%
 
 c=500000
 d=500000
-no_2016_no01 <- no_2016_1 %>% filter( NUTS_ID %in% c( 'NO01' , 'NO03' ))
-no_2021_no08 <- no_2021_1 %>% filter( NUTS_ID %in% c( 'NO08' ))
+no_2016_no01 <- filter(no_2016_1, NUTS_ID %in% c( 'NO01' , 'NO03' ))
+no_2021_no08 <- filter(no_2021_1, NUTS_ID %in% c( 'NO08' ))
 gg_pop = ggplot() +
   geom_raster(data = no_pop_df, aes(x = x, y = y, fill = JRC_1K_POP_2018)) +
   geom_sf(data = no_2016_1, color = "#636363", fill = NA, lwd = .5 ) +
@@ -1000,7 +1014,6 @@ conversion_m_long <- classification[[1]] %>%
              by = c("from_code", "from_version")) %>%
   mutate(pop18 = round(pop18 / 1000, 2)) %>%
   mutate_at(vars(NR, P_MHAB, pop18), list( ~ as.integer(.))) %>%
-  #dplyr::select(!matches("version")) %>%
   dplyr::select(from_code, to_code, from_version, to_version, NR, P_MHAB, pop18)
 
 convert_rel <- conversion_m_long %>%
