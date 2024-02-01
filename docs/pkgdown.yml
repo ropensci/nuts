@@ -2,8 +2,8 @@ pandoc: 3.1.1
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
-  nuts-vignette: nuts-vignette.html
-last_built: 2024-01-29T09:44Z
+  nuts: nuts.html
+last_built: 2024-02-01T10:45Z
 urls:
   reference: https://aaoritz.github.io/nuts/reference
   article: https://aaoritz.github.io/nuts/articles
