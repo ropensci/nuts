@@ -50,7 +50,7 @@ pre code {
 
 :::float-image
 
-```{r out.width='150px', out.extra='style="float:left; padding:30px"', echo=FALSE}
+```{r out.width='150px', out.extra='style="float:left; padding:30px"', echo=FALSE, fig.alt ="Package logo of a squirrel holdling a walnut colored with the flag of Europe"}
 knitr::include_graphics("logo.png")
 ```
 
@@ -208,7 +208,7 @@ p_final = ggplot() +
         , axis.title = element_blank( ))
 ```
 
-```{r,  echo=FALSE, fig.cap="Holdings with Manure Storage Facilities; BU = Built-Up Area in $m^{2}$"}
+```{r,  echo=FALSE, fig.cap="Holdings with Manure Storage Facilities; BU = Built-Up Area in $m^{2}$", fig.alt ="Maps of NUTS 3 regions Chemnitz and Leipzig in NUTS version 2003, between 2003 and 2006 and 2006. They visualize the example in the text in which Chemnitz contributes a part of its area to Leipzig."}
 gridExtra::grid.arrange( p_initial, p_step , p_final , nrow = 1 )
 ```
 
@@ -227,7 +227,7 @@ The package comes with three main functions:
 
 The conversion can only be conducted after classifying the NUTS version(s) and level(s) of your data using the function `classify_nuts()`. This step ensures the validity and completeness of your NUTS codes before proceeding with the conversion.
 
-```{r , echo=FALSE, out.width='60%', fig.align="center", fig.cap="Sequential workflow to convert regional NUTS data"}
+```{r , echo=FALSE, out.width='60%', fig.align="center", fig.cap="Sequential workflow to convert regional NUTS data", fig.alt ="Flow diagram that shows that conversion functions are run after classification."}
 knitr::include_graphics("flow.png")
 ```
 
@@ -295,7 +295,7 @@ pat.converted <- convert_nuts_version(
 )
 ```
 
-```{r,  echo=FALSE,include=FALSE, fig.cap="Converting patent data between versions"}
+```{r,  echo=FALSE,include=FALSE}
 library(terra)
 
 no_2006 <-
@@ -358,7 +358,7 @@ gg_2021 = ggplot() +
 
 ```
 
-```{r,  echo=FALSE}
+```{r,  echo=FALSE, fig.cap="Converting patent data between versions", fig.alt ="Two maps of patents per 1M habitants in Norwegian NUTS 2 regions in NUTS version 2016 and converted to NUTS version 2021"}
 ggarrange( gg_2006 , gg_2021 , nrow = 1 , common.legend = T, legend = "bottom")
 ```
 
@@ -482,7 +482,7 @@ pat.level1 <- convert_nuts_level(
 )
 ```
 
-```{r,  echo=FALSE, fig.cap="Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1"}
+```{r,  echo=FALSE, fig.cap="Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1", fig.alt = "Three maps of Sweden with patent applications at the NUTS 3 level and aggregated to NUTS level 2 and 1."}
 eu_nuts3 <-
   read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(LEVL_CODE == 3) %>%
@@ -657,7 +657,7 @@ This section describes the spatial interpolation procedure. We first cover the l
 
 Below, Norwegian NUTS-2 regions for the versions 2016 and 2021 are shown. All regions apart from Norway's most Northern region have been reorganized in this period.
 
-```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap="Norwegian NUTS-2 regions with boundary changes"}
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap="Norwegian NUTS-2 regions with boundary changes", fig.alt ="Two maps of Norwegian NUTS-2 regions in version 2016 and 2021. The most Eastern and Southern regions have been affected most by administrative redistricting."}
 no_2016 <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(grepl("^NO", NUTS_ID), nchar(NUTS_ID) == 4) %>%
   mutate(nuts = paste0(NUTS_ID, "\n", NUTS_NAME))
@@ -712,7 +712,6 @@ To keep track of these changes, the `nuts` package uses regional flows between d
 
 For Norway going from version 2016 to 2021, the table looks as follows:
 
-
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE}
 library(kableExtra)
 
@@ -733,7 +732,7 @@ kable(no_walks, "html") %>%
 
 In addition to tracing the evolution of NUTS codes, the table contains **flows** of area, population and artificial surfaces between regions and versions. These flows were computed by the JRC with granular [100m x 100m] geographic data. The `ggalluvial` plot below visualizes the flows of area size between the NUTS-2 regions mapped above.
 
-```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap= "Alluvial plot illustrating area size flows"}
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap= "Alluvial plot illustrating area size flows", fig.alt ="The alluvial plot shows population flows from NUTS version 2016 to 2021."}
 library(ggalluvial)
 
 # Add names
@@ -772,7 +771,7 @@ gg_pop_flows
 
 To illustrate the main idea, the map below showcases **population densities** across NUTS-2 regions. As population is not uniformly distributed across space, weighting regions dependent on their size might come with strong assumptions. For instance, region `NO01` in version 2016, that contains the city of Oslo, makes a relatively modest geographical contribution to the new region `NO08`, but significantly bolsters the population of the latter. Assuming that the variable to be converted is correlated with population across space, the conversion can thus be refined using population weights to account for flows between different versions.
 
-```{r,  echo=FALSE, message = FALSE, warning = FALSE, out.width = "100%", fig.width = 7, fig.cap= "Spatial distribution of population and boundary changes"}
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, out.width = "100%", fig.width = 7, fig.cap= "Spatial distribution of population and boundary changes", fig.alt ="Two maps of Southern Norway with very granular population density and administrative boundaries of the 2016 and 2021 NUTS version. The region with the capital Olso and its adjacent region are highlighted in version 2016 that both contribute to a larger single region in version 2021."}
 library(raster)
 library(ggrepel)
 
