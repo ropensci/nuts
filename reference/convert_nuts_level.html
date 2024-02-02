@@ -127,33 +127,7 @@ If set to <code>'most_frequent'</code> data is converted using the best-matching
 <span class="r-in"><span>  <span class="fu">convert_nuts_level</span><span class="op">(</span>to_level <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>                     variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'values'</span><span class="op">=</span> <span class="st">'absolute'</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                     weight <span class="op">=</span> <span class="st">'pop18'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">Classifying version of NUTS codes</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">----------------------------------</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">ME000, ME000, ME000, ME000, ME000, ME000, ME000, ME000, NOZZZ, NOZZZ, NOZZZ, NOZZZ, SIZZZ, NOZZZ</span><span style="color: #0000BB;">.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x indic_ag x time</span><span style="color: #0000BB;">.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'Missing NUTS codes...' in the output.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">Converting level of NUTS codes</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">------------------------------</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Aggregate from NUTS regional level </span><span style="color: #BB0000;">3</span><span style="color: #0000BB;"> to </span><span style="color: #BB0000;">2</span><span style="color: #0000BB;">.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be converted and</span><span style="color: #BB0000;"> are dropped </span><span style="color: #0000BB;">from the dataset: </span><span style="color: #BB0000;">ME000, NOZZZ, SIZZZ</span><span style="color: #0000BB;">.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x indic_ag x time</span><span style="color: #0000BB;">.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4,814 × 5</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    to_code country indic_ag     time values</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> AT11    Austria I07A1_EQ_Y   <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">2</span>110</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> AT11    Austria I07A1_EQ_YC  <span style="text-decoration: underline;">2</span>010    337</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> AT11    Austria I07A2_EQ_Y   <span style="text-decoration: underline;">2</span>010    802</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> AT11    Austria I07A2_EQ_YC  <span style="text-decoration: underline;">2</span>010    756</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> AT11    Austria I07A31_EQ_Y  <span style="text-decoration: underline;">2</span>010    278</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> AT11    Austria I07A32_EQ_Y  <span style="text-decoration: underline;">2</span>010     31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> AT11    Austria I07A3_EQ_YC  <span style="text-decoration: underline;">2</span>010    261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> AT11    Austria I07A_EQ_Y    <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">2</span>180</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> AT12    Austria I07A1_EQ_Y   <span style="text-decoration: underline;">2</span>010  <span style="text-decoration: underline;">19</span>250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> AT12    Austria I07A1_EQ_YC  <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">1</span>853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4,804 more rows</span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in col_blue(style_bold("\nClassifying version of NUTS codes")):</span> could not find function "col_blue"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
