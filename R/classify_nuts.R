@@ -16,7 +16,8 @@
 #'
 #' The output can be passed to [convert_nuts_version()] to convert data across NUTS versions and [convert_nuts_level()] to aggregate across NUTS levels.
 #'
-#' @import crayon
+#' @import cli
+#' @import rlang
 #' @import dplyr
 #' @import stringr
 #'

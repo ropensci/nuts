@@ -13,7 +13,8 @@
 #'
 #' @return A tibble containing NUTS codes, aggregated variable values, and possibly grouping variables.
 #'
-#' @import crayon
+#' @import cli
+#' @import rlang
 #' @import dplyr
 #' @import stringr
 #'
