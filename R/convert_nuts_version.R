@@ -69,7 +69,7 @@ convert_nuts_version <-
     if (is.null(variables))
       stop("Input 'variables' cannot be NULL.")
 
-    if (any(names(variables) %in% colnames(data[[1]])) == F)
+    if (any(names(variables) %in% colnames(data[["data"]])) == F)
       stop("Input 'variables' not found in data.")
 
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))
@@ -95,8 +95,8 @@ convert_nuts_version <-
 
     # Prepare data
     group_vars <- attributes(data)$groups
-    data_versions <- data[[2]]
-    data <- data[[1]]
+    data_versions <- data[["versions_data"]]
+    data <- data[["data"]]
 
     # Check if NUTS codes can be converted
     all_nuts_codes <- get("all_nuts_codes")

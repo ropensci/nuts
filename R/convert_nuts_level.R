@@ -54,7 +54,7 @@ convert_nuts_level <-
     if (is.null(variables))
       stop("Input 'variables' cannot be NULL.")
 
-    if (any(names(variables) %in% colnames(data[[1]])) == F)
+    if (any(names(variables) %in% colnames(data[["data"]])) == F)
       stop("Input 'variables' not found in the provided data frame.")
 
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))
@@ -82,8 +82,8 @@ convert_nuts_level <-
 
     # Prepare data
     group_vars <- attributes(data)$groups
-    data_versions <- data[[2]]
-    data <- data[[1]]
+    data_versions <- data[["versions_data"]]
+    data <- data[["data"]]
 
 
     # Check whether user is trying to aggregate to a lower level than

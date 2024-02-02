@@ -313,23 +313,11 @@ classify_nuts <-
     # OUTPUT
     #--------
     cat("\n")
-    output <- list(data, data_all_versions, data_missing_nuts)
-    names(output) <-
-      c(
-        "Original data with identified NUTS version in variable 'from_version'",
-        paste0(
-          "Overlap of each NUTS version within ",
-          paste0(group_vars,
-                 collapse = " x "),
-          " groups"
-        ),
-        paste0(
-          "Missing NUTS codes within ",
-          paste0(c("from_version", group_vars),
-                 collapse = " x "),
-          " groups"
-        )
-      )
+    output <- list(
+      data = data,
+      versions_data = data_all_versions,
+      missing_data = data_missing_nuts
+    )
 
     attr(output, "groups") <- group_vars
     class(output) <- "nuts.classified"

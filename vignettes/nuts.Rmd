@@ -273,20 +273,20 @@ The function returns a list with three items:
 Below, you see that all data entries correspond to the 2016 NUTS version.
 
 ```{r}
-pat.classified[[1]]
+pat.classified[["data"]]
 ```
 
 2. The second item provides an overview of the share of matching NUTS codes for each of the five existing NUTS versions. The **overlap** is computed within country and possibly additional groups (if provided via the `group_vars` argument).  
 
 ```{r}
-pat.classified[[2]]
+pat.classified[["versions_data"]]
 ```
 
 3. The third item gives all NUTS codes that are **missing** across groups. Such missing codes might lead to conversion errors and are, by default, omitted from all conversion procedures. In our example, no NUTS codes are missing. 
 <!-- We recommend to check whether missing values for these NUTS codes can be replaced, perhaps with 0.  -->
 
 ```{r}
-pat.classified[[3]]
+pat.classified[["missing_data"]]
 ```
 
 
@@ -422,7 +422,7 @@ pat.classified <- classify_nuts(
 Note that the detected best-fitting NUTS versions differ across countries:
 
 ```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-pat.classified[[1]] %>%
+pat.classified[["data"]] %>%
   group_by(country, from_version) %>%
   tally()
 ```
@@ -640,7 +640,7 @@ man.deit <- manure %>%
   distinct(geo, .keep_all = T) %>% 
   classify_nuts(nuts_code = "geo", data = .)
 
-man.deit[[1]] %>% 
+man.deit[["data"]] %>% 
   group_by(country, from_version) %>% 
   tally()
 ```
@@ -866,7 +866,7 @@ pat.n2.nrmhab.12.no <- patents %>%
 classification <- pat.n2.nrmhab.12.no %>%
   classify_nuts(nuts_code = "geo")
 
-conversion_m_long <- classification[[1]] %>%
+conversion_m_long <- classification[["data"]] %>%
   filter(!is.na(from_version)) %>%
   inner_join(filter(cross_walks, to_version == 2021),
              by = c("from_code", "from_version")) %>%
@@ -1004,11 +1004,11 @@ pat.n3.nrmhab.12.no <- patents %>%
 
 classification <- pat.n3.nrmhab.12.no %>%
   classify_nuts(nuts_code = "geo")
-classification[[1]] %>%
+classification[["data"]] %>%
   group_by(from_version) %>%
   tally()
 
-conversion_m_long <- classification[[1]] %>%
+conversion_m_long <- classification[["data"]] %>%
   filter(!is.na(from_version)) %>%
   inner_join(filter(cross_walks, to_version == 2021),
              by = c("from_code", "from_version")) %>%
