@@ -19,9 +19,10 @@ BugReports: https://github.com/AAoritz/nuts/
 Depends: 
     R (>= 3.5.0)
 Imports:
-    crayon,
     dplyr,
-    stringr
+    stringr,
+    rlang,
+    cli
 Suggests: 
     distill,
     eurostat,

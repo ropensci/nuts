@@ -43,7 +43,7 @@ test_that("data input not valid", {
       to_level = 1,
       variables = c("values" = "absolute")
     ),
-    "Input 'data' must be a nuts.classified-object."
+    "Input `data` must be a nuts.classified-object, not a number."
   )
 })
 
@@ -65,7 +65,7 @@ test_that("variable not found", {
         to_level = 1,
         variables = c("valuess" = "absolute")
       ),
-    "Input 'variables' not found in the provided data frame."
+    "Input `variables` not found in the provided data frame."
   )
 })
 
@@ -91,7 +91,7 @@ test_that("invalid to_level 1", {
         to_level = 4,
         variables = c("values" = "absolute")
       ),
-    "Input 'to_level' invalid. Must be 1 or 2."
+    "Input `to_level` invalid. Must be 1 or 2."
   )
 })
 
@@ -104,7 +104,7 @@ test_that("invalid to_level 2", {
         to_level = TRUE,
         variables = c("values" = "absolute")
       ),
-    "Input 'to_level' invalid. Must be 1 or 2."
+    "Input `to_level` invalid. Must be 1 or 2."
   )
 })
 
@@ -118,7 +118,7 @@ test_that("weight invalid", {
         variables = c("values" = "absolute"),
         weight = "pop19"
       ),
-    "Input 'weight' invalid. Must be 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+    "Input `weight` invalid. Must be 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
   )
 })
 
@@ -316,3 +316,4 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(52, 4)
             )
           })
+

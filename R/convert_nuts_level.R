@@ -49,36 +49,31 @@ convert_nuts_level <-
     #------------------------
     # Input checks
     if (any(class(data) != "nuts.classified"))
-      stop("Input 'data' must be a nuts.classified-object.")
+      cli_abort("Input {.arg data} must be a nuts.classified-object, not {.obj_type_friendly {data}}.")
 
     if (is.null(variables))
-      stop("Input 'variables' cannot be NULL.")
+      cli_abort("Input {.arg variables} cannot be NULL.")
 
     if (any(names(variables) %in% colnames(data[["data"]])) == F)
-      stop("Input 'variables' not found in the provided data frame.")
+      cli_abort("Input {.arg variables} not found in the provided data frame.")
 
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))
-      stop("Variable type(s) not found. Use one of the following: 'absolute' or 'relative'.")
+      cli_abort("Variable type(s) not found. Use one of the following: 'absolute' or 'relative'.")
 
-    if (!is.numeric(to_level))
-      stop("Input 'to_level' invalid. Must be 1 or 2.")
-
-    if (!to_level %in% c(1, 2))
-      stop("Input 'to_level' invalid. Must be 1 or 2.")
+    if (!is.numeric(to_level)|!to_level %in% c(1, 2))
+      cli_abort("Input {.arg to_level} invalid. Must be 1 or 2.")
 
     if (!is.null(weight)) {
       if (!weight %in% c("areaKm", "pop18", "pop11", "artif_surf18",
                          "artif_surf12"))
-        stop(
-          "Input 'weight' invalid. Must be 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
-        )
+        cli_abort("Input {.arg weight} invalid. Must be 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'.")
     }
 
     if (!is.logical(missing_rm))
-      stop("Input 'missing_rm' invalid. Must be TRUE/FALSE.")
+      cli_abort("Input {.arg missing_rm} invalid. Must be TRUE/FALSE, not {.obj_type_friendly {missing_rm}}.")
 
     if (!multiple_versions %in% c("break", "most_frequent"))
-      stop("Input 'multiple_versions' invalid. Must be 'break' or 'most_frequent'.")
+      cli_abort("Input {.arg multiple_versions} invalid. Must be 'break' or 'most_frequent'.")
 
     # Prepare data
     group_vars <- attributes(data)$groups
@@ -88,58 +83,50 @@ convert_nuts_level <-
 
     # Check whether user is trying to aggregate to a lower level than
     # current one
-    if (data$from_level[1] < to_level) {
-      stop(
-        paste0(
-          "Provided NUTS codes are on a higher level than input 'to_level'. Only data aggregation to a higher NUTS level allowed."
-        )
-      )
-    }
+    if (data$from_level[1] < to_level)
+      cli_abort("Provided NUTS codes are on a higher level than input {.arg to_level}. Only data aggregation to a higher NUTS level allowed.")
 
-    if (data$from_level[1] == to_level) {
-      stop(paste0("NUTS codes already at level " , to_level , "."))
-    }
+    if (data$from_level[1] == to_level)
+      cli_abort("NUTS codes already at level {to_level}.")
 
     # Check if NUTS codes can be converted
     all_nuts_codes <- get("all_nuts_codes")
     check_nuts_codes <- data$from_code %in% all_nuts_codes$code
-    if (length(data$from_code[check_nuts_codes]) == 0) {
-      stop("\nNUTS codes are not recognized and cannot be converted.")
-    }
-
+    if (length(data$from_code[check_nuts_codes]) == 0)
+      cli_abort("NUTS codes are not recognized and cannot be converted.")
 
     # CONVERSION POSSIBLE
     #----------------------
     # Welcome information
-    cat(blue$bold("\nConverting level of NUTS codes"))
-    cat(blue("\n------------------------------"))
+    cat(col_blue(style_bold("\nConverting level of NUTS codes")))
+    cat(col_blue("\n------------------------------"))
 
     # CONVERSION BETWEEN DIFFERENT NUTS LEVELS
-    cat(blue(
+    cat(col_blue(
       paste0(
         "\n=> Aggregate from NUTS regional level ",
-        red(data$from_level[1]),
+        col_red(data$from_level[1]),
         " to ",
-        red(to_level),
+        col_red(to_level),
         "."
       )
     ))
 
     # Check which NUTS codes can be converted
     if (length(data$from_code[check_nuts_codes]) == length(data$from_code)) {
-      cat(blue("\n=> All NUTS codes can be converted."))
+      cat(col_blue("\n=> All NUTS codes can be converted."))
 
     } else if (length(data$from_code[check_nuts_codes]) < length(data$from_code) &
                length(data$from_code[check_nuts_codes]) > 0) {
       text <-
         paste0(
-          "\n=> These NUTS codes cannot be converted and"  %+% red(" are dropped ") %+% "from the dataset: ",
-          red(paste0(unique(
+          "\n=> These NUTS codes cannot be converted and" , col_red(" are dropped ") , "from the dataset: ",
+          col_red(paste0(unique(
             data$from_code[!check_nuts_codes]
           ), collapse = ", ")),
           "."
         )
-      cat(blue(text))
+      cat(col_blue(text))
 
       data <- data[check_nuts_codes,]
     }
@@ -157,18 +144,19 @@ convert_nuts_level <-
 
     # Use data_versions which is sorted for most frequent version within group
     if (multi_versions_A > multi_versions_B) {
-      cat(blue(
+      cat(col_blue(
         paste0(
-          "\n=> Within " %+% red("groups ") %+% "defined by ",
-          red(paste0(group_vars, collapse = " x ")),
+          "\n=> Within " , col_red("groups ") , "defined by ",
+          col_red(paste0(group_vars, collapse = " x ")),
           ".",
-          "\n==>"  %+% red(" Multiple ") %+% "NUTS code versions. "
+          "\n==>" , col_red(" Multiple ") , "NUTS code versions. "
         )
       ))
 
       if (multiple_versions == "break") {
-        stop(
-          "Mixed NUTS versions within groups! Please make sure the data contains only one version per group. Alternatively, keep only the codes belonging to the 'most_frequent' version using the argument 'multiple_versions'."        )
+        cli_abort(
+          c("Mixed NUTS versions within groups!",
+            "Please make sure the data contains only one version per group. Alternatively, keep only the codes belonging to the 'most_frequent' version using the argument {.arg multiple_versions}."))
 
       } else if (multiple_versions == "most_frequent") {
         data_versions <- data_versions %>%
@@ -181,9 +169,9 @@ convert_nuts_level <-
         data <-
           inner_join(data, data_versions, by = c("from_version", group_vars))
 
-        cat(blue(
+        cat(col_blue(
           paste0(
-            "Choosing most frequent version within group and" %+% red(" dropping "),
+            "Choosing most frequent version within group and" , col_red(" dropping "),
             nrow(data_multi_versions),
             " row(s)."
           )
@@ -237,9 +225,9 @@ convert_nuts_level <-
       filter(if_any(names(variables), ~ is.na(.)))
 
     if (paste_grouping) {
-      cat(blue(paste0(
-        "\n=> Within " %+% red("groups ") %+% "defined by ",
-        red(paste0(group_vars, collapse = " x ")),
+      cat(col_blue(paste0(
+        "\n=> Within " , col_red("groups ") , "defined by ",
+        col_red(paste0(group_vars, collapse = " x ")),
         "."
       )))
 
@@ -247,12 +235,12 @@ convert_nuts_level <-
 
     if (nrow(missing) > 0) {
       cat(
-        blue(
-          "\n==>" %+% red(" Missing ") %+% "NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete."
+        col_blue(
+          "\n==>" , col_red(" Missing ") , "NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete."
         )
       )
     } else if (nrow(missing) == 0) {
-      cat(blue("\n==> No missing NUTS codes."))
+      cat(col_blue("\n==> No missing NUTS codes."))
     }
     rm(missing)
 

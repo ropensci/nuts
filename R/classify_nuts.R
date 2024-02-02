@@ -60,19 +60,15 @@ classify_nuts <-
     #------------------------
     # Input checks
     if (!is.data.frame(data))
-      stop("Input 'data' must be a data frame or tibble.")
-    if (is.null(nuts_code))
-      stop("Input 'nuts_code' cannot be NULL.")
+      cli_abort("Input {.arg data} must be a data frame or tibble, not {.obj_type_friendly {data}}.")
     if (!is.character(nuts_code))
-      stop("Input 'nuts_code' must be provided as a string.")
+      cli_abort("Input {.arg nuts_code} must be provided as a string, not {.obj_type_friendly {nuts_code}}.")
     if (nuts_code %in% colnames(data) == F)
-      stop("Input 'nuts_code' not found in the provided data frame.")
+      cli_abort("Input {.arg nuts_code} not found in the provided data frame.")
     if (!ties %in% c("most_recent", "oldest"))
-      stop("Input 'ties' must be 'most_recent' or 'oldest'.")
+      cli_abort("Input {.arg ties} must be 'most_recent' or 'oldest'.")
     if ("version" %in% names(data))
-      stop(
-        "Please rename the variable 'version' in the provided data frame to avoid conflicts. The function generates a variable with the same name."
-      )
+      cli::cli_abort("Please rename the variable {.arg version} in the provided data frame to avoid conflicts. The function {.fn classify_nuts} generates a variable with the same name.")
 
     # Prepare data set
     data <- data %>%
@@ -80,20 +76,19 @@ classify_nuts <-
       rename(from_code = !!sym(nuts_code))
 
     # Simple NUTS code check
-    if (any(str_detect(data$from_code, "^[A-Za-z]{2}[A-Za-z0-9]{1,3}") == F)) {
-      stop(
-        paste0(
-          "Variable with NUTS codes contains invalid codes. NUTS codes must start with two letters, followed by one (level 1) to three (level 3) alphanumeric characters. All uppercase.
-                Invalid codes: ",
-          paste0(unique(data$from_code[!str_detect(data$from_code, "^[A-Z]{2}[A-Z0-9]{1,3}")]), collapse = ", ")
+    if (any(str_detect(data$from_code, "^[A-Za-z]{2}[A-Za-z0-9]{1,3}$") == F))
+      cli_abort(
+        c(
+          "Variable {.var {nuts_code}} contains invalid NUTS codes.",
+          "NUTS codes must start with two letters, followed by one (level 1) to three (level 3) alphanumeric characters, all uppercase.",
+          "Invalid codes: {unique(data$from_code[!str_detect(data$from_code, '^[A-Z]{2}[A-Z0-9]{1,3}$')])}"
+          )
         )
-      )
-    }
 
     # Grouping vars, country identified by default
     if (!is.null(group_vars)) {
       if (any(group_vars %in% colnames(data) == FALSE)) {
-        stop("Input 'group_vars' not found in the provided data frame.")
+        cli_abort("Input {.arg group_vars} not found in the provided data frame.")
       }
       group_vars <- c("country", group_vars)
     } else {
@@ -114,32 +109,27 @@ classify_nuts <-
         filter(n() > 1) %>%
         distinct(.data$from_code) %>%
         pull()
-      stop(
-        paste0(
-          "Duplicate NUTS codes found. => Please only use unique NUTS codes or specify a grouping variable in `group_vars'. ",
-          "Duplicate codes: ",
-          paste0(duplicate_codes, collapse = ", "),
-          "."
-        )
+      cli_abort(
+        c( "Duplicate NUTS codes found.",
+           "=> Please only use unique NUTS codes or specify a grouping variable in {.arg group_vars}.",
+           "Duplicate codes: {duplicate_codes}."
+           )
       )
     }
 
     # Test if NUTS codes of different levels present
     if (length(unique(nchar(data$from_code))) != 1) {
-      stop(
-        paste0(
-          "\nData contains NUTS codes from multiple levels (",
-          paste0(unique(nchar(data$from_code) - 2), collapse = " and "),
-          "). => Please classify different levels separately."
-        )
+      cli_abort(
+        "Data contains NUTS codes from multiple levels ({sort(unique(nchar(data$from_code) - 2))}).",
+        "=> Please classify different levels separately."
       )
     }
 
     # CLASSIFICATION POSSIBLE
     #-------------------------
     # Welcome information
-    cat(blue$bold("\nClassifying version of NUTS codes"))
-    cat(blue("\n----------------------------------"))
+    cat(col_blue(style_bold("\nClassifying version of NUTS codes")))
+    cat(col_blue("\n----------------------------------"))
 
     # Check for NUTS codes that cannot be classified
     all_nuts_codes <- get("all_nuts_codes")
@@ -147,10 +137,10 @@ classify_nuts <-
       data$from_code[!data$from_code %in% all_nuts_codes$code]
     if (length(codes_not_found) > 0) {
       text <-
-        paste0("\n=> These NUTS codes cannot be identified or classified: "  ,
-               red(paste0(codes_not_found, collapse = ", ")),
-               ".")
-      cat(blue(text))
+        paste0( col_red("\n=> These NUTS codes cannot be identified or classified: " ),
+                "{codes_not_found}",
+                ".")
+      cli_alert_info(text)
     }
 
 
@@ -224,12 +214,12 @@ classify_nuts <-
 
     # - Check if there is variation within groups
     if (any(data$overlap_perc[!is.na(data$from_version)] < 100)) {
-      cat(blue(
+      cat(col_blue(
         paste0(
-          "\n=> Within " %+% red("groups ") %+% "defined by ",
-          red(paste0(group_vars, collapse = " x ")),
+          "\n=> Within " , col_red("groups ") , "defined by ",
+          col_red(paste0(group_vars, collapse = " x ")),
           ".",
-          "\n==> Classified" %+% red(" multiple ") %+% "NUTS code versions. See the tibble 'Overlap of each NUTS version...' in the output."
+          "\n==>" , col_red(" Multiple ") , "NUTS versions classified. See the tibble 'versions_data' in the output."
         )
       ))
       paste_grouping <- F
@@ -291,20 +281,20 @@ classify_nuts <-
 
     # - Show grouping if not yet
     if (paste_grouping) {
-      cat(blue(paste0(
-        "\n=> Within " %+% red("groups ") %+% "defined by ",
-        red(paste0(c(group_vars), collapse = " x ")),
+      cat(col_blue(paste0(
+        "\n=> Within " , col_red("groups ") , "defined by ",
+        col_red(paste0(c(group_vars), collapse = " x ")),
         "."
       )))
     }
 
     # - Alert missing
     if (nrow(data_missing_nuts) == 0) {
-      cat(blue(paste0("\n==> No missing NUTS codes.")))
+      cat(col_blue(paste0("\n==> No missing NUTS codes.")))
     } else if (nrow(data_missing_nuts) > 0) {
-      cat(blue(
+      cat(col_blue(
         paste0(
-          "\n==>" %+% red(" Missing ") %+% "NUTS codes detected. See the tibble 'Missing NUTS codes...' in the output."
+          "\n==>" , col_red(" Missing ") , "NUTS codes detected. See the tibble 'missing_data' in the output."
         )
       ))
     }
