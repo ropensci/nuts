@@ -1,41 +1,5 @@
-# Load testing data
-#----------------------
-# 1. A. EUROSTAT data of manure storage facilities
-
-data("manure")
-
-# 1.B. Add fake random shares
-set.seed(1234567)
-manure <- runif(nrow(manure) , min = 0 , max = 100) %>%
-  bind_cols(manure)
-
-names(manure)[1] <- 'pct'
-
-manure_2_indic_DE_2003 <- manure %>%
-  filter(nchar(geo) == 4) %>%
-  filter(indic_ag == "I07A_EQ_Y") %>%
-  select(-indic_ag) %>%
-  filter(grepl("^DE", geo)) %>%
-  filter(time == 2003) %>%
-  select(-time)
-
-manure_2_indic <- manure %>%
-  filter(nchar(geo) == 4) %>%
-  filter(indic_ag == "I07A_EQ_Y") %>%
-  select(-indic_ag)
-
-manure_2_wild <- manure_2_indic %>%
-  select(-time) %>%
-  distinct(geo)
-
-manure_3 <- manure %>%
-  filter(nchar(geo) == 5)
-
-######################################################### TESTS
-
 # Run error tests
 #---------------------
-
 test_that("data input not valid", {
   expect_error(
     convert_nuts_level(
@@ -49,7 +13,7 @@ test_that("data input not valid", {
 
 test_that("variables missing", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_indic_2_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(data = .,
                          to_level = 1)
@@ -58,7 +22,7 @@ test_that("variables missing", {
 
 test_that("variable not found", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_indic_2_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(
         data = .,
@@ -71,7 +35,7 @@ test_that("variable not found", {
 
 test_that("variable type not found", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(
         data = .,
@@ -84,7 +48,7 @@ test_that("variable type not found", {
 
 test_that("invalid to_level 1", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(
         data = .,
@@ -97,7 +61,7 @@ test_that("invalid to_level 1", {
 
 test_that("invalid to_level 2", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(
         data = .,
@@ -110,7 +74,7 @@ test_that("invalid to_level 2", {
 
 test_that("weight invalid", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(
         data = .,
@@ -125,7 +89,7 @@ test_that("weight invalid", {
 
 test_that("NUTS codes already at level 2", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(
         to_level = 2,
@@ -140,7 +104,8 @@ test_that("NUTS codes already at level 2", {
 #---------------------
 test_that("Converter output spits out correct names", {
   expect_equal(
-    manure_3 %>%
+    manure %>%
+      filter(nchar(geo) == 5) %>%
       filter(!grepl("EU|ME|ZZ", geo)) %>%
       classify_nuts(
         nuts_code = "geo",
@@ -158,7 +123,8 @@ test_that("Converter output spits out correct names", {
 
 test_that("See if all codes are aggregated from level 3 to level 2", {
   expect_equal({
-    manure_3 %>%
+    manure %>%
+      filter(nchar(geo) == 5) %>%
       filter(!grepl("EU|ME|ZZ", geo)) %>%
       classify_nuts(nuts_code = "geo",
                     group_vars = c("indic_ag", "time")) %>%
@@ -176,7 +142,8 @@ test_that("See if all codes are aggregated from level 3 to level 2", {
 
 test_that("See if all codes are aggregated from level 3 to level 1", {
   expect_equal({
-    manure_3 %>%
+    manure %>%
+      filter(nchar(geo) == 5) %>%
       filter(!grepl("EU|ME|ZZ", geo)) %>%
       classify_nuts(nuts_code = "geo",
                     group_vars = c("indic_ag", "time")) %>%
@@ -195,7 +162,7 @@ test_that("See if all codes are aggregated from level 3 to level 1", {
 
 test_that("Grouped output equal to non-grouped output", {
   expect_equal({
-    manure_2_indic %>%
+    manure_2_indic() %>%
       filter(grepl("DE", geo)) %>%
       filter(!grepl("ZZ", geo)) %>%
       filter(time %in% c(2000, 2010)) %>%
@@ -209,7 +176,7 @@ test_that("Grouped output equal to non-grouped output", {
       filter(time == 2000) %>% select(-time) %>%
       as.data.frame()
   },
-  manure_2_indic %>%
+  manure_2_indic() %>%
     filter(grepl("DE", geo)) %>%
     filter(!grepl("ZZ", geo)) %>%
     filter(time %in% c(2000)) %>%
@@ -225,7 +192,7 @@ test_that("Grouped output equal to non-grouped output", {
 
 test_that("Grouped output equal to non-grouped output", {
   expect_equal({
-    manure_2_indic %>%
+    manure_2_indic() %>%
       filter(grepl("DE", geo)) %>%
       filter(!grepl("ZZ", geo)) %>%
       filter(time %in% c(2000, 2010)) %>%
@@ -239,7 +206,7 @@ test_that("Grouped output equal to non-grouped output", {
       filter(time == 2000) %>% select(-time) %>%
       as.data.frame()
   },
-  manure_2_indic %>%
+  manure_2_indic() %>%
     filter(grepl("DE", geo)) %>%
     filter(!grepl("ZZ", geo)) %>%
     filter(time %in% c(2000)) %>%
@@ -255,7 +222,7 @@ test_that("Grouped output equal to non-grouped output", {
 
 test_that("Additional variables unspecified by the user (here: time)", {
   expect_equal(
-    manure_2_indic %>%
+    manure_2_indic() %>%
       filter(grepl("DE", geo)) %>%
       filter(!grepl("ZZ", geo)) %>%
       filter(time %in% c(2000)) %>%
@@ -316,4 +283,3 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(52, 4)
             )
           })
-

@@ -1,35 +1,4 @@
-# Load testing data
-#----------------------
 
-# 1. A. EUROSTAT data of manure storage facilities
-data("manure")
-
-# 1.B. Add fake random shares
-set.seed(1234567)
-manure <- runif(nrow(manure) , min = 0 , max = 100) %>%
-  bind_cols(manure)
-
-names(manure)[1] <- 'pct'
-
-manure_2_indic_DE_2003 <- manure %>%
-  filter(nchar(geo) == 4) %>%
-  filter(indic_ag == "I07A_EQ_Y") %>%
-  select(-indic_ag) %>%
-  filter(grepl("^DE", geo)) %>%
-  filter(time == 2003) %>%
-  select(-time)
-
-manure_2_indic <- manure %>%
-  filter(nchar(geo) == 4) %>%
-  filter(indic_ag == "I07A_EQ_Y") %>%
-  select(-indic_ag)
-
-manure_3 <- manure %>%
-  filter(nchar(geo) == 5)
-
-
-
-######################################################### TESTS
 
 # Run error tests
 #---------------------
@@ -46,7 +15,7 @@ test_that("data input not valid", {
 
 test_that("variables missing", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_version(data = .,
                            to_version = "2021")
@@ -55,7 +24,7 @@ test_that("variables missing", {
 
 test_that("variable not found", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_version(
         data = .,
@@ -68,7 +37,7 @@ test_that("variable not found", {
 
 test_that("variable type not found", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_version(
         data = .,
@@ -81,7 +50,7 @@ test_that("variable type not found", {
 
 test_that("to_version invalid", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_version(
         data = .,
@@ -94,7 +63,7 @@ test_that("to_version invalid", {
 
 test_that("weight invalid", {
   expect_error(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_version(
         data = .,
@@ -133,7 +102,7 @@ test_that("Mixing NUTS codes of different levels", {
 #---------------------
 test_that("Converter output spits out correct names", {
   expect_equal(
-    manure_2_indic_DE_2003 %>%
+    manure_2_indic_DE_2003() %>%
       filter(!grepl("ZZ", geo)) %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_version(
@@ -148,7 +117,7 @@ test_that("Converter output spits out correct names", {
 
 test_that("Grouped output equal to non-grouped output", {
   expect_equal({
-    manure_2_indic %>%
+    manure_2_indic() %>%
       filter(grepl("DE", geo)) %>%
       filter(!grepl("ZZ", geo)) %>%
       filter(time %in% c(2000, 2010)) %>%
@@ -163,7 +132,7 @@ test_that("Grouped output equal to non-grouped output", {
       ) %>%
       filter(time == 2000) %>% select(-time)
   },
-  manure_2_indic %>%
+  manure_2_indic() %>%
     filter(grepl("DE", geo)) %>%
     filter(!grepl("ZZ", geo)) %>%
     filter(time %in% c(2000)) %>%
@@ -179,7 +148,8 @@ test_that("Grouped output equal to non-grouped output", {
 
 test_that("Multiple groups", {
   expect_equal({
-    manure_3 %>%
+    manure %>%
+      filter(nchar(geo) == 5) %>%
       classify_nuts(
         nuts_code = "geo",
         data = .,
@@ -199,7 +169,7 @@ test_that("Multiple groups", {
 
 test_that("Missing NUTS codes", {
   expect_equal({
-    manure_2_indic_DE_2003  %>%
+    manure_2_indic_DE_2003()  %>%
       classify_nuts(nuts_code = "geo",
                     data = .) %>%
       convert_nuts_version(
@@ -217,9 +187,7 @@ test_that("Missing NUTS codes", {
 
 test_that("Ignoring missing NUTS codes", {
   expect_equal({
-    cross_walks %>%
-      filter(from_code %in% "DE50")
-    manure_2_indic_DE_2003  %>%
+    manure_2_indic_DE_2003()  %>%
       classify_nuts(nuts_code = "geo",
                     data = .) %>%
       convert_nuts_version(
@@ -281,4 +249,3 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(1005, 5)
             )
           })
-

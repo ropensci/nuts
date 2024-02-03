@@ -1,58 +1,44 @@
-# Load testing data
-data("manure")
-data("patents")
-
-manure_indic_DE_2003 <- manure %>%
-  filter(nchar(geo) == 4) %>%
-  filter(indic_ag == "I07A_EQ_Y") %>%
-  select(-indic_ag) %>%
-  filter(grepl("^DE", geo)) %>%
-  filter(time == 2003) %>%
-  select(-time)
-
-manure_indic <- manure %>%
-  filter(nchar(geo) == 4) %>%
-  filter(indic_ag == "I07A_EQ_Y") %>%
-  select(-indic_ag)
-
-patents_nr_n2_2012 <- patents %>%
-  filter(unit == "NR", nchar(geo) == 4, time == 2012)
-
-
 # Run error tests
 test_that("data not valid", {
-  expect_error(classify_nuts(data = 1 , nuts_code = "geo"),
-               "Input `data` must be a data frame or tibble, not a number.")
+  expect_error(
+    classify_nuts(data = 1 , nuts_code = "geo"),
+    "Input `data` must be a data frame or tibble, not a number."
+  )
 })
 
 test_that("Needs geo var 1", {
   expect_error(
-    manure_indic_DE_2003 %>% classify_nuts(nuts_code = NULL),
+    manure_indic_2_DE_2003() %>%
+      classify_nuts(nuts_code = NULL),
     "Input `nuts_code` must be provided as a string, not NULL."
   )
 })
 
 test_that("Needs geo var 2", {
-  expect_error(manure_indic_DE_2003 %>% classify_nuts())
+  expect_error(manure_indic_2_DE_2003() %>%
+                 classify_nuts())
 })
 
 test_that("nuts_code not valid", {
   expect_error(
-    manure_indic_DE_2003 %>% classify_nuts(nuts_code = 1),
+    manure_indic_2_DE_2003() %>%
+      classify_nuts(nuts_code = 1),
     "Input `nuts_code` must be provided as a string, not a number."
   )
 })
 
 test_that("nuts_code name not found", {
   expect_error(
-    manure_indic_DE_2003 %>% classify_nuts(nuts_code = "geoo"),
+    manure_indic_2_DE_2003() %>%
+      classify_nuts(nuts_code = "geoo"),
     "Input `nuts_code` not found in the provided data frame."
   )
 })
 
 test_that("ties not valid", {
   expect_error(
-    manure_indic_DE_2003 %>% classify_nuts(nuts_code = "geo", ties = "most_recentt"),
+    manure_indic_2_DE_2003() %>%
+      classify_nuts(nuts_code = "geo", ties = "most_recentt"),
     "Input `ties` must be 'most_recent' or 'oldest'."
   )
 })
@@ -60,7 +46,7 @@ test_that("ties not valid", {
 test_that("NUTS codes not valid", {
   expect_equal(
     expect_error(
-      manure_indic_DE_2003 %>%
+      manure_indic_2_DE_2003() %>%
         mutate(geo = str_remove(geo, "[A-Z]")) %>%
         classify_nuts(nuts_code = "geo")
     ) %>%
@@ -85,37 +71,44 @@ test_that("Multiple levels", {
 
 test_that("grouping variable not found", {
   expect_error(
-    manure_indic_DE_2003 %>%
+    manure_indic_2_DE_2003() %>%
       classify_nuts(nuts_code = "geo", group_vars = "group"),
     "Input `group_vars` not found in the provided data frame."
   )
 })
 
 test_that("no grouping variable was used or NUTS codes are not unique", {
-  expect_equal(expect_error(classify_nuts(data = manure_indic, nuts_code = "geo")) %>%
-                 grepl("Duplicate NUTS codes found", .),
-               TRUE)
+  expect_equal(expect_error(classify_nuts(
+    data = manure_2_indic(),
+    nuts_code = "geo"
+  )) %>%
+    grepl("Duplicate NUTS codes found", .),
+  TRUE)
 })
 
 
 # Run positive tests
 test_that("Classify returns nuts.classified", {
   expect_equal(attr(
-    classify_nuts(data = manure_indic_DE_2003, nuts_code = "geo"),
+    classify_nuts(data = manure_indic_2_DE_2003(),
+                  nuts_code = "geo"),
     "class"
   ),
   "nuts.classified")
 })
 
 test_that("Length of three", {
-  expect_equal(length(classify_nuts(data = manure_indic_DE_2003, nuts_code = "geo")),
-               3)
+  expect_equal(length(
+    classify_nuts(data = manure_indic_2_DE_2003(),
+                  nuts_code = "geo")
+  ),
+  3)
 })
 
 test_that("Dimensions of ouput when using group", {
   expect_equal(dim(
     classify_nuts(
-      data = manure_indic,
+      data = manure_2_indic(),
       nuts_code = "geo",
       group_vars = "time"
     )[[1]]
@@ -127,7 +120,7 @@ test_that("Dimensions of within group overlap classification output when using g
           {
             expect_equal(dim(
               classify_nuts(
-                data = manure_indic,
+                data = manure_2_indic(),
                 nuts_code = "geo",
                 group_vars = "time"
               )[[2]]
@@ -139,7 +132,7 @@ test_that("Names of NUTS version classified output when using groups", {
   expect_equal(
     names(
       classify_nuts(
-        data = manure_indic,
+        data = manure_2_indic(),
         nuts_code = "geo",
         group_vars = "time"
       )[[1]]
@@ -158,7 +151,7 @@ test_that("Names of NUTS version classified output when using groups", {
 test_that("Pass unidentifiable NUTS codes with version = NA", {
   expect_equal(
     classify_nuts(
-      data = manure_indic,
+      data = manure_2_indic(),
       nuts_code = "geo",
       group_vars = "time"
     )[[1]] %>%
@@ -172,7 +165,7 @@ test_that("Pass unidentifiable NUTS codes with version = NA", {
 test_that("Report custom warning that there are multiple versions within groups",
           {
             expect_equal(length(
-              manure_indic %>%
+              manure_2_indic() %>%
                 distinct(geo, .keep_all = T) %>%
                 classify_nuts(data = ., nuts_code = "geo")
             ),
@@ -181,7 +174,8 @@ test_that("Report custom warning that there are multiple versions within groups"
 
 test_that("No missing NUTS codes", {
   expect_equal(
-    patents_nr_n2_2012 %>%
+    patents %>%
+      filter(unit == "NR", nchar(geo) == 4, time == 2012) %>%
       filter(grepl("^DE", geo)) %>%
       classify_nuts(data = ., nuts_code = "geo") %>%
       .[[3]] %>%
@@ -192,7 +186,8 @@ test_that("No missing NUTS codes", {
 
 test_that("One missing NUTS code", {
   expect_equal(
-    patents_nr_n2_2012 %>%
+    patents %>%
+      filter(unit == "NR", nchar(geo) == 4, time == 2012) %>%
       filter(grepl("^DE", geo)) %>%
       filter(geo != "DE11") %>%
       classify_nuts(data = ., nuts_code = "geo") %>%
@@ -201,4 +196,3 @@ test_that("One missing NUTS code", {
     c(1, 4)
   )
 })
-
