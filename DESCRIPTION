@@ -19,10 +19,10 @@ BugReports: https://github.com/AAoritz/nuts/
 Depends: 
     R (>= 3.5.0)
 Imports:
+    cli,
     dplyr,
-    stringr,
     rlang,
-    cli
+    stringr
 Suggests: 
     distill,
     eurostat,
