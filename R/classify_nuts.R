@@ -98,6 +98,7 @@ classify_nuts <-
       select(any_of(c("from_code", group_vars))) %>%
       distinct() %>%
       nrow()
+
     if (distinct_N < nrow(data)) {
       duplicate_codes <- data %>%
         group_by_at(vars(all_of(c(
@@ -115,7 +116,8 @@ classify_nuts <-
     }
 
     # Test if NUTS codes of different levels present
-    if (length(unique(nchar(data$from_code))) != 1) {
+    nr_different_nuts_levels = length(unique(nchar(data$from_code)))
+    if (nr_different_nuts_levels != 1) {
       cli_abort(
         "Data contains NUTS codes from multiple levels ({sort(unique(nchar(data$from_code) - 2))}).",
         "=> Please classify different levels separately."
@@ -210,7 +212,8 @@ classify_nuts <-
       ungroup()
 
     # - Check if there is variation within groups
-    if (any(data$overlap_perc[!is.na(data$from_version)] < 100)) {
+    pct_overlap_within_groups <- unique(data$overlap_perc[!is.na(data$from_version)])
+    if (any(pct_overlap_within_groups < 100)) {
       cat(col_blue(
         paste0(
           "\n=> Within " , col_red("groups ") , "defined by ",
