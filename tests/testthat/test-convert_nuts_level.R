@@ -219,7 +219,6 @@ test_that("Grouped output equal to non-grouped output", {
     as.data.frame())
 })
 
-
 test_that("Additional variables unspecified by the user (here: time)", {
   expect_equal(
     manure_2_indic() %>%

@@ -1,6 +1,7 @@
 # Load testing data
 manure_2_indic_DE_2003 <- function() {
-  df <- withr::with_preserve_seed(
+  df <- withr::with_seed(
+    seed = 123345,
       runif(nrow(manure) , min = 0 , max = 100)) %>%
     bind_cols(manure)
 
@@ -18,7 +19,8 @@ manure_2_indic_DE_2003 <- function() {
 }
 
 manure_2_indic <- function() {
-  df <- withr::with_preserve_seed(
+  df <- withr::with_seed(
+    seed = 12345,
     runif(nrow(manure) , min = 0 , max = 100)) %>%
     bind_cols(manure)
 
