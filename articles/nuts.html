@@ -249,11 +249,10 @@ at the NUTS-2 level. This data is provided by EUROSTAT.</p>
 <span><span class="co"># Classifying the Data</span></span>
 <span><span class="va">pat.classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_nuts.html">classify_nuts</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat.n2.mhab.12.no</span>,</span>
 <span>                                nuts_code <span class="op">=</span> <span class="st">"geo"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Classifying version of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ----------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Classifying version of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
 <p>The function returns a list with three items:</p>
 <ol style="list-style-type: decimal">
 <li>The first item gives the <strong>original data set</strong>
@@ -265,7 +264,7 @@ automatically generated from the provided NUTS codes.</li>
 </ol>
 <p>Below, you see that all data entries correspond to the 2016 NUTS
 version.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.classified</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 6</span></span></span>
 <span><span class="co">##   from_code from_version from_level country  time values</span></span>
@@ -284,7 +283,7 @@ codes for each of the five existing NUTS versions. The
 additional groups (if provided via the <code>group_vars</code>
 argument).</li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.classified</span><span class="op">[[</span><span class="st">"versions_data"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 3</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   country [1]</span></span></span>
@@ -303,7 +302,7 @@ procedures. In our example, no NUTS codes are missing.
 <!-- We recommend to check whether missing values for these NUTS codes can be replaced, perhaps with 0.  -->
 </li>
 </ol>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.classified</span><span class="op">[[</span><span class="st">"missing_data"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 0 × 4</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   from_version, country [0]</span></span></span>
@@ -325,20 +324,19 @@ interpolated. It is important to indicate the <strong>variable
 type</strong> in the named input-vector since the interpolation
 approaches differ for <a href="https://urban.jrc.ec.europa.eu/nutsconverter/docs/2022_08_04_NUTS_converter.pdf" class="external-link">absolute
 and relative values</a>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Converting Data to 2021 NUTS version</span></span>
 <span><span class="va">pat.converted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_nuts_version.html">convert_nuts_version</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">pat.classified</span>,</span>
 <span>  to_version <span class="op">=</span> <span class="st">"2021"</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"relative"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting versions of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ---------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2016</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; All NUTS codes can be converted.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting versions of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2016</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">All NUTS codes can be converted.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
 <div class="figure">
 <img src="nuts_files/figure-html/unnamed-chunk-13-1.png" alt="Two maps of patents per 1M habitants in Norwegian NUTS 2 regions in NUTS version 2016 and converted to NUTS version 2021" width="100%"><p class="caption">
 Converting patent data between versions
@@ -350,7 +348,7 @@ seven observations, whereas the converted data set contains six. The
 regions <code>NO01</code>, <code>NO03</code>, <code>NO04</code>, and
 <code>NO05</code> are lost, while <code>NO08</code>, <code>NO09</code>,
 and <code>NO0A</code> are now listed.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.n2.mhab.12.no</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 3</span></span></span>
 <span><span class="co">##   geo    time values</span></span>
@@ -362,7 +360,7 @@ and <code>NO0A</code> are now listed.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">5</span> NO05   <span style="text-decoration: underline;">2</span>012   48.9</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">6</span> NO06   <span style="text-decoration: underline;">2</span>012  145. </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">7</span> NO07   <span style="text-decoration: underline;">2</span>012   16.5</span></span></code></pre>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.converted</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 4</span></span></span>
 <span><span class="co">##   to_code to_version country values</span></span>
@@ -379,7 +377,7 @@ and <code>NO0A</code> are now listed.</p>
 <p>You can also convert <strong>multiple variables</strong> at once.
 Below, we add the number of patent applications per 1000 inhabitants as
 a second variable:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Converting Multiple Variables</span></span>
 <span><span class="va">pat.n2.mhab.12.no</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>values_per_thous <span class="op">=</span> <span class="va">values</span> <span class="op">*</span> <span class="fl">1000</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -393,18 +391,16 @@ a second variable:</p>
 <span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"relative"</span>,</span>
 <span>                  <span class="st">"values_per_thous"</span> <span class="op">=</span> <span class="st">"relative"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Classifying version of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ----------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span>
-<span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting versions of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ---------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2016</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; All NUTS codes can be converted.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Classifying version of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting versions of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2016</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">All NUTS codes can be converted.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 6 × 5</span></span></span>
 <span><span class="co">##   to_code to_version country values values_per_thous</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -425,7 +421,7 @@ dimensions). It is possible to harmonize data across such
 the <code>group_vars</code> argument. Below, we transform data within
 country and year groups for Sweden, Slovenia, and Croatia to the 2021
 NUTS version.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Classifying grouped data (time)</span></span>
 <span><span class="va">pat.n2.mhab.sesihr</span> <span class="op">&lt;-</span> <span class="va">pat.n2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">unit</span> <span class="op">==</span> <span class="st">"P_MHAB"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -433,14 +429,13 @@ NUTS version.</p>
 <span></span>
 <span><span class="va">pat.classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_nuts.html">classify_nuts</a></span><span class="op">(</span>nuts_code <span class="op">=</span> <span class="st">"geo"</span>, data <span class="op">=</span> <span class="va">pat.n2.mhab.sesihr</span>,</span>
 <span>    group_vars <span class="op">=</span> <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Classifying version of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ----------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x time</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Classifying version of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">time</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
 <p>Note that the detected best-fitting NUTS versions differ across
 countries:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.classified</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">from_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -452,25 +447,24 @@ countries:</p>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> Slovenia 2010            26</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> Sweden   2021           104</span></span></code></pre>
 <p>The grouping is stored and passed on to the conversion function:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Converting grouped data (Time)</span></span>
 <span><span class="va">pat.converted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_nuts_version.html">convert_nuts_version</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">pat.classified</span>,</span>
 <span>  to_version <span class="op">=</span> <span class="st">"2021"</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"relative"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting versions of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ---------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2010, 2016, 2021</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; All NUTS codes can be converted.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x time</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting versions of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2016</span><span style="color: #0000BB;">, </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">, and </span><span style="color: #BB0000;">2010</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">All NUTS codes can be converted.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">time</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
 <p>Conveniently, the group argument can also be used to transform higher
 dimensional data. Below, we include two indicators for patent
 applications to convert data that varies at the
 indicator-year-country-NUTS code level.</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Classifying and converting multi-group data</span></span>
 <span><span class="va">pat.n2.mhabmact.12.sesihr</span> <span class="op">&lt;-</span> <span class="va">pat.n2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">unit</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"P_MHAB"</span>, <span class="st">"P_MACT"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -487,18 +481,16 @@ indicator-year-country-NUTS code level.</p>
 <span>    to_version <span class="op">=</span> <span class="st">"2021"</span>,</span>
 <span>    variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"relative"</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Classifying version of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ----------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x time x unit</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span>
-<span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting versions of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ---------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2010, 2016, 2021</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; All NUTS codes can be converted.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x time x unit</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Classifying version of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">, </span><span style="color: #BB0000;">time</span><span style="color: #0000BB;">, and </span><span style="color: #BB0000;">unit</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting versions of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2016</span><span style="color: #0000BB;">, </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">, and </span><span style="color: #BB0000;">2010</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">All NUTS codes can be converted.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">, </span><span style="color: #BB0000;">time</span><span style="color: #0000BB;">, and </span><span style="color: #BB0000;">unit</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
 </div>
 </div>
 <div class="section level3">
@@ -516,7 +508,7 @@ number of patent applications in Sweden from NUTS-3 to higher levels.
 The functions below return a warning concerning non-identifiable NUTS
 codes. See <a href="#nuts_not_identified"><em>Non-identified NUTS
 codes</em></a> for further information.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"patents"</span>, package <span class="op">=</span> <span class="st">"nuts"</span><span class="op">)</span></span>
 <span><span class="co"># Aggregating data from NUTS-3 to NUTS-2 and NUTS-1</span></span>
 <span><span class="va">pat.n3</span> <span class="op">&lt;-</span> <span class="va">patents</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -529,40 +521,37 @@ codes</em></a> for further information.</p>
 <span></span>
 <span><span class="va">pat.classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_nuts.html">classify_nuts</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat.n3.nr.12.se</span>,</span>
 <span>                                nuts_code <span class="op">=</span> <span class="st">"geo"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Classifying version of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ----------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> </span></span>
-<span><span class="co"><span style="color: #BB0000;">## =&gt; These NUTS codes cannot be identified or classified: </span>SEXXX and SEZZZ.</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Classifying version of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">SEXXX</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">SEZZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.level2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_nuts_level.html">convert_nuts_level</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">pat.classified</span>,</span>
 <span>  to_level <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting level of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Aggregate from NUTS regional level </span><span style="color: #BB0000;">3</span><span style="color: #0000BB;"> to </span><span style="color: #BB0000;">2</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; These NUTS codes cannot be converted and</span><span style="color: #BB0000;"> are dropped </span><span style="color: #0000BB;">from the dataset: </span><span style="color: #BB0000;">SEXXX, SEZZZ</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting level of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">--------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Aggregate from NUTS regional level </span><span style="color: #BB0000;">3</span><span style="color: #0000BB;"> to </span><span style="color: #BB0000;">2</span>.</span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">=&gt; These NUTS codes cannot be converted and </span><span style="color: #BB0000;">are dropped</span><span style="color: #0000BB;"> from the</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">dataaset: </span><span style="color: #BB0000;">SEXXX</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">SEZZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; No missing NUTS codes.</span></span></span></code></pre>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.level1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_nuts_level.html">convert_nuts_level</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">pat.classified</span>,</span>
 <span>  to_level <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting level of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Aggregate from NUTS regional level </span><span style="color: #BB0000;">3</span><span style="color: #0000BB;"> to </span><span style="color: #BB0000;">1</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; These NUTS codes cannot be converted and</span><span style="color: #BB0000;"> are dropped </span><span style="color: #0000BB;">from the dataset: </span><span style="color: #BB0000;">SEXXX, SEZZZ</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting level of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">--------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Aggregate from NUTS regional level </span><span style="color: #BB0000;">3</span><span style="color: #0000BB;"> to </span><span style="color: #BB0000;">1</span>.</span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">=&gt; These NUTS codes cannot be converted and </span><span style="color: #BB0000;">are dropped</span><span style="color: #0000BB;"> from the</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">dataaset: </span><span style="color: #BB0000;">SEXXX</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">SEZZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; No missing NUTS codes.</span></span></span></code></pre>
 <div class="figure">
 <img src="nuts_files/figure-html/unnamed-chunk-22-1.png" alt="Three maps of Sweden with patent applications at the NUTS 3 level and aggregated to NUTS level 2 and 1." width="100%"><p class="caption">
 Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1
@@ -590,21 +579,18 @@ be attached to a certain region.<a class="footnote-ref" tabindex="0" data-bs-tog
 continental shelf, embassies, consulates, military bases and deposits of
 oil, natural gas, etc. in international waters.&lt;/p&gt;"><sup>3</sup></a> Codes ending with the letter X refer to
 observations with unknown regions.</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.n3.nr.12.dk</span> <span class="op">&lt;-</span> <span class="va">pat.n3</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">unit</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NR"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op">==</span> <span class="fl">2012</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">geo</span>, <span class="st">"^DK"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pat.classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_nuts.html">classify_nuts</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat.n3.nr.12.dk</span>, nuts_code <span class="op">=</span> <span class="st">"geo"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Classifying version of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ----------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> </span></span>
-<span><span class="co"><span style="color: #BB0000;">## =&gt; These NUTS codes cannot be identified or classified: </span>DKXXX and DKZZZ.</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt; No missing NUTS codes.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Classifying version of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">DKXXX</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">DKZZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; No missing NUTS codes.</span></span></span></code></pre>
 </div>
 <div class="section level4">
 <h4 id="missing-nuts-codes">Missing NUTS codes<a class="anchor" aria-label="anchor" href="#missing-nuts-codes"></a>
@@ -614,25 +600,22 @@ provided are complete. Missing values in the input data will, by
 default, result in missing values for all affected transformed regions
 in the output data.</p>
 <p>The example below illustrates this case.</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.n3.nr.12.si</span> <span class="op">&lt;-</span> <span class="va">pat.n3</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">unit</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"NR"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op">==</span> <span class="fl">2012</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">geo</span>, <span class="st">"^SI"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pat.classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/classify_nuts.html">classify_nuts</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat.n3.nr.12.si</span>, nuts_code <span class="op">=</span> <span class="st">"geo"</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Classifying version of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ----------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> </span></span>
-<span><span class="co"><span style="color: #BB0000;">## =&gt; These NUTS codes cannot be identified or classified: </span>SIXXX and SIZZZ.</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'missing_data' in the output.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Classifying version of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">SIXXX</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">SIZZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; </span><span style="color: #BB0000;">Missing</span><span style="color: #0000BB;"> NUTS codes detected. See the tibble 'missing_data' in the output.</span></span></span></code></pre>
 <p><code><a href="../reference/classify_nuts.html">classify_nuts()</a></code> returns a warning that NUTS codes are
 missing in the input data. These codes can be inspected by calling
 <code>pat.classified[3]</code>.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pat.classified</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
 <pre><code><span><span class="co">## $missing_data</span></span>
 <span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
@@ -645,18 +628,20 @@ missing in the input data. These codes can be inspected by calling
 code <code>SI011</code> transformed into <code>SI031</code> and the
 region <code>SI016</code> was split into <code>SI036</code> and
 <code>SI037</code>.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/convert_nuts_version.html">convert_nuts_version</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat.classified</span>, </span>
 <span>                     to_version <span class="op">=</span> <span class="st">"2021"</span>, </span>
 <span>                     variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting versions of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ---------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2010</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; These NUTS codes cannot be converted and</span><span style="color: #BB0000;"> are dropped </span><span style="color: #0000BB;">from the dataset: </span><span style="color: #BB0000;">SIXXX, SIZZZ</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting versions of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2010</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">=&gt; These NUTS codes cannot be converted and </span><span style="color: #BB0000;">are dropped</span><span style="color: #0000BB;"> from the</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">dataaset: </span><span style="color: #BB0000;">SIXXX</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">SIZZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">==&gt; </span><span style="color: #BB0000;">Missing</span><span style="color: #0000BB;"> NUTS codes in data. No values are calculated for regions</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">associated with missing NUTS codes. Ensure that the input data is</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">complete.</span></span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
 <span><span class="co">##   to_code to_version country  values</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -675,7 +660,7 @@ input data. Effectively, the interpolation procedures assume that
 missing values can be replaced with <code>0</code>, which may be a very
 strong assumption depending on the context.</p></li>
 </ol>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/convert_nuts_version.html">convert_nuts_version</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">pat.classified</span>, </span>
 <span>  to_version <span class="op">=</span> <span class="st">"2021"</span>, </span>
@@ -683,13 +668,15 @@ strong assumption depending on the context.</p></li>
 <span>  missing_rm <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">to_code</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"SI031"</span>, <span class="st">"SI036"</span>, <span class="st">"SI037"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting versions of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ---------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2010</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; These NUTS codes cannot be converted and</span><span style="color: #BB0000;"> are dropped </span><span style="color: #0000BB;">from the dataset: </span><span style="color: #BB0000;">SIXXX, SIZZZ</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting versions of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2010</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">=&gt; These NUTS codes cannot be converted and </span><span style="color: #BB0000;">are dropped</span><span style="color: #0000BB;"> from the</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">dataaset: </span><span style="color: #BB0000;">SIXXX</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">SIZZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">==&gt; </span><span style="color: #BB0000;">Missing</span><span style="color: #0000BB;"> NUTS codes in data. No values are calculated for regions</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">associated with missing NUTS codes. Ensure that the input data is</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">complete.</span></span></span></code></pre>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
 <span><span class="co">##   to_code to_version country  values</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -704,7 +691,7 @@ strong assumption depending on the context.</p></li>
 NUTS levels</strong> at once. The classification function will throw an
 error in this case. The conversion needs to be conducted for every level
 separately.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">patents</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">geo</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^EL"</span>, <span class="va">geo</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">geo</span>, .keep_all <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
@@ -725,22 +712,20 @@ artificially create a data set containing different NUTS versions.
 <code><a href="../reference/classify_nuts.html">classify_nuts()</a></code> returns a warning and by inspecting the
 identified versions, we see that there are mixed versions within groups
 (the countries).</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb97"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">man.deit</span> <span class="op">&lt;-</span> <span class="va">manure</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">grepl</a></span><span class="op">(</span><span class="st">"^DE|^IT"</span>, <span class="va">geo</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="va">geo</span><span class="op">)</span> <span class="op">==</span> <span class="fl">4</span>, <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">geo</span>, .keep_all <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/classify_nuts.html">classify_nuts</a></span><span class="op">(</span>nuts_code <span class="op">=</span> <span class="st">"geo"</span>, data <span class="op">=</span> <span class="va">.</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Classifying version of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ----------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> </span></span>
-<span><span class="co"><span style="color: #BB0000;">## =&gt; These NUTS codes cannot be identified or classified: </span>DEZZ.</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Multiple </span><span style="color: #0000BB;">NUTS versions classified. See the tibble 'versions_data' in the output.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'missing_data' in the output.</span></span></span></code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Classifying version of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">DEZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">==&gt; </span><span style="color: #BB0000;">Multiple</span><span style="color: #0000BB;"> NUTS versions classified. See the tibble 'versions_data'</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">in the output.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">==&gt; </span><span style="color: #BB0000;">Missing</span><span style="color: #0000BB;"> NUTS codes detected. See the tibble 'missing_data' in the output.</span></span></span></code></pre>
+<div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">man.deit</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">from_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -763,22 +748,26 @@ non-dominant versions are discarded.</p>
 <p>Once we convert this data set, all NUTS regions unrecognized
 acoording to the 2006 (Germany) and 2021 (Italy) version are dropped
 automatically.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">man.deit.converted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/convert_nuts_version.html">convert_nuts_version</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">man.deit</span>,</span>
 <span>  to_version <span class="op">=</span> <span class="fl">2021</span>,</span>
 <span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"relative"</span><span class="op">)</span>,</span>
 <span>  multiple_versions <span class="op">=</span> <span class="st">"most_frequent"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co"><span style="color: #0000BB; font-weight: bold;">## Converting versions of NUTS codes</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ---------------------------------</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2006, 2021</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; These NUTS codes cannot be converted and</span><span style="color: #BB0000;"> are dropped </span><span style="color: #0000BB;">from the dataset: </span><span style="color: #BB0000;">DEZZ</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## =&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Multiple </span><span style="color: #0000BB;">NUTS code versions. Choosing most frequent version within group and</span><span style="color: #BB0000;"> dropping </span><span style="color: #0000BB;">12 row(s).</span></span></span>
-<span><span class="co"><span style="color: #0000BB;">## ==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.</span></span></span></code></pre>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Converting versions of NUTS codes</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">-----------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2006</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">=&gt; These NUTS codes cannot be converted and </span><span style="color: #BB0000;">are dropped</span><span style="color: #0000BB;"> from the</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">dataaset: </span><span style="color: #BB0000;">DEZZ</span><span style="color: #0000BB;">.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">==&gt; </span><span style="color: #BB0000;">Multiple</span><span style="color: #0000BB;"> NUTS code</span></span></span>
+<span><span class="co"><span style="color: #0000BB;">## versions.</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #00BBBB;">ℹ</span> <span style="color: #0000BB;">Choosing most frequent version within group and </span><span style="color: #BB0000;">dropping</span><span style="color: #0000BB;"> 12 row(s).</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning: <span style="color: #0000BB;">==&gt; </span><span style="color: #BB0000;">Missing</span><span style="color: #0000BB;"> NUTS codes in data. No values are calculated for regions</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">associated with missing NUTS codes. Ensure that the input data is</span></span></span>
+<span><span class="co">## <span style="color: #0000BB;">complete.</span></span></span></code></pre>
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">man.deit.converted</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">to_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
