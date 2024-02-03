@@ -130,7 +130,35 @@ If set to <code>'most_frequent'</code> data is converted using the best-matching
 <span class="r-in"><span>  <span class="fu">convert_nuts_version</span><span class="op">(</span>to_version <span class="op">=</span> <span class="st">'2021'</span>,</span></span>
 <span class="r-in"><span>                       weight <span class="op">=</span> <span class="st">'pop18'</span>,</span></span>
 <span class="r-in"><span>                       variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'values'</span> <span class="op">=</span> <span class="st">'absolute'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in col_blue(style_bold("\nClassifying version of NUTS codes")):</span> could not find function "col_blue"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">Classifying version of NUTS codes</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">----------------------------------</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">=&gt; These NUTS codes cannot be identified or classified: </span>DEZZ.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'missing_data' in the output.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">Converting versions of NUTS codes</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">---------------------------------</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2006</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be converted and</span><span style="color: #BB0000;"> are dropped </span><span style="color: #0000BB;">from the dataset: </span><span style="color: #BB0000;">DEZZ</span><span style="color: #0000BB;">.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 38 × 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    to_code to_version country values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> DE11    2021       Germany  <span style="text-decoration: underline;">11</span>320</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> DE12    2021       Germany   <span style="text-decoration: underline;">3</span>710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> DE13    2021       Germany   <span style="text-decoration: underline;">9</span>710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> DE14    2021       Germany  <span style="text-decoration: underline;">11</span>220</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> DE21    2021       Germany  <span style="text-decoration: underline;">22</span>760</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> DE22    2021       Germany  <span style="text-decoration: underline;">16</span>390</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> DE23    2021       Germany  <span style="text-decoration: underline;">12</span>500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> DE24    2021       Germany   <span style="text-decoration: underline;">8</span>440</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> DE25    2021       Germany  <span style="text-decoration: underline;">10</span>380</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> DE26    2021       Germany   <span style="text-decoration: underline;">6</span>150</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 28 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Convert NUTS 3 codes by country x year, classifying version first</span></span></span>
@@ -143,7 +171,35 @@ If set to <code>'most_frequent'</code> data is converted using the best-matching
 <span class="r-in"><span>  <span class="fu">convert_nuts_version</span><span class="op">(</span>to_version <span class="op">=</span> <span class="st">'2021'</span>,</span></span>
 <span class="r-in"><span>                       weight <span class="op">=</span> <span class="st">'pop18'</span>,</span></span>
 <span class="r-in"><span>                       variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'values'</span> <span class="op">=</span> <span class="st">'absolute'</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in col_blue(style_bold("\nClassifying version of NUTS codes")):</span> could not find function "col_blue"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">Classifying version of NUTS codes</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">----------------------------------</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">=&gt; These NUTS codes cannot be identified or classified: </span>ME000 and NOZZZ.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x time</span><span style="color: #0000BB;">.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'missing_data' in the output.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">Converting versions of NUTS codes</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">---------------------------------</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Converting NUTS codes in version(s) </span><span style="color: #BB0000;">2006, 2010, 2013, 2016, 2021</span><span style="color: #0000BB;"> to version </span><span style="color: #BB0000;">2021</span><span style="color: #0000BB;">.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be converted and</span><span style="color: #BB0000;"> are dropped </span><span style="color: #0000BB;">from the dataset: </span><span style="color: #BB0000;">ME000, NOZZZ</span><span style="color: #0000BB;">.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x time</span><span style="color: #0000BB;">.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 2,296 × 5</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    to_code to_version country  time values</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 1</span> AT111   2021       Austria  <span style="text-decoration: underline;">2</span>010    276</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 2</span> AT112   2021       Austria  <span style="text-decoration: underline;">2</span>010    482</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 3</span> AT113   2021       Austria  <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">1</span>422</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 4</span> AT121   2021       Austria  <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">6</span>889</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 5</span> AT122   2021       Austria  <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">3</span>133</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 6</span> AT123   2021       Austria  <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">2</span>027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 7</span> AT124   2021       Austria  <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">5</span>870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 8</span> AT125   2021       Austria  <span style="text-decoration: underline;">2</span>010    905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;"> 9</span> AT126   2021       Austria  <span style="text-decoration: underline;">2</span>010   <span style="text-decoration: underline;">1</span>103</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> AT127   2021       Austria  <span style="text-decoration: underline;">2</span>010    506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2,286 more rows</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
