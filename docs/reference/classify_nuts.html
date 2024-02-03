@@ -134,10 +134,12 @@ for each group.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">Classifying version of NUTS codes</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">----------------------------------</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">DEZZ</span><span style="color: #0000BB;">.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">=&gt; These NUTS codes cannot be identified or classified: </span>DEZZ.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'Missing NUTS codes...' in the output.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`Original data with identified NUTS version in variable 'from_version'`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'missing_data' in the output.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 36 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    from_code from_version from_level country values</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -153,7 +155,7 @@ for each group.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> DE26      2006                  2 Germany   <span style="text-decoration: underline;">6</span>150</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 26 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`Overlap of each NUTS version within country groups`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $versions_data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   country [2]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   from_version country overlap_perc</span>
@@ -165,7 +167,7 @@ for each group.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> 2010         Germany         88.6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> <span style="color: #BB0000;">NA</span>           <span style="color: #BB0000;">NA</span>              <span style="color: #BB0000;">NA</span>  </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`Missing NUTS codes within from_version x country groups`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $missing_data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 4 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   from_version, country [1]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   from_code from_version from_level country</span>
@@ -191,10 +193,12 @@ for each group.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB; font-weight: bold;">Classifying version of NUTS codes</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">----------------------------------</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">ME000, NOZZZ</span><span style="color: #0000BB;">.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">=&gt; These NUTS codes cannot be identified or classified: </span>ME000 and NOZZZ.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">=&gt; Within </span><span style="color: #BB0000;">groups </span><span style="color: #0000BB;">defined by </span><span style="color: #BB0000;">country x time</span><span style="color: #0000BB;">.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'Missing NUTS codes...' in the output.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`Original data with identified NUTS version in variable 'from_version'`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">==&gt;</span><span style="color: #BB0000;"> Missing </span><span style="color: #0000BB;">NUTS codes detected. See the tibble 'missing_data' in the output.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1,902 × 6</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    from_code from_version from_level country  time values</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
@@ -210,7 +214,7 @@ for each group.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> AT127     2021                  3 Austria  <span style="text-decoration: underline;">2</span>010    506</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 1,892 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`Overlap of each NUTS version within country x time groups`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $versions_data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 312 × 4</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   country, time [67]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    from_version country  time overlap_perc</span>
@@ -227,7 +231,7 @@ for each group.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> 2021         Belgium  <span style="text-decoration: underline;">2</span>000         81.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 302 more rows</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $`Missing NUTS codes within from_version x country x time groups`</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $missing_data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 324 × 5</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># Groups:   from_version, country, time [16]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    from_code from_version from_level country  time</span>
