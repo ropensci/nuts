@@ -53,6 +53,15 @@ classify_nuts <-
            nuts_code = nuts_code,
            group_vars = NULL,
            ties = "most_recent") {
+
+    # DEFINE CLI DIVs
+    #-----------------------
+    cli_div(theme = list(
+      span.red = list(color = "red"),
+      span.blue = list(color = "blue")
+      )
+      )
+
     # CODE BREAKING CHECKS
     #------------------------
     # Input checks
@@ -127,19 +136,14 @@ classify_nuts <-
     # CLASSIFICATION POSSIBLE
     #-------------------------
     # Welcome information
-    cat(col_blue(style_bold("\nClassifying version of NUTS codes")))
-    cat(col_blue("\n----------------------------------"))
-
+    cli_alert_info(c("{.blue Classifying version of NUTS codes}",
+                     "\n{.blue -----------------------------------}"))
     # Check for NUTS codes that cannot be classified
     all_nuts_codes <- get("all_nuts_codes")
     codes_not_found <-
       data$from_code[!data$from_code %in% all_nuts_codes$code]
     if (length(codes_not_found) > 0) {
-      text <-
-        paste0( col_red("\n=> These NUTS codes cannot be identified or classified: " ),
-                "{codes_not_found}",
-                ".")
-      cli_alert_info(text)
+      cli_alert_info("{.blue => These NUTS codes cannot be identified or classified: {.red {codes_not_found}}.}")
     }
 
 
@@ -214,14 +218,8 @@ classify_nuts <-
     # - Check if there is variation within groups
     pct_overlap_within_groups <- unique(data$overlap_perc[!is.na(data$from_version)])
     if (any(pct_overlap_within_groups < 100)) {
-      cat(col_blue(
-        paste0(
-          "\n=> Within " , col_red("groups ") , "defined by ",
-          col_red(paste0(group_vars, collapse = " x ")),
-          ".",
-          "\n==>" , col_red(" Multiple ") , "NUTS versions classified. See the tibble 'versions_data' in the output."
-        )
-      ))
+      cli_warn(c( "{.blue => Within {.red groups} defined by {.red {group_vars}}.}",
+                  "{.blue ==> {.red Multiple} NUTS versions classified. See the tibble 'versions_data' in the output.}"))
       paste_grouping <- F
     } else {
       paste_grouping <- T
@@ -281,22 +279,14 @@ classify_nuts <-
 
     # - Show grouping if not yet
     if (paste_grouping) {
-      cat(col_blue(paste0(
-        "\n=> Within " , col_red("groups ") , "defined by ",
-        col_red(paste0(c(group_vars), collapse = " x ")),
-        "."
-      )))
+      cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}.}")
     }
 
     # - Alert missing
     if (nrow(data_missing_nuts) == 0) {
-      cat(col_blue(paste0("\n==> No missing NUTS codes.")))
+      cli_alert_info("{.blue \n==> No missing NUTS codes.}")
     } else if (nrow(data_missing_nuts) > 0) {
-      cat(col_blue(
-        paste0(
-          "\n==>" , col_red(" Missing ") , "NUTS codes detected. See the tibble 'missing_data' in the output."
-        )
-      ))
+      cli_alert_info("{.blue \n==> {.red Missing} NUTS codes detected. See the tibble 'missing_data' in the output.}")
     }
     # - done
 

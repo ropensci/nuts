@@ -42,6 +42,14 @@ convert_nuts_level <-
            weight = NULL,
            missing_rm = FALSE,
            multiple_versions = "break") {
+
+    # DEFINE CLI DIVs
+    #-----------------------
+    cli_div(theme = list(
+      span.red = list(color = "red"),
+      span.blue = list(color = "blue")
+    )
+    )
     # CODE BREAKING CHECKS
     #------------------------
     # Input checks
@@ -105,41 +113,20 @@ convert_nuts_level <-
     # CONVERSION POSSIBLE
     #----------------------
     # Welcome information
-    cat(col_blue(style_bold("\nConverting level of NUTS codes")))
-    cat(col_blue("\n------------------------------"))
-
+    cli_alert_info(c("{.blue Converting level of NUTS codes}",
+                     "\n{.blue --------------------------------}"))
     # CONVERSION BETWEEN DIFFERENT NUTS LEVELS
-    cat(col_blue(
-      paste0(
-        "\n=> Aggregate from NUTS regional level ",
-        col_red(data$from_level[1]),
-        " to ",
-        col_red(to_level),
-        "."
-      )
-    ))
+    cli_alert_info("{.blue => Aggregate from NUTS regional level {.red {data$from_level[1]}} to {.red {to_level}}}.")
 
     # Check which NUTS codes can be converted
     nr_nuts_codes_recognized <-
       length(data$from_code[check_nuts_codes])
     nr_nuts_codes <- length(data$from_code)
     if (nr_nuts_codes_recognized == nr_nuts_codes) {
-      cat(col_blue("\n=> All NUTS codes can be converted."))
-
+      cli_alert_info("{.blue => All NUTS codes can be converted.}")
     } else if (nr_nuts_codes_recognized < nr_nuts_codes &&
                nr_nuts_codes_recognized > 0) {
-      text <-
-        paste0(
-          "\n=> These NUTS codes cannot be converted and" ,
-          col_red(" are dropped ") ,
-          "from the dataset: ",
-          col_red(paste0(unique(
-            data$from_code[!check_nuts_codes]
-          ), collapse = ", ")),
-          "."
-        )
-      cat(col_blue(text))
-
+      cli_warn("{.blue => These NUTS codes cannot be converted and {.red are dropped} from the dataaset: {.red {unique(data$from_code[!check_nuts_codes])}}.}")
       data <- data[check_nuts_codes, ]
     }
 
@@ -156,18 +143,8 @@ convert_nuts_level <-
 
     # Use data_versions which is sorted for most frequent version within group
     if (multi_versions_A > multi_versions_B) {
-      cat(col_blue(
-        paste0(
-          "\n=> Within " ,
-          col_red("groups ") ,
-          "defined by ",
-          col_red(paste0(group_vars, collapse = " x ")),
-          ".",
-          "\n==>" ,
-          col_red(" Multiple ") ,
-          "NUTS code versions. "
-        )
-      ))
+      cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}}")
+      cli_warn("{.blue ==> {.red Multiple} NUTS code versions.}")
 
       if (multiple_versions == "break") {
         cli_abort(
@@ -188,14 +165,7 @@ convert_nuts_level <-
         data <-
           inner_join(data, data_versions, by = c("from_version", group_vars))
 
-        cat(col_blue(
-          paste0(
-            "Choosing most frequent version within group and" ,
-            col_red(" dropping "),
-            nrow(data_multi_versions),
-            " row(s)."
-          )
-        ))
+        cli_alert_info("{.blue Choosing most frequent version within group and {.red dropping} {nrow(data_multi_versions)} row(s).}")
       }
       paste_grouping = F
     } else {
@@ -245,26 +215,14 @@ convert_nuts_level <-
       filter(if_any(names(variables), ~ is.na(.)))
 
     if (paste_grouping) {
-      cat(col_blue(paste0(
-        "\n=> Within " ,
-        col_red("groups ") ,
-        "defined by ",
-        col_red(paste0(group_vars, collapse = " x ")),
-        "."
-      )))
-
+      cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}.}")
     }
 
     if (nrow(missing) > 0) {
-      cat(
-        col_blue(
-          "\n==>" ,
-          col_red(" Missing ") ,
-          "NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete."
-        )
-      )
+      cli_warn(c("{.blue => {.red Missing} NUTS codes in data.}",
+                 "{.blue ==> No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.}"))
     } else if (nrow(missing) == 0) {
-      cat(col_blue("\n==> No missing NUTS codes."))
+      cli_alert_info("{.blue => No missing NUTS codes.}")
     }
     rm(missing)
 
