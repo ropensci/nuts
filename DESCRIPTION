@@ -42,7 +42,8 @@ Suggests:
     sf,
     terra,
     testthat,
-    tidyr
+    tidyr,
+    withr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3

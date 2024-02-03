@@ -1,6 +1,7 @@
 # Load testing data
 manure_2_indic_DE_2003 <- function() {
-  df <- runif(nrow(manure) , min = 0 , max = 100) %>%
+  df <- withr::with_preserve_seed(
+      runif(nrow(manure) , min = 0 , max = 100)) %>%
     bind_cols(manure)
 
   names(df)[1] <- 'pct'
@@ -17,7 +18,8 @@ manure_2_indic_DE_2003 <- function() {
 }
 
 manure_2_indic <- function() {
-  df <- runif(nrow(manure) , min = 0 , max = 100) %>%
+  df <- withr::with_preserve_seed(
+    runif(nrow(manure) , min = 0 , max = 100)) %>%
     bind_cols(manure)
 
   names(df)[1] <- 'pct'
