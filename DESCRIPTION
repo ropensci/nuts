@@ -21,8 +21,13 @@ Depends:
 Imports:
     cli,
     dplyr,
+    glue,
+    lifecycle,
+    magrittr,
     rlang,
-    stringr
+    stringr,
+    tibble,
+    withr
 Suggests: 
     distill,
     eurostat,
@@ -42,8 +47,7 @@ Suggests:
     sf,
     terra,
     testthat,
-    tidyr,
-    withr
+    tidyr
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
