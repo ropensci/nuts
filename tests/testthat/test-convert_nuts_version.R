@@ -157,13 +157,12 @@ test_that("Multiple groups", {
       ) %>%
       convert_nuts_version(
         to_version = "2021",
-        variables = c("values" = "absolute",
-                      "pct" = "relative")
+        variables = c("values" = "absolute")
       ) %>%
       dim(.)
   }
   ,
-  c(13140, 7))
+  c(13140, 6))
 })
 
 
@@ -249,3 +248,4 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(1005, 5)
             )
           })
+

@@ -13,7 +13,7 @@ test_that("data input not valid", {
 
 test_that("variables missing", {
   expect_error(
-    manure_indic_2_DE_2003() %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(data = .,
                          to_level = 1)
@@ -22,7 +22,7 @@ test_that("variables missing", {
 
 test_that("variable not found", {
   expect_error(
-    manure_indic_2_DE_2003() %>%
+    manure_2_indic_DE_2003() %>%
       classify_nuts(nuts_code = "geo") %>%
       convert_nuts_level(
         data = .,
@@ -130,8 +130,7 @@ test_that("See if all codes are aggregated from level 3 to level 2", {
                     group_vars = c("indic_ag", "time")) %>%
       convert_nuts_level(
         to_level = 2,
-        variables = c("values" = "absolute",
-                      "pct" = "relative")
+        variables = c("values" = "absolute")
       ) %>%
       pull(to_code) %>%
       nchar(.) %>%
@@ -149,8 +148,7 @@ test_that("See if all codes are aggregated from level 3 to level 1", {
                     group_vars = c("indic_ag", "time")) %>%
       convert_nuts_level(
         to_level = 1,
-        variables = c("values" = "absolute",
-                      "pct" = "relative")
+        variables = c("values" = "absolute")
       ) %>%
       pull(to_code) %>%
       nchar(.) %>%
@@ -282,3 +280,4 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(52, 4)
             )
           })
+
