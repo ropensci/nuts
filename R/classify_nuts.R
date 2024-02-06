@@ -136,8 +136,8 @@ classify_nuts <-
     # CLASSIFICATION POSSIBLE
     #-------------------------
     # Welcome information
-    cli_alert_info(c("{.blue Classifying version of NUTS codes}",
-                     "\n{.blue -----------------------------------}"))
+    cli_text("{.blue Classifying version of NUTS codes}")
+    cli_text("{.blue -----------------------------------}")
     # Check for NUTS codes that cannot be classified
     all_nuts_codes <- get("all_nuts_codes")
     codes_not_found <-
@@ -218,8 +218,8 @@ classify_nuts <-
     # - Check if there is variation within groups
     pct_overlap_within_groups <- unique(data$overlap_perc[!is.na(data$from_version)])
     if (any(pct_overlap_within_groups < 100)) {
-      cli_warn(c( "{.blue => Within {.red groups} defined by {.red {group_vars}}.}",
-                  "{.blue ==> {.red Multiple} NUTS versions classified. See the tibble 'versions_data' in the output.}"))
+      cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}.}")
+      cli_alert_warning("{.blue ==> {.red Multiple} NUTS versions classified. See the tibble 'versions_data' in the output.}")
       paste_grouping <- F
     } else {
       paste_grouping <- T
@@ -286,7 +286,7 @@ classify_nuts <-
     if (nrow(data_missing_nuts) == 0) {
       cli_alert_info("{.blue \n==> No missing NUTS codes.}")
     } else if (nrow(data_missing_nuts) > 0) {
-      cli_alert_info("{.blue \n==> {.red Missing} NUTS codes detected. See the tibble 'missing_data' in the output.}")
+      cli_alert_warning("{.blue \n==> {.red Missing} NUTS codes detected. See the tibble 'missing_data' in the output.}")
     }
     # - done
 

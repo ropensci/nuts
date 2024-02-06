@@ -118,8 +118,8 @@ convert_nuts_version <-
     # CONVERSION POSSIBLE
     #----------------------
     # Welcome information
-    cli_alert_info(c("{.blue Converting versions of NUTS codes}",
-                     "\n{.blue -----------------------------------}"))
+    cli_text("{.blue Converting versions of NUTS codes}")
+    cli_text("{.blue  ---------------------------------}")
     # CONVERSION BETWEEN DIFFERENT NUTS VERSIONS
     cli_alert_info("{.blue => Converting NUTS codes in version(s) {.red {unique(data$from_version[!is.na(data$from_version)])}} to version {.red {to_version}}.}")
     # Check which NUTS codes can be converted
@@ -130,7 +130,7 @@ convert_nuts_version <-
       cli_alert_info("{.blue All NUTS codes can be converted.}")
     } else if (nr_nuts_codes_recognized < nr_nuts_codes &&
                nr_nuts_codes_recognized > 0) {
-      cli_warn("{.blue => These NUTS codes cannot be converted and {.red are dropped} from the dataaset: {.red {unique(data$from_code[!check_nuts_codes])}}.}")
+      cli_alert_warning("{.blue => These NUTS codes cannot be converted and {.red are dropped} from the dataaset: {.red {unique(data$from_code[!check_nuts_codes])}}.}")
       data <- data[check_nuts_codes, ]
     }
 
@@ -148,7 +148,7 @@ convert_nuts_version <-
     # Use data_versions which is sorted for most frequent version within group
     if (multi_versions_A > multi_versions_B) {
       cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}}")
-      cli_warn("{.blue ==> {.red Multiple} NUTS code versions.}")
+      cli_alert_warning("{.blue ==> {.red Multiple} NUTS code versions.}")
       if (multiple_versions == "break") {
         cli_abort(
           c(
@@ -228,7 +228,8 @@ convert_nuts_version <-
 
     # - Alert missing
     if (nrow(missing) > 0) {
-      cli_warn( "{.blue ==> {.red Missing} NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.}" )
+      cli_alert_warning("{.blue => {.red Missing} NUTS codes in data.}")
+      cli_alert_warning("{.blue ==> No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.}")
     } else if (nrow(missing) == 0) {
       cli_alert_info("{.blue \n==> No missing NUTS codes.}")
     }
