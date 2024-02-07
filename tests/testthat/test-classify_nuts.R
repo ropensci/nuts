@@ -19,13 +19,18 @@ test_that("Needs geo var 2", {
                  classify_nuts())
 })
 
+
 test_that("nuts_code not valid", {
-  expect_error(
-    manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = 1),
-    "Input `nuts_code` must be provided as a string, not a number."
+  expect_equal(
+  expect_error(manure_2_indic_DE_2003() %>%
+                 classify_nuts(nuts_code = 1)) %>%
+    .[["message"]] %>%
+    as.character() %>%
+    grepl("must be provided as a string", .),
+  TRUE
   )
 })
+
 
 test_that("nuts_code name not found", {
   expect_error(
@@ -54,7 +59,6 @@ test_that("NUTS codes not valid", {
     TRUE
   )
 })
-
 
 test_that("Multiple levels", {
   expect_equal(
