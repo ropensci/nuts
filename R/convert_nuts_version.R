@@ -232,7 +232,7 @@ convert_nuts_version <-
       message_missing_codes <- c("x" = "{.blue {.red Missing} NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.}")
 
       } else if (nrow(missing) == 0) {
-      message_missing_codes <- c("v" = "{.blue No {.red missing} NUTS codes.")
+      message_missing_codes <- c("v" = "{.blue No {.red missing} NUTS codes.}")
     }
     rm(missing)
 
@@ -294,7 +294,6 @@ convert_nuts_version <-
         message_missing_codes
       )
     )
-
 
     return(as_tibble(data))
   }
