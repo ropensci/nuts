@@ -119,21 +119,20 @@ convert_nuts_level <-
 
     # CONVERSION POSSIBLE
     #----------------------
-    # Welcome information
-    cli_text("{.blue Converting level of NUTS codes}")
-    cli_text("{.blue ------------------------------}")
     # CONVERSION BETWEEN DIFFERENT NUTS LEVELS
-    cli_alert_info("{.blue => Aggregate from NUTS regional level {.red {data$from_level[1]}} to {.red {to_level}}}.")
+    aggregate_from_level <- data$from_level[1]
+    message_conversion_levels <- c("i" = "{.blue Aggregate from NUTS regional level {.red {aggregate_from_level}} to {.red {to_level}}}.")
 
     # Check which NUTS codes can be converted
     nr_nuts_codes_recognized <-
       length(data$from_code[check_nuts_codes])
     nr_nuts_codes <- length(data$from_code)
+    dropped_codes <- unique(data$from_code[!check_nuts_codes])
     if (nr_nuts_codes_recognized == nr_nuts_codes) {
-      cli_alert_info("{.blue => All NUTS codes can be converted.}")
+      message_can_be_converted <- c("v" = "{.blue All NUTS codes can be converted.}")
     } else if (nr_nuts_codes_recognized < nr_nuts_codes &&
                nr_nuts_codes_recognized > 0) {
-      cli_alert_warning("{.blue => These NUTS codes cannot be converted and {.red are dropped} from the dataset: {.red {unique(data$from_code[!check_nuts_codes])}}.}")
+      message_can_be_converted <- c("x" = "{.blue These NUTS codes cannot be converted and {.red are dropped}: {.red {dropped_codes}}.}")
       data <- data[check_nuts_codes, ]
     }
 
@@ -149,37 +148,33 @@ convert_nuts_level <-
       nrow()
 
     # Use data_versions which is sorted for most frequent version within group
-    if (multi_versions_A > multi_versions_B) {
-      cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}}")
-      cli_alert_warning("{.blue ==> {.red Multiple} NUTS code versions.}")
+    if (multi_versions_A > multi_versions_B && multiple_versions == "break") {
 
-      if (multiple_versions == "break") {
-        cli_abort(
-          c(
-            "Mixed NUTS versions within groups!",
-            "Please make sure the data contains only one version per group. Alternatively, keep only the codes belonging to the 'most_frequent' version using the argument {.arg multiple_versions}."
-          )
+      cli_abort(
+        c(
+          "Mixed NUTS versions within groups!"
+          ,
+          "Please make sure the data contains only one version per group. Alternatively, keep only the codes belonging to the 'most_frequent' version using the argument 'multiple_versions'."
         )
+      )
 
-      } else if (multiple_versions == "most_frequent") {
-        data_versions <- data_versions %>%
-          group_by_at(vars(any_of(c(group_vars)))) %>%
-          slice(1) %>%
-          ungroup()
+    } else if (multi_versions_A > multi_versions_B && multiple_versions == "most_frequent") {
+      data_versions <- data_versions %>%
+        group_by_at(vars(any_of(c(group_vars)))) %>%
+        slice(1) %>%
+        ungroup()
 
-        data_multi_versions <-
-          anti_join(data, data_versions, by = c("from_version", group_vars))
-        data <-
-          inner_join(data, data_versions, by = c("from_version", group_vars))
+      data_multi_versions <-
+        anti_join(data, data_versions, by = c("from_version", group_vars))
+      data <-
+        inner_join(data, data_versions, by = c("from_version", group_vars))
 
-        cli_alert_info("{.blue Choosing most frequent version within group and {.red dropping} {nrow(data_multi_versions)} row(s).}")
-      }
-      paste_grouping = F
+      n_rows_dropped <- nrow(data_multi_versions)
+      message_multiple_versions <- c("!" =  "{.blue Choosing most frequent version within group and {.red dropping} {n_rows_dropped} row{?s}.}")
     } else {
-      paste_grouping = T
+      message_multiple_versions <- c("v" =  "{.blue Version is {.red unique}.}")
     }
     # - Done
-
 
     # Prepare join with regional indicator stocks such that missing NUTS codes within groups are kept
     # - Create group structure
@@ -221,15 +216,12 @@ convert_nuts_level <-
       select(all_of(names(variables))) %>%
       filter(if_any(names(variables), ~ is.na(.)))
 
-    if (paste_grouping) {
-      cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}.}")
-    }
-
+    # - Alert missing
     if (nrow(missing) > 0) {
-      cli_alert_warning("{.blue => {.red Missing} NUTS codes in data.}")
-      cli_alert_warning("{.blue ==> No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.}")
+      message_missing_codes <- c("x" = "{.blue {.red Missing} NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.}")
+
     } else if (nrow(missing) == 0) {
-      cli_alert_info("{.blue => No missing NUTS codes.}")
+      message_missing_codes <- c("v" = "{.blue No {.red missing} NUTS codes.}")
     }
     rm(missing)
 
@@ -272,7 +264,17 @@ convert_nuts_level <-
       full_join(rel_data, by = c("to_code", group_vars))
     # - Done
 
-    cat("\n")
+    # Console Message
+    #-----------------
+    cli_h1("Converting version of NUTS codes")
+    cli_bullets(
+      c("{.blue Within {.red groups} defined by {.red {group_vars}}:}",
+        message_conversion_levels,
+        message_can_be_converted,
+        message_multiple_versions,
+        message_missing_codes
+      )
+    )
 
     return(data)
   }

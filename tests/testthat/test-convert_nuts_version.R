@@ -1,5 +1,3 @@
-
-
 # Run error tests
 #---------------------
 test_that("data input not valid", {
