@@ -3,7 +3,7 @@
 
 ## usethis namespace: start
 #' @import cli
-#' @import magrittr
+#' @importFrom magrittr %>%
 #' @import rlang
 #' @import tibble
 #' @importFrom dplyr anti_join
