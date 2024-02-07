@@ -60,7 +60,8 @@
 <span>  variables <span class="op">=</span> <span class="va">variables</span>,</span>
 <span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  missing_rm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  multiple_versions <span class="op">=</span> <span class="st">"break"</span></span>
+<span>  multiple_versions <span class="op">=</span> <span class="st">"break"</span>,</span>
+<span>  quiet <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -90,6 +91,10 @@ population in 2011 <code>'pop11'</code> or 2018 <code>'pop18'</code>, or artific
 <dt>multiple_versions</dt>
 <dd><p>By default equal to <code>'break'</code>, throwing an error when providing multiple NUTS versions within groups.
 If set to <code>'most_frequent'</code> data is converted using the best-matching NUTS version.</p></dd>
+
+
+<dt>quiet</dt>
+<dd><p>Suppress messages and warnings. <code>TRUE</code> by default.</p></dd>
 
 </dl></div>
     <div class="section level2">
