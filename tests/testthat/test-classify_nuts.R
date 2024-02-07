@@ -1,3 +1,5 @@
+devtools::load_all()
+
 # Run error tests
 test_that("data not valid", {
   expect_error(

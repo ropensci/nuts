@@ -142,17 +142,15 @@ classify_nuts <-
 
     # CLASSIFICATION POSSIBLE
     #-------------------------
-    # Welcome information
-    cli_text("{.blue Classifying version of NUTS codes}")
-    cli_text("{.blue -----------------------------------}")
     # Check for NUTS codes that cannot be classified
     all_nuts_codes <- get("all_nuts_codes")
     codes_not_found <-
       data$from_code[!data$from_code %in% all_nuts_codes$code]
     if (length(codes_not_found) > 0) {
-      cli_alert_info("{.blue => These NUTS codes cannot be identified or classified: {.red {codes_not_found}}.}")
-    }
-
+      message_codes_not_found <- c("!" = "{.blue These NUTS codes cannot be identified or classified: {.red {codes_not_found}}.}")
+    } else (
+      message_codes_not_found <- c("v" = "{.blue All NUTS codes can be identified and classified.}")
+    )
 
     # A. CLASSIFY LEVEL
     #-----------------------
@@ -225,11 +223,9 @@ classify_nuts <-
     # - Check if there is variation within groups
     pct_overlap_within_groups <- unique(data$overlap_perc[!is.na(data$from_version)])
     if (any(pct_overlap_within_groups < 100)) {
-      cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}.}")
-      cli_alert_warning("{.blue ==> {.red Multiple} NUTS versions classified. See the tibble 'versions_data' in the output.}")
-      paste_grouping <- F
+      message_multiple_versions <- c("x" = "{.blue {.red Multiple} NUTS versions classified. See the tibble 'versions_data' in the output.}")
     } else {
-      paste_grouping <- T
+      message_multiple_versions <- c("v" = "{.blue {.red Unique} NUTS version classified.}")
     }
 
     # - Clean data
@@ -284,22 +280,27 @@ classify_nuts <-
         "from_version", group_vars
       ))))
 
-    # - Show grouping if not yet
-    if (paste_grouping) {
-      cli_alert_info("{.blue => Within {.red groups} defined by {.red {group_vars}}.}")
-    }
 
     # - Alert missing
     if (nrow(data_missing_nuts) == 0) {
-      cli_alert_info("{.blue \n==> No missing NUTS codes.}")
+      message_missing_codes <- c("v" =  "{.blue No missing NUTS codes.}")
     } else if (nrow(data_missing_nuts) > 0) {
-      cli_alert_warning("{.blue \n==> {.red Missing} NUTS codes detected. See the tibble 'missing_data' in the output.}")
+      message_missing_codes <- c( "x" = "{.blue {.red Missing} NUTS codes detected. See the tibble 'missing_data' in the output.}")
     }
     # - done
 
+    # Console Message
+    #-----------------
+    cli_h1("Classifying version of NUTS codes")
+    cli_bullets(
+      c("{.blue Within {.red groups} defined by {.red {group_vars}}:}",
+        message_codes_not_found,
+        message_multiple_versions,
+        message_missing_codes)
+    )
+
     # OUTPUT
     #--------
-    cat("\n")
     output <- list(
       data = data,
       versions_data = data_all_versions,
