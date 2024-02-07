@@ -30,6 +30,7 @@
 #' @importFrom dplyr summarise_at
 #' @importFrom dplyr ungroup
 #' @importFrom dplyr bind_rows
+#' @importFrom dplyr bind_cols
 #' @importFrom dplyr n_distinct
 #' @importFrom dplyr vars
 #' @importFrom dplyr any_of
