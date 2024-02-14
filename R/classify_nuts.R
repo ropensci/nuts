@@ -291,13 +291,19 @@ classify_nuts <-
 
     # Console Message
     #-----------------
-    cli_h1("Classifying version of NUTS codes")
-    cli_bullets(
-      c("{.blue Within {.red groups} defined by {.red {group_vars}}:}",
-        message_codes_not_found,
-        message_multiple_versions,
-        message_missing_codes)
-    )
+    is_verbose_mode <-
+      (getOption("nuts.verbose", "quiet") == "verbose")
+    if (is_verbose_mode) {
+      cli_h1("Classifying version of NUTS codes")
+      cli_bullets(
+        c(
+          "{.blue Within {.red groups} defined by {.red {group_vars}}:}",
+          message_codes_not_found,
+          message_multiple_versions,
+          message_missing_codes
+        )
+      )
+    }
 
     # OUTPUT
     #--------

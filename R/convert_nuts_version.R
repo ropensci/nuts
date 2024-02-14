@@ -283,17 +283,22 @@ convert_nuts_version <-
       full_join(rel_data, by = c("to_code", "to_version", group_vars))
     # - done
 
+
     # Console Message
     #-----------------
-    cli_h1("Converting version of NUTS codes")
-    cli_bullets(
-      c("{.blue Within {.red groups} defined by {.red {group_vars}}:}",
-        message_conversion_versions,
-        message_can_be_converted,
-        message_multiple_versions,
-        message_missing_codes
+    is_verbose_mode <- (getOption("nuts.verbose", "quiet") == "verbose")
+    if (is_verbose_mode) {
+      cli_h1("Converting version of NUTS codes")
+      cli_bullets(
+        c(
+          "{.blue Within {.red groups} defined by {.red {group_vars}}:}",
+          message_conversion_versions,
+          message_can_be_converted,
+          message_multiple_versions,
+          message_missing_codes
+        )
       )
-    )
+    }
 
     return(as_tibble(data))
   }
