@@ -9,7 +9,6 @@
 #' @param group_vars Variable name(s) for classification within groups. Always computes overlap within country. `NULL`by default.
 #' @param ties Picks `'most_recent'` or `'oldest'` version when overlap is identical across multiple NUTS versions. `'most_recent'`
 #' by default.
-#' @param quiet Suppress messages and warnings. `FALSE` by default.
 #'
 #' @return A list of three tibbles. The first tibble contains the original data with the classified NUTS version, level, and country.
 #' The second tibble lists the group-specific overlap with each NUTS version. The third tibble shows missing NUTS codes
@@ -53,13 +52,7 @@ classify_nuts <-
   function(data = data,
            nuts_code = nuts_code,
            group_vars = NULL,
-           ties = "most_recent",
-           quiet = FALSE) {
-
-    if (quiet) {
-      old <- options(cli.default_handler = function(...) { })
-      on.exit(options(old), add = TRUE)
-    }
+           ties = "most_recent") {
 
     # DEFINE CLI DIVs
     #-----------------------

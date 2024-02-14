@@ -10,7 +10,6 @@
 #' @param missing_rm Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.
 #' @param multiple_versions By default equal to `'break'`, throwing an error when providing multiple NUTS versions within groups.
 #' If set to `'most_frequent'` data is converted using the best-matching NUTS version.
-#' @param quiet Suppress messages and warnings. `FALSE` by default.
 #'
 #' @return A tibble containing NUTS codes, converted variable values, and possibly grouping variables.
 #'
@@ -57,21 +56,16 @@ convert_nuts_version <-
            variables = variables,
            weight = NULL,
            missing_rm = FALSE,
-           multiple_versions = "break",
-           quiet = FALSE) {
-
-    if (quiet) {
-      old <- options(cli.default_handler = function(...) { })
-      on.exit(options(old), add = TRUE)
-    }
+           multiple_versions = "break") {
 
     # DEFINE CLI DIVs
     #-----------------------
     cli_div(theme = list(
       span.red = list(color = "red"),
       span.blue = list(color = "blue")
+      )
     )
-    )
+
     # CODE BREAKING CHECKS
     #------------------------
     # Input checks
