@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   nuts: nuts.html
-last_built: 2024-02-14T14:52Z
+last_built: 2024-02-14T15:02Z
 urls:
   reference: https://aaoritz.github.io/nuts/reference
   article: https://aaoritz.github.io/nuts/articles
