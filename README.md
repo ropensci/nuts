@@ -4,6 +4,7 @@
   [![R-CMD-check](https://github.com/AAoritz/nuts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AAoritz/nuts/actions/workflows/R-CMD-check.yaml)
   [![codecov](https://codecov.io/gh/AAoritz/nuts/graph/badge.svg?token=UXSUFJOD2U)](https://codecov.io/gh/AAoritz/nuts)
   [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
+  [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/623_status.svg)](https://github.com/ropensci/software-review/issues/623)
   <!-- badges: end -->
 
 Changing administrative regional boundaries over time complicates the construction of consistent regional panel data. The `nuts` package can transform **European regional data** identified by **NUTS codes** between different **versions** and **subdivision levels** with the aim to harmonize and link data sets. 
