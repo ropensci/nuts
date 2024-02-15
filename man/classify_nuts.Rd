@@ -8,8 +8,7 @@ classify_nuts(
   data = data,
   nuts_code = nuts_code,
   group_vars = NULL,
-  ties = "most_recent",
-  quiet = FALSE
+  ties = "most_recent"
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ duplicate NUTS codes within groups allowed.}
 
 \item{ties}{Picks \code{'most_recent'} or \code{'oldest'} version when overlap is identical across multiple NUTS versions. \code{'most_recent'}
 by default.}
-
-\item{quiet}{Suppress messages and warnings. \code{FALSE} by default.}
 }
 \value{
 A list of three tibbles. The first tibble contains the original data with the classified NUTS version, level, and country.

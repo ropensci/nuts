@@ -201,4 +201,3 @@ test_that("One missing NUTS code", {
     c(1, 4)
   )
 })
-
