@@ -3,7 +3,7 @@
 #' `convert_nuts_level()` transforms regional NUTS data between NUTS levels
 #'
 #' @param data A nuts.classified object returned by [`classify_nuts()`].
-#' @param to_level Number corresponding to desired NUTS level: `1`, `2` or `3`.
+#' @param to_level Number corresponding to the desired NUTS level to be aggregated to: `1` or `2`.
 #' @param variables Named character specifying variable names and variable type (`'absolute'` or `'relative'`), e.g. `c('var_name' = 'absolute')`.
 #' @param weight String with name of the weight used for conversion. Can be area size `'areaKm'` (default),
 #' population in 2011 `'pop11'` or 2018 `'pop18'`, or artificial surfaces in 2012 `'artif_surf12'` and 2018 `'artif_surf18'`.
