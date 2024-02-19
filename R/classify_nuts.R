@@ -69,7 +69,7 @@ classify_nuts <-
       cli_abort("Input {.arg data} must be a data frame or tibble, not {.obj_type_friendly {data}}.")
     if (!is.character(nuts_code))
       cli_abort("Input {.arg nuts_code} must be provided as a string, not {.obj_type_friendly {nuts_code}}.")
-    if (nuts_code %in% colnames(data) == F)
+    if (nuts_code %in% colnames(data) == FALSE)
       cli_abort("Input {.arg nuts_code} not found in the provided data frame.")
     if (!ties %in% c("most_recent", "oldest"))
       cli_abort("Input {.arg ties} must be 'most_recent' or 'oldest'.")
@@ -82,7 +82,7 @@ classify_nuts <-
       rename(from_code = !!sym(nuts_code))
 
     # Simple NUTS code check
-    if (any(str_detect(data$from_code, "^[A-Za-z]{2}[A-Za-z0-9]{1,3}$") == F))
+    if (any(str_detect(data$from_code, "^[A-Za-z]{2}[A-Za-z0-9]{1,3}$") == FALSE))
       cli_abort(
         c(
           "Variable {.var {nuts_code}} contains invalid NUTS codes.",

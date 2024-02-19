@@ -77,7 +77,7 @@ convert_nuts_version <-
     if (is.null(variables))
       cli_abort("Input {.arg variables} cannot be NULL.")
 
-    if (any(names(variables) %in% colnames(data[["data"]])) == F)
+    if (any(names(variables) %in% colnames(data[["data"]])) == FALSE)
       cli_abort("Input {.arg variables} not found in the provided data frame.")
 
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))

@@ -62,7 +62,7 @@ convert_nuts_level <-
     if (is.null(variables))
       cli_abort("Input {.arg variables} cannot be NULL.")
 
-    if (any(names(variables) %in% colnames(data[["data"]])) == F)
+    if (any(names(variables) %in% colnames(data[["data"]])) == FALSE)
       cli_abort("Input {.arg variables} not found in the provided data frame.")
 
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))
@@ -182,7 +182,7 @@ convert_nuts_level <-
     stocks <- cross_walks %>%
       filter(.data$from_version == .data$to_version) %>%
       select(-c("from_version", "to_version", "to_code")) %>%
-      distinct(.data$from_code, .keep_all = T)
+      distinct(.data$from_code, .keep_all = TRUE)
 
     # - Expand all NUTS codes by all group combinations
     if (!is.null(group_vars)) {
