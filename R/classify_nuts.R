@@ -82,7 +82,7 @@ classify_nuts <-
       rename(from_code = !!sym(nuts_code))
 
     # Simple NUTS code check
-    if (!(any(str_detect(data$from_code, "^[A-Za-z]{2}[A-Za-z0-9]{1,3}$"))))
+    if (any(!(str_detect(data$from_code, "^[A-Za-z]{2}[A-Za-z0-9]{1,3}$"))))
       cli_abort(
         c(
           "Variable {.var {nuts_code}} contains invalid NUTS codes.",
@@ -93,7 +93,7 @@ classify_nuts <-
 
     # Grouping vars, country identified by default
     if (!is.null(group_vars)) {
-      if (!(any(group_vars %in% colnames(data)))) {
+      if (any(!(group_vars %in% colnames(data)))) {
         cli_abort("Input {.arg group_vars} not found in the provided data frame.")
       }
       group_vars <- c("country", group_vars)

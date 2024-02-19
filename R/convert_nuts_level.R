@@ -62,7 +62,7 @@ convert_nuts_level <-
     if (is.null(variables))
       cli_abort("Input {.arg variables} cannot be NULL.")
 
-    if (!(any(names(variables) %in% colnames(data[["data"]]))))
+    if (any(!(names(variables) %in% colnames(data[["data"]]))))
       cli_abort("Input {.arg variables} not found in the provided data frame.")
 
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))
