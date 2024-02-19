@@ -10,8 +10,7 @@ convert_nuts_version(
   variables = variables,
   weight = NULL,
   missing_rm = FALSE,
-  multiple_versions = "break",
-  quiet = FALSE
+  multiple_versions = "break"
 )
 }
 \arguments{
@@ -28,8 +27,6 @@ population in 2011 \code{'pop11'} or 2018 \code{'pop18'}, or artificial surfaces
 
 \item{multiple_versions}{By default equal to \code{'break'}, throwing an error when providing multiple NUTS versions within groups.
 If set to \code{'most_frequent'} data is converted using the best-matching NUTS version.}
-
-\item{quiet}{Suppress messages and warnings. \code{FALSE} by default.}
 }
 \value{
 A tibble containing NUTS codes, converted variable values, and possibly grouping variables.
