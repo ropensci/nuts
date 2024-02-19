@@ -253,17 +253,17 @@ library(nuts)
 # Loading and subsetting Eurostat data
 data(patents, package = "nuts")
 
-pat.n2 <- patents %>% 
+pat_n2 <- patents %>% 
   filter(nchar(geo) == 4) # NUTS-2 values
 
-pat.n2.mhab.12.no <- pat.n2 %>%
+pat_n2_mhab_12_no <- pat_n2 %>%
   filter(unit == "P_MHAB") %>% # Patents per one million inhabitants
   filter(time == 2012) %>% # 2012
   filter(str_detect(geo, "^NO")) %>%  # Norway
   select(-unit)
 
 # Classifying the Data
-pat.classified <- classify_nuts(data = pat.n2.mhab.12.no,
+pat_classified <- classify_nuts(data = pat_n2_mhab_12_no,
                                 nuts_code = "geo")
 ```
 
@@ -274,20 +274,20 @@ The function returns a list with three items:
 Below, you see that all data entries correspond to the 2016 NUTS version.
 
 ```{r}
-pat.classified[["data"]]
+pat_classified[["data"]]
 ```
 
 2. The second item provides an overview of the share of matching NUTS codes for each of the five existing NUTS versions. The **overlap** is computed within country and possibly additional groups (if provided via the `group_vars` argument).  
 
 ```{r}
-pat.classified[["versions_data"]]
+pat_classified[["versions_data"]]
 ```
 
 3. The third item gives all NUTS codes that are **missing** across groups. Such missing codes might lead to conversion errors and are, by default, omitted from all conversion procedures. In our example, no NUTS codes are missing. 
 <!-- We recommend to check whether missing values for these NUTS codes can be replaced, perhaps with 0.  -->
 
 ```{r}
-pat.classified[["missing_data"]]
+pat_classified[["missing_data"]]
 ```
 
 
@@ -298,8 +298,8 @@ We provide the classified NUTS data, specify the target NUTS version for data tr
 
 ```{r}
 # Converting Data to 2021 NUTS version
-pat.converted <- convert_nuts_version(
-  data = pat.classified,
+pat_converted <- convert_nuts_version(
+  data = pat_classified,
   to_version = "2021",
   variables = c("values" = "relative")
 )
@@ -311,7 +311,7 @@ library(terra)
 no_2006 <-
   read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(LEVL_CODE == 2 & CNTR_CODE == "NO") %>%
-  full_join(pat.n2.mhab.12.no , by = c("NUTS_ID" = "geo"))
+  full_join(pat_n2_mhab_12_no , by = c("NUTS_ID" = "geo"))
 
 no_changes <- cross_walks %>%
   filter(
@@ -345,7 +345,7 @@ gg_2006 = ggplot() +
 no_2021 <-
   read_sf("NUTS_RG_20M_2021_3857.shp/NUTS_RG_20M_2021_3857.shp") %>%
   filter(LEVL_CODE == 2 & CNTR_CODE == "NO") %>%
-  full_join(pat.converted , by = c("NUTS_ID" = "to_code")) %>%
+  full_join(pat_converted , by = c("NUTS_ID" = "to_code")) %>%
   filter(NUTS_ID != "NO0B")
 
 gg_2021 = ggplot() +
@@ -375,11 +375,11 @@ ggarrange( gg_2006 , gg_2021 , nrow = 1 , common.legend = T, legend = "bottom")
 The output below displays the corresponding data frames based on the original and converted NUTS codes. The original data set comprises of seven observations, whereas the converted data set contains six. The regions `NO01`, `NO03`, `NO04`, and `NO05` are lost, while `NO08`, `NO09`, and `NO0A` are now listed.
 
 ```{r}
-pat.n2.mhab.12.no
+pat_n2_mhab_12_no
 ```
 
 ```{r}
-pat.converted
+pat_converted
 ```
 
 
@@ -389,7 +389,7 @@ You can also convert **multiple variables** at once. Below, we add the number of
 
 ```{r}
 # Converting Multiple Variables
-pat.n2.mhab.12.no %>%
+pat_n2_mhab_12_no %>%
   mutate(values_per_thous = values * 1000) %>%
   classify_nuts(
     data = .,
@@ -409,13 +409,13 @@ Longitudinal regional data, as commonly supplied by EUROSTAT, often comes with v
 
 ```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 # Classifying grouped data (time)
-pat.n2.mhab.sesihr <- pat.n2 %>%
+pat_n2_mhab_sesihr <- pat_n2 %>%
   filter(unit == "P_MHAB") %>%
   filter(str_detect(geo, "^SE|^SI|^HR"))
 
-pat.classified <- classify_nuts(
+pat_classified <- classify_nuts(
   nuts_code = "geo",
-  data = pat.n2.mhab.sesihr,
+  data = pat_n2_mhab_sesihr,
   group_vars = "time"
   )
 ```
@@ -423,7 +423,7 @@ pat.classified <- classify_nuts(
 Note that the detected best-fitting NUTS versions differ across countries:
 
 ```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-pat.classified[["data"]] %>%
+pat_classified[["data"]] %>%
   group_by(country, from_version) %>%
   tally()
 ```
@@ -432,8 +432,8 @@ The grouping is stored and passed on to the conversion function:
 
 ```{r}
 # Converting grouped data (Time)
-pat.converted <- convert_nuts_version(
-  data = pat.classified,
+pat_converted <- convert_nuts_version(
+  data = pat_classified,
   to_version = "2021",
   variables = c("values" = "relative")
 )
@@ -443,11 +443,11 @@ Conveniently, the group argument can also be used to transform higher dimensiona
 
 ```{r}
 # Classifying and converting multi-group data
-pat.n2.mhabmact.12.sesihr <- pat.n2 %>%
+pat_n2_mhabmact_12_sesihr <- pat_n2 %>%
   filter(unit %in% c("P_MHAB", "P_MACT")) %>%
   filter(str_detect(geo, "^SE|^SI|^HR"))
 
-pat.converted <- pat.n2.mhabmact.12.sesihr %>%
+pat_converted <- pat_n2_mhabmact_12_sesihr %>%
   classify_nuts(
     data = .,
     nuts_code = "geo",
@@ -469,25 +469,25 @@ In the following example, we illustrate how to aggregate the total number of pat
 ```{r}
 data("patents", package = "nuts")
 # Aggregating data from NUTS-3 to NUTS-2 and NUTS-1
-pat.n3 <- patents %>% 
+pat_n3 <- patents %>% 
   filter(nchar(geo) == 5)
 
-pat.n3.nr.12.se <- pat.n3 %>%
+pat_n3_nr_12_se <- pat_n3 %>%
   filter(unit %in% c("NR")) %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^SE"))
 
-pat.classified <- classify_nuts(data = pat.n3.nr.12.se,
+pat_classified <- classify_nuts(data = pat_n3_nr_12_se,
                                 nuts_code = "geo")
 
-pat.level2 <- convert_nuts_level(
-  data = pat.classified,
+pat_level2 <- convert_nuts_level(
+  data = pat_classified,
   to_level = 2,
   variables = c("values" = "absolute")
 )
 
-pat.level1 <- convert_nuts_level(
-  data = pat.classified,
+pat_level1 <- convert_nuts_level(
+  data = pat_classified,
   to_level = 1,
   variables = c("values" = "absolute")
 )
@@ -497,19 +497,19 @@ pat.level1 <- convert_nuts_level(
 eu_nuts3 <-
   read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(LEVL_CODE == 3) %>%
-  full_join(pat.n3.nr.12.se , by = c("NUTS_ID" = "geo")) %>%
+  full_join(pat_n3_nr_12_se , by = c("NUTS_ID" = "geo")) %>%
   filter(str_detect(NUTS_ID, "^SE"))
 
 eu_nuts2 <-
   read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(LEVL_CODE == 2) %>%
-  full_join(pat.level2 , by = c("NUTS_ID" = "to_code")) %>%
+  full_join(pat_level2 , by = c("NUTS_ID" = "to_code")) %>%
   filter(str_detect(NUTS_ID, "^SE"))
 
 eu_nuts1 <-
   read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(LEVL_CODE == 1) %>%
-  full_join(pat.level1 , by = c("NUTS_ID" = "to_code")) %>%
+  full_join(pat_level1 , by = c("NUTS_ID" = "to_code")) %>%
   filter(str_detect(NUTS_ID, "^SE"))
 
 gg_nuts3 = ggplot() +
@@ -560,12 +560,12 @@ The example below classifies 2012 patent data from Denmark. The original EUROSTA
 [^3]: Such as air-space, territorial waters and the continental shelf, embassies, consulates, military bases and deposits of oil, natural gas, etc. in international waters.
 
 ```{r}
-pat.n3.nr.12.dk <- pat.n3 %>%
+pat_n3.nr.12.dk <- pat_n3 %>%
   filter(unit %in% c("NR")) %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^DK"))
 
-pat.classified <- classify_nuts(data = pat.n3.nr.12.dk, nuts_code = "geo")
+pat_classified <- classify_nuts(data = pat_n3.nr.12.dk, nuts_code = "geo")
 ```
 
 ### Missing NUTS codes
@@ -575,24 +575,24 @@ pat.classified <- classify_nuts(data = pat.n3.nr.12.dk, nuts_code = "geo")
 The example below illustrates this case.
 
 ```{r}
-pat.n3.nr.12.si <- pat.n3 %>%
+pat_n3_nr_12_si <- pat_n3 %>%
   filter(unit %in% c("NR")) %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^SI"))
 
-pat.classified <- classify_nuts(data = pat.n3.nr.12.si, nuts_code = "geo")
+pat_classified <- classify_nuts(data = pat_n3_nr_12_si, nuts_code = "geo")
 ```
 
-`classify_nuts()` returns a warning that NUTS codes are missing in the input data. These codes can be inspected by calling `pat.classified[3]`. 
+`classify_nuts()` returns a warning that NUTS codes are missing in the input data. These codes can be inspected by calling `pat_classified[3]`. 
 
 ```{r}
-pat.classified[3]
+pat_classified[3]
 ```
 
 The resulting conversion returns three missing values as the source code `SI011` transformed into `SI031` and the region `SI016` was split into `SI036` and `SI037`.
 
 ```{r}
-convert_nuts_version(data = pat.classified, 
+convert_nuts_version(data = pat_classified, 
                      to_version = "2021", 
                      variables = c("values" = "absolute")) %>% 
   filter(is.na(values))
@@ -608,7 +608,7 @@ Users have three options to overcome this problem.
 
 ```{r}
 convert_nuts_version(
-  data = pat.classified, 
+  data = pat_classified, 
   to_version = "2021", 
   variables = c("values" = "absolute"),
   missing_rm = TRUE
@@ -635,13 +635,13 @@ Converting **multiple NUTS versions** within groups might lead to erroneous spat
 The example below illustrates this problem. We classify German and Italian manure storage facility data from EUROSTAT without specifying `group_vars`. Instead, we keep all unique NUTS codes to artificially create a data set containing different NUTS versions. `classify_nuts()` returns a warning and by inspecting the identified versions, we see that there are mixed versions within groups (the countries).
 
 ```{r}
-man.deit <- manure %>% 
+man_deit <- manure %>% 
   filter(grepl("^DE|^IT", geo)) %>%
   filter(nchar(geo) == 4, ) %>% 
   distinct(geo, .keep_all = T) %>% 
   classify_nuts(nuts_code = "geo", data = .)
 
-man.deit[["data"]] %>% 
+man_deit[["data"]] %>% 
   group_by(country, from_version) %>% 
   tally()
 ```
@@ -651,14 +651,14 @@ When proceeding to the conversion with either `convert_nuts_version()` or `conve
 Once we convert this data set, all NUTS regions unrecognized acoording to the 2006 (Germany) and 2021 (Italy) version are dropped automatically. 
 
 ```{r}
-man.deit.converted <- convert_nuts_version(
-  data = man.deit,
+man_deit_converted <- convert_nuts_version(
+  data = man_deit,
   to_version = 2021,
   variables = c("values" = "relative"),
   multiple_versions = "most_frequent"
 )
 
-man.deit.converted %>% 
+man_deit_converted %>% 
   group_by(country, to_version) %>% 
   tally()
 ```
@@ -855,7 +855,7 @@ In this example, we transform **absolute** values, the number of patent applicat
 The conversion employs the `cross_walks` table, which includes population flow data (expressed in thousands) between two NUTS-2 regions from the source version to the target version. The function joins the our variable of interest, `NR`, which varies across the departing NUTS-2 codes (`from_code`). The function initially calculates a **weight** (`w`) equal to the population flow's share of the total population in the departing region in version 2016 (`from_code`):
 
 ```{r,  include = F}
-pat.n2.nrmhab.12.no <- patents %>%
+pat_n2_nrmhab_12_no <- patents %>%
   filter(nchar(geo) == 4) %>%  # NUTS-2 values
   filter(unit %in% c("NR", "P_MHAB")) %>%
   filter(time == 2012) %>% # 2012
@@ -864,7 +864,7 @@ pat.n2.nrmhab.12.no <- patents %>%
   tidyr::pivot_wider(id_cols = c("geo"), names_from = "unit",
               values_from = "values")
 
-classification <- pat.n2.nrmhab.12.no %>%
+classification <- pat_n2_nrmhab_12_no %>%
   classify_nuts(nuts_code = "geo")
 
 conversion_m_long <- classification[["data"]] %>%
@@ -991,7 +991,7 @@ The function `convert_nuts_level()` aggregates from lower to higher order **leve
 **Relative** values are aggregated in `convert_nuts_level()` by computing the weighted mean of all lower order regional **levels**. To convert, for example, the number of patent applications per one million inhabitants from NUTS-3 to NUTS-2, the function adds the population size in 2018.
 
 ```{r,  include = FALSE}
-pat.n3.nrmhab.12.no <- patents %>%
+pat_n3_nrmhab_12_no <- patents %>%
   filter(nchar(geo) == 5) %>%  # NUTS-2 values
   filter(unit %in% c("NR", "P_MHAB")) %>%
   filter(time == 2012) %>% # 2012
@@ -1003,7 +1003,7 @@ pat.n3.nrmhab.12.no <- patents %>%
     values_from = "values"
   )
 
-classification <- pat.n3.nrmhab.12.no %>%
+classification <- pat_n3_nrmhab_12_no %>%
   classify_nuts(nuts_code = "geo")
 classification[["data"]] %>%
   group_by(from_version) %>%
@@ -1024,7 +1024,7 @@ convert_rel <- conversion_m_long %>%
   mutate(nuts_3 = from_code,
          nuts_2 = substr(from_code, 1, 4)) %>%
   dplyr::select(nuts_3, nuts_2, pop18) %>%
-  inner_join(dplyr::select(pat.n3.nrmhab.12.no, nuts_3 = geo, P_MHAB)) %>%
+  inner_join(dplyr::select(pat_n3_nrmhab_12_no, nuts_3 = geo, P_MHAB)) %>%
   mutate_at(vars(P_MHAB, pop18), list( ~ as.integer(.)))
 ```
 
