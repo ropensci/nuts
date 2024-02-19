@@ -54,7 +54,7 @@ convert_nuts_level <-
     # CODE BREAKING CHECKS
     #------------------------
     # Input checks
-    if (any(class(data) != "nuts.classified"))
+    !(any(class(output) == "nuts.classified"))
       cli_abort(
         "Input {.arg data} must be a nuts.classified-object, not {.obj_type_friendly {data}}."
       )

@@ -307,7 +307,7 @@ classify_nuts <-
     )
 
     attr(output, "groups") <- group_vars
-    class(output) <- "nuts.classified"
+    class(output) <- c("nuts.classified", class(output))
 
     return(output)
   }
