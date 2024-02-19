@@ -180,9 +180,7 @@ convert_nuts_version <-
 
     # Prepare join with cross walk such that missing NUTS codes within groups are kept
     # - Filter cross walks to desired version
-    cross_walks <- get("cross_walks")
-    cross_walks <-
-      cross_walks[cross_walks$to_version == to_version, ]
+    cross_walks <- get("cross_walks")[cross_walks$to_version == to_version, ]
 
     # - Create group structure
     group_structure <- data %>%
