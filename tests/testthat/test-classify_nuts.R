@@ -98,7 +98,7 @@ test_that("Classify returns nuts.classified", {
                   nuts_code = "geo"),
     "class"
   ),
-  "nuts.classified")
+  c("nuts.classified", "list"))
 })
 
 test_that("Length of three", {
