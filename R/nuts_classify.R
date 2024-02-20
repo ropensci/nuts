@@ -111,9 +111,9 @@ nuts_classify <-
 
     if (distinct_N < nrow(data)) {
       duplicate_codes <- data %>%
-        group_by_at(vars(all_of(c(
+        group_by(pick(c(
           "from_code", group_vars[group_vars != "country"]
-        )))) %>%
+        ))) %>%
         filter(n() > 1) %>%
         distinct(.data$from_code) %>%
         pull()
@@ -173,12 +173,11 @@ nuts_classify <-
     # - Compute overlap for each version within groups
     data <- data %>%
       filter(!is.na(.data$from_version)) %>%
-      group_by_at(vars(all_of(c(group_vars)))) %>%
+      group_by(pick(group_vars)) %>%
       mutate(from_code_N_dis = n_distinct(.data$from_code)) %>%
       ungroup() %>%
-      group_by_at(vars(all_of(c(
-        "from_version", group_vars
-      )))) %>%
+      group_by(pick(c(
+        "from_version", group_vars))) %>%
       mutate(from_version_N = n()) %>%
       ungroup() %>%
       mutate(overlap_perc = round(.data$from_version_N / .data$from_code_N_dis * 100, 2)) %>%
@@ -203,14 +202,13 @@ nuts_classify <-
         "from_version", group_vars, "overlap_perc"
       ))) %>%
       distinct() %>%
-      arrange_at(vars(all_of(c(group_vars)))) %>%
-      group_by_at(vars(all_of(c(group_vars))))
+      arrange(pick(group_vars)) %>%
+      group_by(pick(group_vars))
 
     # - Chose best version
     data <- data %>%
-      group_by_at(vars(all_of(c(
-        "from_code", group_vars
-      )))) %>%
+      group_by(pick(c(
+        "from_code", group_vars))) %>%
       slice(1) %>%
       ungroup()
 
@@ -270,9 +268,9 @@ nuts_classify <-
       anti_join(data,
                 by = c("from_code", "from_version", "from_level", group_vars)) %>%
       select(c("from_code", "from_version", "from_level", group_vars)) %>%
-      group_by_at(vars(all_of(c(
+      group_by(pick(c(
         "from_version", group_vars
-      ))))
+      )))
 
 
     # - Alert missing

@@ -203,20 +203,19 @@ nuts_aggregate <-
     # - Aggregate absolute values
     abs_data <- data %>%
       select(-all_of(rel_vars)) %>%
-      group_by_at(vars(any_of(c(
+      group_by(pick(c(
         "to_code", group_vars
-      )))) %>%
-      summarise_at(vars(all_of(abs_vars)), list(~ sum(., na.rm = missing_rm))) %>%
+      ))) %>%
+      summarise(across(abs_vars, ~ sum(.x, na.rm = missing_rm))) %>%
       ungroup()
 
     # - Weigh relative values according to regional size
     rel_data <- data %>%
       select(-all_of(abs_vars)) %>%
-      group_by_at(vars(any_of(c(
+      group_by(pick(c(
         "to_code", group_vars
-      )))) %>%
-      summarise_at(vars(all_of(rel_vars)),
-                   list(~ sum(. * .data$w, na.rm = missing_rm) / sum(.data$w))) %>%
+      ))) %>%
+      summarise(across(rel_vars, ~ {sum(.x * .data$w, na.rm = missing_rm) / sum(.data$w)})) %>%
       ungroup()
 
     data <- abs_data %>%

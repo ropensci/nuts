@@ -113,6 +113,7 @@ test_that("Converter output spits out correct names", {
   )
 })
 
+
 test_that("Grouped output equal to non-grouped output", {
   expect_equal({
     manure_2_indic() %>%
@@ -247,3 +248,4 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(1005, 5)
             )
           })
+
