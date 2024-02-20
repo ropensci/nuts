@@ -43,7 +43,5 @@
 #' @importFrom dplyr arrange_at
 #' @importFrom glue glue
 #' @importFrom lifecycle deprecated
-#' @importFrom stringr str_detect
-#' @importFrom stringr str_remove
 ## usethis namespace: end
 NULL

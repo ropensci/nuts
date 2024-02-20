@@ -81,12 +81,13 @@ nuts_classify <-
       rename(from_code = !!sym(nuts_code))
 
     # Simple NUTS code check
-    if (any(!(str_detect(data$from_code, "^[A-Za-z]{2}[A-Za-z0-9]{1,3}$"))))
+    if (any(!(grepl("^[A-Za-z]{2}[A-Za-z0-9]{1,3}$", data$from_code))))
+      invalid_codes  <- unique(data$from_code[!grepl("^[A-Za-z]{2}[A-Za-z0-9]{1,3}$", data$from_code)])
       cli_abort(
         c(
           "Variable {.var {nuts_code}} contains invalid NUTS codes.",
           "NUTS codes must start with two letters, followed by one (level 1) to three (level 3) alphanumeric characters, all uppercase.",
-          "Invalid codes: {unique(data$from_code[!str_detect(data$from_code, '^[A-Z]{2}[A-Z0-9]{1,3}$')])}"
+          "Invalid codes: {invalid_codes}"
           )
         )
 

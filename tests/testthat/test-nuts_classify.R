@@ -52,7 +52,7 @@ test_that("NUTS codes not valid", {
   expect_equal(
     expect_error(
       manure_2_indic_DE_2003() %>%
-        mutate(geo = str_remove(geo, "[A-Z]")) %>%
+        mutate(geo = gsub("[A-Z]", "", geo)) %>%
         classify_nuts(nuts_code = "geo")
     ) %>%
       grepl("Variable `geo` contains invalid NUTS codes.", .),
