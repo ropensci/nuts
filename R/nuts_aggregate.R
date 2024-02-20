@@ -2,7 +2,7 @@
 #'
 #' `nuts_aggregate()` transforms regional NUTS data between NUTS levels.
 #'
-#' @param data A nuts.classified object returned by [`classify_nuts()`].
+#' @param data A nuts.classified object returned by [`nuts_classify()`].
 #' @param to_level Number corresponding to the desired NUTS level to be aggregated to: `1` or `2`.
 #' @param variables Named character specifying variable names and variable type (`'absolute'` or `'relative'`), e.g. `c('var_name' = 'absolute')`.
 #' @param weight String with name of the weight used for conversion. Can be area size `'areaKm'` (default),
@@ -34,7 +34,6 @@
 #'                  weight = 'pop18')
 #'
 #' @export
-
 nuts_aggregate <-
   function(data = data,
            to_level = to_level,
@@ -130,45 +129,11 @@ nuts_aggregate <-
       data <- data[check_nuts_codes, ]
     }
 
-    # Test for multiple versions within groups
-    multi_versions_A <- data %>%
-      select(all_of(c(group_vars, "from_version"))) %>%
-      distinct() %>%
-      nrow()
-
-    multi_versions_B <- data %>%
-      select(all_of(c(group_vars))) %>%
-      distinct() %>%
-      nrow()
-
-    # Use data_versions which is sorted for most frequent version within group
-    if (multi_versions_A > multi_versions_B && multiple_versions == "break") {
-
-      cli_abort(
-        c(
-          "Mixed NUTS versions within groups!"
-          ,
-          "Please make sure the data contains only one version per group. Alternatively, keep only the codes belonging to the 'most_frequent' version using the argument 'multiple_versions'."
-        )
-      )
-
-    } else if (multi_versions_A > multi_versions_B && multiple_versions == "most_frequent") {
-      data_versions <- data_versions %>%
-        group_by_at(vars(any_of(c(group_vars)))) %>%
-        slice(1) %>%
-        ungroup()
-
-      data_multi_versions <-
-        anti_join(data, data_versions, by = c("from_version", group_vars))
-      data <-
-        inner_join(data, data_versions, by = c("from_version", group_vars))
-
-      n_rows_dropped <- nrow(data_multi_versions)
-      message_multiple_versions <- c("!" =  "{.blue Choosing most frequent version within group and {.red dropping} {n_rows_dropped} row{?s}.}")
-    } else {
-      message_multiple_versions <- c("v" =  "{.blue Version is {.red unique}.}")
-    }
-    # - Done
+    # Test for multiple versions
+    data <- nuts_test_multiple_versions(group_vars = group_vars, multiple_versions = multiple_versions,
+                                        data_versions = data_versions, data = data)
+    message_multiple_versions <- data[["message_multiple_versions"]]
+    data <- data[["data"]]
 
     # Prepare join with regional indicator stocks such that missing NUTS codes within groups are kept
     # - Create group structure

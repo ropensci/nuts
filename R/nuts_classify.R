@@ -81,7 +81,7 @@ nuts_classify <-
       rename(from_code = !!sym(nuts_code))
 
     # Simple NUTS code check
-    if (any(!(grepl("^[A-Za-z]{2}[A-Za-z0-9]{1,3}$", data$from_code))))
+    if (any(!(grepl("^[A-Za-z]{2}[A-Za-z0-9]{1,3}$", data$from_code)))){
       invalid_codes  <- unique(data$from_code[!grepl("^[A-Za-z]{2}[A-Za-z0-9]{1,3}$", data$from_code)])
       cli_abort(
         c(
@@ -90,6 +90,7 @@ nuts_classify <-
           "Invalid codes: {invalid_codes}"
           )
         )
+    }
 
     # Grouping vars, country identified by default
     if (!is.null(group_vars)) {

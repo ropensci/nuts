@@ -2,7 +2,7 @@
 #---------------------
 test_that("data input not valid", {
   expect_error(
-    convert_nuts_version(
+    nuts_convert_version(
       data = 1,
       to_version = "2021",
       variables = c("values" = "absolute")
@@ -14,8 +14,8 @@ test_that("data input not valid", {
 test_that("variables missing", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_version(data = .,
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_convert_version(data = .,
                            to_version = "2021")
   )
 })
@@ -23,8 +23,8 @@ test_that("variables missing", {
 test_that("variable not found", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_version(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_convert_version(
         data = .,
         to_version = "2021",
         variables = c("valuess" = "absolute")
@@ -36,8 +36,8 @@ test_that("variable not found", {
 test_that("variable type not found", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_version(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_convert_version(
         data = .,
         to_version = "2021",
         variables = c("values" = "absolutee")
@@ -49,8 +49,8 @@ test_that("variable type not found", {
 test_that("to_version invalid", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_version(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_convert_version(
         data = .,
         to_version = "2020",
         variables = c("values" = "absolute")
@@ -62,8 +62,8 @@ test_that("to_version invalid", {
 test_that("weight invalid", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_version(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_convert_version(
         data = .,
         to_version = "2021",
         variables = c("values" = "absolute"),
@@ -84,8 +84,8 @@ test_that("Mixing NUTS codes of different levels", {
         filter(grepl("^DE", geo)) %>%
         filter(geo != "DE") %>%
         filter(time == 2003) %>%
-        classify_nuts(nuts_code = "geo") %>%
-        convert_nuts_version(
+        nuts_classify(nuts_code = "geo") %>%
+        nuts_convert_version(
           data = .,
           to_version = "2021",
           variables = c("values" = "absolute")
@@ -102,8 +102,8 @@ test_that("Converter output spits out correct names", {
   expect_equal(
     manure_2_indic_DE_2003() %>%
       filter(!grepl("ZZ", geo)) %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_version(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_convert_version(
         to_version = "2021",
         variables = c("values" = "absolute")
       ) %>%
@@ -119,10 +119,10 @@ test_that("Grouped output equal to non-grouped output", {
       filter(grepl("DE", geo)) %>%
       filter(!grepl("ZZ", geo)) %>%
       filter(time %in% c(2000, 2010)) %>%
-      classify_nuts(nuts_code = "geo",
+      nuts_classify(nuts_code = "geo",
                     data = .,
                     group_vars = "time") %>%
-      convert_nuts_version(
+      nuts_convert_version(
         data = .,
         to_version = "2021",
         variables = c("values" = "absolute",
@@ -134,9 +134,9 @@ test_that("Grouped output equal to non-grouped output", {
     filter(grepl("DE", geo)) %>%
     filter(!grepl("ZZ", geo)) %>%
     filter(time %in% c(2000)) %>%
-    classify_nuts(nuts_code = "geo",
+    nuts_classify(nuts_code = "geo",
                   data = .) %>%
-    convert_nuts_version(
+    nuts_convert_version(
       data = .,
       to_version = "2021",
       variables = c("values" = "absolute",
@@ -148,12 +148,12 @@ test_that("Multiple groups", {
   expect_equal({
     manure %>%
       filter(nchar(geo) == 5) %>%
-      classify_nuts(
+      nuts_classify(
         nuts_code = "geo",
         data = .,
         group_vars = c("time", "indic_ag")
       ) %>%
-      convert_nuts_version(
+      nuts_convert_version(
         to_version = "2021",
         variables = c("values" = "absolute")
       ) %>%
@@ -167,9 +167,9 @@ test_that("Multiple groups", {
 test_that("Missing NUTS codes", {
   expect_equal({
     manure_2_indic_DE_2003()  %>%
-      classify_nuts(nuts_code = "geo",
+      nuts_classify(nuts_code = "geo",
                     data = .) %>%
-      convert_nuts_version(
+      nuts_convert_version(
         to_version = "2021",
         variables = c("values" = "absolute",
                       "pct" = "relative")
@@ -185,9 +185,9 @@ test_that("Missing NUTS codes", {
 test_that("Ignoring missing NUTS codes", {
   expect_equal({
     manure_2_indic_DE_2003()  %>%
-      classify_nuts(nuts_code = "geo",
+      nuts_classify(nuts_code = "geo",
                     data = .) %>%
-      convert_nuts_version(
+      nuts_convert_version(
         to_version = "2021",
         variables = c("values" = "absolute",
                       "pct" = "relative"),
@@ -208,12 +208,12 @@ test_that("Feeding multiple NUTS versions within groups", {
         filter(nchar(geo) == 5) %>%
         select(geo, indic_ag, values) %>%
         distinct(geo,  .keep_all = T) %>%
-        classify_nuts(
+        nuts_classify(
           nuts_code = "geo",
           group_vars = "indic_ag",
           data = .
         ) %>%
-        convert_nuts_version(
+        nuts_convert_version(
           to_version = 2021,
           variables = c("values" = "absolute"),
           missing_rm = T
@@ -224,6 +224,7 @@ test_that("Feeding multiple NUTS versions within groups", {
   )
 })
 
+
 test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
           {
             expect_equal(
@@ -231,12 +232,12 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
                 filter(nchar(geo) == 5) %>%
                 select(geo, indic_ag, values) %>%
                 distinct(geo,  .keep_all = T) %>%
-                classify_nuts(
+                nuts_classify(
                   nuts_code = "geo",
                   group_vars = "indic_ag",
                   data = .
                 ) %>%
-                convert_nuts_version(
+                nuts_convert_version(
                   to_version = 2021,
                   variables = c("values" = "absolute"),
                   multiple_versions = "most_frequent"
@@ -246,4 +247,3 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(1005, 5)
             )
           })
-

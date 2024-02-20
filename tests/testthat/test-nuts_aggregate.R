@@ -2,7 +2,7 @@
 #---------------------
 test_that("data input not valid", {
   expect_error(
-    convert_nuts_level(
+    nuts_aggregate(
       data = 1,
       to_level = 1,
       variables = c("values" = "absolute")
@@ -14,8 +14,8 @@ test_that("data input not valid", {
 test_that("variables missing", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_level(data = .,
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(data = .,
                          to_level = 1)
   )
 })
@@ -23,8 +23,8 @@ test_that("variables missing", {
 test_that("variable not found", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_level(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
         data = .,
         to_level = 1,
         variables = c("valuess" = "absolute")
@@ -36,8 +36,8 @@ test_that("variable not found", {
 test_that("variable type not found", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_level(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
         data = .,
         to_level = 1,
         variables = c("values" = "absolutee")
@@ -49,8 +49,8 @@ test_that("variable type not found", {
 test_that("invalid to_level 1", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_level(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
         data = .,
         to_level = 4,
         variables = c("values" = "absolute")
@@ -62,8 +62,8 @@ test_that("invalid to_level 1", {
 test_that("invalid to_level 2", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_level(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
         data = .,
         to_level = TRUE,
         variables = c("values" = "absolute")
@@ -75,8 +75,8 @@ test_that("invalid to_level 2", {
 test_that("weight invalid", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_level(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
         data = .,
         to_level = 1,
         variables = c("values" = "absolute"),
@@ -90,8 +90,8 @@ test_that("weight invalid", {
 test_that("NUTS codes already at level 2", {
   expect_error(
     manure_2_indic_DE_2003() %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_level(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
         to_level = 2,
         variables = c("values" = "absolute")
       ),
@@ -107,11 +107,11 @@ test_that("Converter output spits out correct names", {
     manure %>%
       filter(nchar(geo) == 5) %>%
       filter(!grepl("EU|ME|ZZ", geo)) %>%
-      classify_nuts(
+      nuts_classify(
         nuts_code = "geo",
         group_vars = c("indic_ag", "time")
       ) %>%
-      convert_nuts_level(
+      nuts_aggregate(
         to_level = 2,
         variables = c("values" = "absolute")
       ) %>%
@@ -126,9 +126,9 @@ test_that("See if all codes are aggregated from level 3 to level 2", {
     manure %>%
       filter(nchar(geo) == 5) %>%
       filter(!grepl("EU|ME|ZZ", geo)) %>%
-      classify_nuts(nuts_code = "geo",
+      nuts_classify(nuts_code = "geo",
                     group_vars = c("indic_ag", "time")) %>%
-      convert_nuts_level(
+      nuts_aggregate(
         to_level = 2,
         variables = c("values" = "absolute")
       ) %>%
@@ -144,9 +144,9 @@ test_that("See if all codes are aggregated from level 3 to level 1", {
     manure %>%
       filter(nchar(geo) == 5) %>%
       filter(!grepl("EU|ME|ZZ", geo)) %>%
-      classify_nuts(nuts_code = "geo",
+      nuts_classify(nuts_code = "geo",
                     group_vars = c("indic_ag", "time")) %>%
-      convert_nuts_level(
+      nuts_aggregate(
         to_level = 1,
         variables = c("values" = "absolute")
       ) %>%
@@ -164,9 +164,9 @@ test_that("Grouped output equal to non-grouped output", {
       filter(grepl("DE", geo)) %>%
       filter(!grepl("ZZ", geo)) %>%
       filter(time %in% c(2000, 2010)) %>%
-      classify_nuts(nuts_code = "geo",
+      nuts_classify(nuts_code = "geo",
                     group_vars = "time") %>%
-      convert_nuts_level(
+      nuts_aggregate(
         to_level = 1,
         variables = c("values" = "absolute",
                       "pct" = "relative")
@@ -178,8 +178,8 @@ test_that("Grouped output equal to non-grouped output", {
     filter(grepl("DE", geo)) %>%
     filter(!grepl("ZZ", geo)) %>%
     filter(time %in% c(2000)) %>%
-    classify_nuts(nuts_code = "geo") %>%
-    convert_nuts_level(
+    nuts_classify(nuts_code = "geo") %>%
+    nuts_aggregate(
       to_level = 1,
       variables = c("values" = "absolute",
                     "pct" = "relative")
@@ -194,9 +194,9 @@ test_that("Grouped output equal to non-grouped output", {
       filter(grepl("DE", geo)) %>%
       filter(!grepl("ZZ", geo)) %>%
       filter(time %in% c(2000, 2010)) %>%
-      classify_nuts(nuts_code = "geo",
+      nuts_classify(nuts_code = "geo",
                     group_vars = "time") %>%
-      convert_nuts_level(
+      nuts_aggregate(
         to_level = 1,
         variables = c("values" = "absolute",
                       "pct" = "relative")
@@ -208,8 +208,8 @@ test_that("Grouped output equal to non-grouped output", {
     filter(grepl("DE", geo)) %>%
     filter(!grepl("ZZ", geo)) %>%
     filter(time %in% c(2000)) %>%
-    classify_nuts(nuts_code = "geo") %>%
-    convert_nuts_level(
+    nuts_classify(nuts_code = "geo") %>%
+    nuts_aggregate(
       to_level = 1,
       variables = c("values" = "absolute",
                     "pct" = "relative")
@@ -223,8 +223,8 @@ test_that("Additional variables unspecified by the user (here: time)", {
       filter(grepl("DE", geo)) %>%
       filter(!grepl("ZZ", geo)) %>%
       filter(time %in% c(2000)) %>%
-      classify_nuts(nuts_code = "geo") %>%
-      convert_nuts_level(
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
         to_level = 1,
         variables = c("values" = "absolute",
                       "pct" = "relative"),
@@ -242,12 +242,12 @@ test_that("Feeding multiple NUTS versions within groups", {
         filter(nchar(geo) == 5) %>%
         select(geo, indic_ag, values) %>%
         distinct(geo,  .keep_all = T) %>%
-        classify_nuts(
+        nuts_classify(
           nuts_code = "geo",
           group_vars = "indic_ag",
           data = .
         ) %>%
-        convert_nuts_level(
+        nuts_aggregate(
           to_level = 1,
           variables = c("values" = "absolute"),
           missing_rm = T
@@ -265,12 +265,12 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
                 filter(nchar(geo) == 5) %>%
                 select(geo, indic_ag, values) %>%
                 distinct(geo,  .keep_all = T) %>%
-                classify_nuts(
+                nuts_classify(
                   nuts_code = "geo",
                   group_vars = "indic_ag",
                   data = .
                 ) %>%
-                convert_nuts_level(
+                nuts_aggregate(
                   to_level = 1,
                   variables = c("values" = "absolute"),
                   multiple_versions = "most_frequent"
