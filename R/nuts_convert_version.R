@@ -1,6 +1,6 @@
 #' Convert between NUTS versions
 #'
-#' `convert_nuts_version()` transforms regional NUTS data between NUTS versions
+#' `nuts_convert_version()` transforms regional NUTS data between NUTS versions.
 #'
 #' @param data A nuts.classified object returned by [`classify_nuts()`].
 #' @param to_version String with desired NUTS version the function should convert to. Possible versions: `'2006'`, `'2010'`, `'2013'`, `'2016'` or `'2021'`
@@ -32,7 +32,7 @@
 #'   select(-indic_ag, -time) %>%
 #'   # Data now only varies at the NUTS code level
 #'   classify_nuts(nuts_code = "geo") %>%
-#'   convert_nuts_version(to_version = '2021',
+#'   nuts_convert_version(to_version = '2021',
 #'                        weight = 'pop18',
 #'                        variables = c('values' = 'absolute'))
 #'
@@ -44,13 +44,13 @@
 #'   select(-indic_ag) %>%
 #'   # Data now varies at the year x NUTS code level
 #'   classify_nuts(nuts_code = 'geo', group_vars = c('time')) %>%
-#'   convert_nuts_version(to_version = '2021',
+#'   nuts_convert_version(to_version = '2021',
 #'                        weight = 'pop18',
 #'                        variables = c('values' = 'absolute'))
 #'
 #'
 #' @export
-convert_nuts_version <-
+nuts_convert_version <-
   function(data = data,
            to_version = to_version,
            variables = variables,

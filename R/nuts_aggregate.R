@@ -1,6 +1,6 @@
-#' Convert between NUTS levels
+#' Aggregate to higher order NUTS levels
 #'
-#' `convert_nuts_level()` transforms regional NUTS data between NUTS levels
+#' `nuts_aggregate()` transforms regional NUTS data between NUTS levels.
 #'
 #' @param data A nuts.classified object returned by [`classify_nuts()`].
 #' @param to_level Number corresponding to the desired NUTS level to be aggregated to: `1` or `2`.
@@ -29,13 +29,13 @@
 #'   classify_nuts(nuts_code = "geo",
 #'                 group_vars = c('indic_ag','time')) %>%
 #'   # Group vars are automatically passed on
-#'   convert_nuts_level(to_level = 2,
-#'                      variables = c('values'= 'absolute'),
-#'                      weight = 'pop18')
+#'   nuts_aggregate(to_level = 2,
+#'                  variables = c('values'= 'absolute'),
+#'                  weight = 'pop18')
 #'
 #' @export
 
-convert_nuts_level <-
+nuts_aggregate <-
   function(data = data,
            to_level = to_level,
            variables = variables,

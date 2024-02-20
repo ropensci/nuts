@@ -1,6 +1,6 @@
 #' Classify version of NUTS codes
 #'
-#' `classify_nuts()` can identify the NUTS version year and level from a variable containing NUTS codes
+#' `nuts_classify()` can identify the NUTS version year and level from a variable containing NUTS codes.
 #'
 #' @param data A data frame or tibble that contains a variable with NUTS `1`, `2` or `3` codes and possibly other variables.
 #' NUTS codes must be of the same level and need to be unique, unless additional grouping variables are specified. No
@@ -14,7 +14,7 @@
 #' The second tibble lists the group-specific overlap with each NUTS version. The third tibble shows missing NUTS codes
 #' for each group.
 #'
-#' The output can be passed to [convert_nuts_version()] to convert data across NUTS versions and [convert_nuts_level()] to aggregate across NUTS levels.
+#' The output can be passed to [nuts_convert_version()] to convert data across NUTS versions and [nuts_aggregate()] to aggregate across NUTS levels.
 #'
 #'
 #' @examples
@@ -34,7 +34,7 @@
 #'  filter(time == 2003) %>%
 #'  select(-indic_ag, -time) %>%
 #'  # Data varies at the NUTS code level
-#'  classify_nuts(nuts_code = 'geo')
+#'  nuts_classify(nuts_code = 'geo')
 #'
 #'# Classify version of NUTS 3 codes within country and year
 #' manure %>%
@@ -43,12 +43,11 @@
 #'   select(-indic_ag) %>%
 #'   # Data varies at the year x country x NUTS code level. The country grouping
 #'   # is always used by default.
-#'   classify_nuts(nuts_code = 'geo', group_vars = 'time')
+#'   nuts_classify(nuts_code = 'geo', group_vars = 'time')
 #'
 #'
 #' @export
-
-classify_nuts <-
+nuts_classify <-
   function(data = data,
            nuts_code = nuts_code,
            group_vars = NULL,
