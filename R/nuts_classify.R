@@ -47,11 +47,10 @@
 #'
 #'
 #' @export
-nuts_classify <-
-  function(data = data,
-           nuts_code = nuts_code,
-           group_vars = NULL,
-           ties = "most_recent") {
+nuts_classify <- function(data = data,
+                          nuts_code = nuts_code,
+                          group_vars = NULL,
+                          ties = c("most_recent", "oldest")) {
 
     # DEFINE CLI DIVs
     #-----------------------
@@ -70,7 +69,7 @@ nuts_classify <-
       cli_abort("Input {.arg nuts_code} must be provided as a string, not {.obj_type_friendly {nuts_code}}.")
     if (!(nuts_code %in% colnames(data)))
       cli_abort("Input {.arg nuts_code} not found in the provided data frame.")
-    if (!ties %in% c("most_recent", "oldest"))
+    if (!ties[1] %in% c("most_recent", "oldest"))
       cli_abort("Input {.arg ties} must be 'most_recent' or 'oldest'.")
     if ("version" %in% names(data))
       cli::cli_abort("Please rename the variable {.arg version} in the provided data frame to avoid conflicts. The function {.fn classify_nuts} generates a variable with the same name.")
@@ -187,7 +186,7 @@ nuts_classify <-
     rm(data_na)
 
     # - Sort for best version in case of ties
-    if (ties == "oldest") {
+    if (ties[1] == "oldest") {
       data <- data %>%
         arrange(desc(.data$overlap_perc), .data$from_version)
     } else {

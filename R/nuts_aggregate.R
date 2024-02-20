@@ -8,7 +8,7 @@
 #' @param weight String with name of the weight used for conversion. Can be area size `'areaKm'` (default),
 #' population in 2011 `'pop11'` or 2018 `'pop18'`, or artificial surfaces in 2012 `'artif_surf12'` and 2018 `'artif_surf18'`.
 #' @param missing_rm Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.
-#' @param multiple_versions By default equal to `'break'`, throwing an error when providing multiple NUTS versions within groups.
+#' @param multiple_versions By default equal to `'error'`, when providing multiple NUTS versions within groups.
 #' If set to `'most_frequent'` data is converted using the best-matching NUTS version.
 #'
 #' @return A tibble containing NUTS codes, aggregated variable values, and possibly grouping variables.
@@ -34,13 +34,12 @@
 #'                  weight = 'pop18')
 #'
 #' @export
-nuts_aggregate <-
-  function(data = data,
-           to_level = to_level,
-           variables = variables,
-           weight = NULL,
-           missing_rm = FALSE,
-           multiple_versions = "break") {
+nuts_aggregate <- function(data = data,
+                           to_level = to_level,
+                           variables = variables,
+                           weight = NULL,
+                           missing_rm = FALSE,
+                           multiple_versions = c("error", "most_frequent")) {
 
     # DEFINE CLI DIVs
     #-----------------------
@@ -83,8 +82,8 @@ nuts_aggregate <-
         "Input {.arg missing_rm} invalid. Must be TRUE/FALSE, not {.obj_type_friendly {missing_rm}}."
       )
 
-    if (!multiple_versions %in% c("break", "most_frequent"))
-      cli_abort("Input {.arg multiple_versions} invalid. Must be 'break' or 'most_frequent'.")
+    if (!multiple_versions[1] %in% c("error", "most_frequent"))
+      cli_abort("Input {.arg multiple_versions} invalid. Must be 'error' or 'most_frequent'.")
 
     # Prepare data
     group_vars <- attributes(data)$groups

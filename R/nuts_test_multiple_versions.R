@@ -22,7 +22,7 @@ nuts_test_multiple_versions = function(group_vars, multiple_versions, data_versi
 
   # Use data_versions which is sorted for most frequent version within group
   if (multi_versions_A > multi_versions_B &&
-      multiple_versions == "break") {
+      multiple_versions[1] == "error") {
     cli_abort(
       c(
         "Mixed NUTS versions within groups!"
@@ -32,7 +32,7 @@ nuts_test_multiple_versions = function(group_vars, multiple_versions, data_versi
     )
 
   } else if (multi_versions_A > multi_versions_B &&
-             multiple_versions == "most_frequent") {
+             multiple_versions[1] == "most_frequent") {
     data_versions <- data_versions %>%
       group_by_at(vars(any_of(c(group_vars)))) %>%
       slice(1) %>%
