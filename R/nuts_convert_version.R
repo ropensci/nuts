@@ -13,6 +13,8 @@
 #'
 #' @return A tibble containing NUTS codes, converted variable values, and possibly grouping variables.
 #'
+#' @details Console messages can be controlled with `rlang::local_options(nuts.verbose = "quiet")` to silence messages and
+#' `nuts.verbose = "verbose"` to switch messages back on.
 #'
 #' @examples
 #' library(dplyr)
@@ -31,7 +33,7 @@
 #'   filter(time == 2003) %>%
 #'   select(-indic_ag, -time) %>%
 #'   # Data now only varies at the NUTS code level
-#'   classify_nuts(nuts_code = "geo") %>%
+#'   nuts_classify(nuts_code = "geo") %>%
 #'   nuts_convert_version(to_version = '2021',
 #'                        weight = 'pop18',
 #'                        variables = c('values' = 'absolute'))
@@ -43,7 +45,7 @@
 #'   filter(indic_ag == 'I07A_EQ_Y') %>%
 #'   select(-indic_ag) %>%
 #'   # Data now varies at the year x NUTS code level
-#'   classify_nuts(nuts_code = 'geo', group_vars = c('time')) %>%
+#'   nuts_classify(nuts_code = 'geo', group_vars = c('time')) %>%
 #'   nuts_convert_version(to_version = '2021',
 #'                        weight = 'pop18',
 #'                        variables = c('values' = 'absolute'))

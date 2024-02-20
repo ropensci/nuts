@@ -23,6 +23,11 @@ pak::pak("AAoritz/nuts/")
 
 Check out the [website](https://aaoritz.github.io/nuts/articles/nuts-vignette.html) for example usage and further details.
 
+### Verbosity Control
+
+Console messages can be controlled with `rlang::local_options(nuts.verbose = "quiet")` to silence messages and setting `nuts.verbose = "verbose"` to switch messages back on.
+
+
 ### Citation
 
 Please support the development of open science and data by citing the JRC and us in your work:

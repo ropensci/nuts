@@ -7,7 +7,7 @@ reference:
 - title: Functions
   desc:  Functions that classify and convert regional data
 - contents:
-    starts_with("convert_|classify_")
+    starts_with("nuts_classify|nuts_aggregate|nuts_convert")
 - title: Data
   desc:  Data sets required for conversion and examples
 - contents:

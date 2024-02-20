@@ -13,6 +13,8 @@
 #'
 #' @return A tibble containing NUTS codes, aggregated variable values, and possibly grouping variables.
 #'
+#' @details Console messages can be controlled with `rlang::local_options(nuts.verbose = "quiet")` to silence messages and
+#' `nuts.verbose = "verbose"` to switch messages back on.
 #'
 #' @examples
 #' library(dplyr)
@@ -26,7 +28,7 @@
 #'# Aggregate from NUTS 3 to 2 by indicator x year
 #' manure %>%
 #'   filter(nchar(geo) == 5) %>%
-#'   classify_nuts(nuts_code = "geo",
+#'   nuts_classify(nuts_code = "geo",
 #'                 group_vars = c('indic_ag','time')) %>%
 #'   # Group vars are automatically passed on
 #'   nuts_aggregate(to_level = 2,

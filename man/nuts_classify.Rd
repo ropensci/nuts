@@ -8,7 +8,7 @@ nuts_classify(
   data = data,
   nuts_code = nuts_code,
   group_vars = NULL,
-  ties = "most_recent"
+  ties = c("most_recent", "oldest")
 )
 }
 \arguments{
@@ -32,6 +32,10 @@ The output can be passed to \code{\link[=nuts_convert_version]{nuts_convert_vers
 }
 \description{
 \code{nuts_classify()} can identify the NUTS version year and level from a variable containing NUTS codes.
+}
+\details{
+Console messages can be controlled with \code{rlang::local_options(nuts.verbose = "quiet")} to silence messages and
+\code{nuts.verbose = "verbose"} to switch messages back on.
 }
 \examples{
 library(dplyr)

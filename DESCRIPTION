@@ -41,6 +41,7 @@ Suggests:
     readr,
     rmarkdown,
     sf,
+    stringr,
     terra,
     testthat,
     tidyr,

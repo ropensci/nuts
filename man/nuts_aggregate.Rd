@@ -10,7 +10,7 @@ nuts_aggregate(
   variables = variables,
   weight = NULL,
   missing_rm = FALSE,
-  multiple_versions = "break"
+  multiple_versions = c("error", "most_frequent")
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ population in 2011 \code{'pop11'} or 2018 \code{'pop18'}, or artificial surfaces
 
 \item{missing_rm}{Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.}
 
-\item{multiple_versions}{By default equal to \code{'break'}, throwing an error when providing multiple NUTS versions within groups.
+\item{multiple_versions}{By default equal to \code{'error'}, when providing multiple NUTS versions within groups.
 If set to \code{'most_frequent'} data is converted using the best-matching NUTS version.}
 }
 \value{
@@ -33,6 +33,10 @@ A tibble containing NUTS codes, aggregated variable values, and possibly groupin
 }
 \description{
 \code{nuts_aggregate()} transforms regional NUTS data between NUTS levels.
+}
+\details{
+Console messages can be controlled with \code{rlang::local_options(nuts.verbose = "quiet")} to silence messages and
+\code{nuts.verbose = "verbose"} to switch messages back on.
 }
 \examples{
 library(dplyr)
@@ -46,7 +50,7 @@ head(manure)
 # Aggregate from NUTS 3 to 2 by indicator x year
 manure \%>\%
   filter(nchar(geo) == 5) \%>\%
-  classify_nuts(nuts_code = "geo",
+  nuts_classify(nuts_code = "geo",
                 group_vars = c('indic_ag','time')) \%>\%
   # Group vars are automatically passed on
   nuts_aggregate(to_level = 2,

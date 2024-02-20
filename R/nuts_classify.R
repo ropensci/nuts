@@ -16,6 +16,9 @@
 #'
 #' The output can be passed to [nuts_convert_version()] to convert data across NUTS versions and [nuts_aggregate()] to aggregate across NUTS levels.
 #'
+#' @details Console messages can be controlled with `rlang::local_options(nuts.verbose = "quiet")` to silence messages and
+#' `nuts.verbose = "verbose"` to switch messages back on.
+#'
 #'
 #' @examples
 #' library(dplyr)

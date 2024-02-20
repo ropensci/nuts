@@ -120,10 +120,10 @@ manure_indic <- manure %>%
 
 class <- manure_indic %>%
   distinct(geo, .keep_all = T) %>%
-  classify_nuts(data = ., nuts_code = "geo")
+  nuts_classify(data = ., nuts_code = "geo")
 
 transf <- class %>% 
-  convert_nuts_version( to_version = "2010" , variables = c( 'values' = 'absolute' ) , weight = 'artif_surf12' )
+  nuts_convert_version( to_version = "2010" , variables = c( 'values' = 'absolute' ) , weight = 'artif_surf12' )
 
 small <- manure_indic %>% 
   filter( geo %in% c( 'DED1' , 'DED3' ) )
@@ -226,15 +226,15 @@ gridExtra::grid.arrange( p_initial, p_step , p_final , nrow = 1 )
 
 The package comes with three main functions:
 
--   `classify_nuts()` detects the NUTS version(s) and level(s) of a data set. Its output can be directly fed into the two other functions.
+-   `nuts_classify()` detects the NUTS version(s) and level(s) of a data set. Its output can be directly fed into the two other functions.
 
--   `convert_nuts_version()` converts your data to a desired NUTS version (2006, 2010, 2013, 2016, 2021). This transformation works in any direction.
+-   `nuts_convert_version()` converts your data to a desired NUTS version (2006, 2010, 2013, 2016, 2021). This transformation works in any direction.
 
--   `convert_nuts_level()` aggregates data to some upper-level NUTS code, i.e., it transforms NUTS-3 data to the NUTS-2 or NUTS-1 level (but not vice versa).
+-   `nuts_aggregate()` aggregates data to some upper-level NUTS code, i.e., it transforms NUTS-3 data to the NUTS-2 or NUTS-1 level (but not vice versa).
 
 ## Workflow
 
-The conversion can only be conducted after classifying the NUTS version(s) and level(s) of your data using the function `classify_nuts()`. This step ensures the validity and completeness of your NUTS codes before proceeding with the conversion.
+The conversion can only be conducted after classifying the NUTS version(s) and level(s) of your data using the function `nuts_classify()`. This step ensures the validity and completeness of your NUTS codes before proceeding with the conversion.
 
 ```{r , echo=FALSE, out.width='60%', fig.align="center", fig.cap="Sequential workflow to convert regional NUTS data", fig.alt ="Flow diagram that shows that conversion functions are run after classification."}
 knitr::include_graphics("flow.png")
@@ -244,7 +244,7 @@ knitr::include_graphics("flow.png")
 
 ## Identifying NUTS version and level
 
-The `classify_nuts()` function's main purpose is to find the most suitable NUTS **version** and to identify the **level** of the data set. Below, you see an example using patent application data (per one million inhabitants) for Norway in 2012 at the NUTS-2 level. This data is provided by EUROSTAT.
+The `nuts_classify()` function's main purpose is to find the most suitable NUTS **version** and to identify the **level** of the data set. Below, you see an example using patent application data (per one million inhabitants) for Norway in 2012 at the NUTS-2 level. This data is provided by EUROSTAT.
 
 ```{r}
 # Load package
@@ -263,7 +263,7 @@ pat_n2_mhab_12_no <- pat_n2 %>%
   select(-unit)
 
 # Classifying the Data
-pat_classified <- classify_nuts(data = pat_n2_mhab_12_no,
+pat_classified <- nuts_classify(data = pat_n2_mhab_12_no,
                                 nuts_code = "geo")
 ```
 
@@ -298,7 +298,7 @@ We provide the classified NUTS data, specify the target NUTS version for data tr
 
 ```{r}
 # Converting Data to 2021 NUTS version
-pat_converted <- convert_nuts_version(
+pat_converted <- nuts_convert_version(
   data = pat_classified,
   to_version = "2021",
   variables = c("values" = "relative")
@@ -391,11 +391,11 @@ You can also convert **multiple variables** at once. Below, we add the number of
 # Converting Multiple Variables
 pat_n2_mhab_12_no %>%
   mutate(values_per_thous = values * 1000) %>%
-  classify_nuts(
+  nuts_classify(
     data = .,
     nuts_code = "geo"
     ) %>%
-  convert_nuts_version(
+  nuts_convert_version(
     data = .,
     to_version = "2021",
     variables = c("values" = "relative",
@@ -405,7 +405,7 @@ pat_n2_mhab_12_no %>%
 
 ### Converting grouped data
 
-Longitudinal regional data, as commonly supplied by EUROSTAT, often comes with varying NUTS versions across countries and years (and other dimensions). It is possible to harmonize data across such **groups** using `convert_nuts_version()` with the `group_vars` argument. Below, we transform data within country and year groups for Sweden, Slovenia, and Croatia to the 2021 NUTS version.
+Longitudinal regional data, as commonly supplied by EUROSTAT, often comes with varying NUTS versions across countries and years (and other dimensions). It is possible to harmonize data across such **groups** using `nuts_convert_version()` with the `group_vars` argument. Below, we transform data within country and year groups for Sweden, Slovenia, and Croatia to the 2021 NUTS version.
 
 ```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 # Classifying grouped data (time)
@@ -413,7 +413,7 @@ pat_n2_mhab_sesihr <- pat_n2 %>%
   filter(unit == "P_MHAB") %>%
   filter(str_detect(geo, "^SE|^SI|^HR"))
 
-pat_classified <- classify_nuts(
+pat_classified <- nuts_classify(
   nuts_code = "geo",
   data = pat_n2_mhab_sesihr,
   group_vars = "time"
@@ -432,7 +432,7 @@ The grouping is stored and passed on to the conversion function:
 
 ```{r}
 # Converting grouped data (Time)
-pat_converted <- convert_nuts_version(
+pat_converted <- nuts_convert_version(
   data = pat_classified,
   to_version = "2021",
   variables = c("values" = "relative")
@@ -448,12 +448,12 @@ pat_n2_mhabmact_12_sesihr <- pat_n2 %>%
   filter(str_detect(geo, "^SE|^SI|^HR"))
 
 pat_converted <- pat_n2_mhabmact_12_sesihr %>%
-  classify_nuts(
+  nuts_classify(
     data = .,
     nuts_code = "geo",
     group_vars = c("time", "unit")
   ) %>%
-  convert_nuts_version(
+  nuts_convert_version(
     data = .,
     to_version = "2021",
     variables = c("values" = "relative")
@@ -462,7 +462,7 @@ pat_converted <- pat_n2_mhabmact_12_sesihr %>%
 
 ## Converting data between NUTS levels
 
-The `convert_nuts_level()` function facilitates the **aggregation** of data from lower NUTS **levels** to higher ones using spatial weights. This enables users to summarize variables upward from the NUTS-3 level to NUTS-2 or NUTS-1 levels. It is important to note that this function does not support disaggregation since this comes with strong assumptions about the spatial distribution of a variable's values.
+The `nuts_aggregate()` function facilitates the **aggregation** of data from lower NUTS **levels** to higher ones using spatial weights. This enables users to summarize variables upward from the NUTS-3 level to NUTS-2 or NUTS-1 levels. It is important to note that this function does not support disaggregation since this comes with strong assumptions about the spatial distribution of a variable's values.
 
 In the following example, we illustrate how to aggregate the total number of patent applications in Sweden from NUTS-3 to higher levels. The functions below return a warning concerning non-identifiable NUTS codes. See [*Non-identified NUTS codes*](#nuts_not_identified) for further information.
 
@@ -477,16 +477,16 @@ pat_n3_nr_12_se <- pat_n3 %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^SE"))
 
-pat_classified <- classify_nuts(data = pat_n3_nr_12_se,
+pat_classified <- nuts_classify(data = pat_n3_nr_12_se,
                                 nuts_code = "geo")
 
-pat_level2 <- convert_nuts_level(
+pat_level2 <- nuts_aggregate(
   data = pat_classified,
   to_level = 2,
   variables = c("values" = "absolute")
 )
 
-pat_level1 <- convert_nuts_level(
+pat_level1 <- nuts_aggregate(
   data = pat_classified,
   to_level = 1,
   variables = c("values" = "absolute")
@@ -553,7 +553,7 @@ annotate_figure(gg, top = text_grob("Patent applications across Swedish NUTS reg
 
 ### Non-identified NUTS codes {#nuts_not_identified}
 
-If the input data contains NUTS codes that cannot be identified in any NUTS version, the output of `classifiy_nuts` lists all of these codes. All conversion procedures (`convert_nuts_version()` and `convert_nuts_level()`) will work as expected while ignoring values for these regions.
+If the input data contains NUTS codes that cannot be identified in any NUTS version, the output of `classifiy_nuts` lists all of these codes. All conversion procedures (`nuts_convert_version()` and `nuts_aggregate()`) will work as expected while ignoring values for these regions.
 
 The example below classifies 2012 patent data from Denmark. The original EUROSTAT data contains the codes `DKZZZ` and `DKXXX`, which are not part of the conversion matrices. Codes ending with the letter Z refer to "[Extra-Regio](https://stat.gov.pl/en/regional-statistics/classification-of-territorial-units/classification-of-territorial-units-for-statistics-nuts/principles-for-creation-and-development-of-nuts-units/)" territories. These codes collect statistics for territories that cannot be attached to a certain region.[^3] Codes ending with the letter X refer to observations with unknown regions.
 
@@ -565,12 +565,12 @@ pat_n3.nr.12.dk <- pat_n3 %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^DK"))
 
-pat_classified <- classify_nuts(data = pat_n3.nr.12.dk, nuts_code = "geo")
+pat_classified <- nuts_classify(data = pat_n3.nr.12.dk, nuts_code = "geo")
 ```
 
 ### Missing NUTS codes
 
-`classify_nuts()` also checks whether the NUTS codes provided are complete. Missing values in the input data will, by default, result in missing values for all affected transformed regions in the output data. 
+`nuts_classify()` also checks whether the NUTS codes provided are complete. Missing values in the input data will, by default, result in missing values for all affected transformed regions in the output data. 
 
 The example below illustrates this case.
 
@@ -580,10 +580,10 @@ pat_n3_nr_12_si <- pat_n3 %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^SI"))
 
-pat_classified <- classify_nuts(data = pat_n3_nr_12_si, nuts_code = "geo")
+pat_classified <- nuts_classify(data = pat_n3_nr_12_si, nuts_code = "geo")
 ```
 
-`classify_nuts()` returns a warning that NUTS codes are missing in the input data. These codes can be inspected by calling `pat_classified[3]`. 
+`nuts_classify()` returns a warning that NUTS codes are missing in the input data. These codes can be inspected by calling `pat_classified[3]`. 
 
 ```{r}
 pat_classified[3]
@@ -592,7 +592,7 @@ pat_classified[3]
 The resulting conversion returns three missing values as the source code `SI011` transformed into `SI031` and the region `SI016` was split into `SI036` and `SI037`.
 
 ```{r}
-convert_nuts_version(data = pat_classified, 
+nuts_convert_version(data = pat_classified, 
                      to_version = "2021", 
                      variables = c("values" = "absolute")) %>% 
   filter(is.na(values))
@@ -607,7 +607,7 @@ Users have three options to overcome this problem.
   3. The argument `missing_rm` can be set to `TRUE`. In this case, missing values will be removed from the input data. Effectively, the interpolation procedures assume that missing values can be replaced with `0`, which may be a very strong assumption depending on the context.
 
 ```{r}
-convert_nuts_version(
+nuts_convert_version(
   data = pat_classified, 
   to_version = "2021", 
   variables = c("values" = "absolute"),
@@ -625,33 +625,33 @@ The package does not allow for the conversion of **multiple NUTS levels** at onc
 patents %>% 
   filter(nchar(geo) %in% c(4, 5), grepl("^EL", geo)) %>% 
   distinct(geo, .keep_all = T) %>% 
-  classify_nuts(nuts_code = "geo", data = .)
+  nuts_classify(nuts_code = "geo", data = .)
 ```
 
 ### Multiple NUTS versions within groups
 
 Converting **multiple NUTS versions** within groups might lead to erroneous spatial interpolations since overlaps between regions of different versions are possible.
 
-The example below illustrates this problem. We classify German and Italian manure storage facility data from EUROSTAT without specifying `group_vars`. Instead, we keep all unique NUTS codes to artificially create a data set containing different NUTS versions. `classify_nuts()` returns a warning and by inspecting the identified versions, we see that there are mixed versions within groups (the countries).
+The example below illustrates this problem. We classify German and Italian manure storage facility data from EUROSTAT without specifying `group_vars`. Instead, we keep all unique NUTS codes to artificially create a data set containing different NUTS versions. `nuts_classify()` returns a warning and by inspecting the identified versions, we see that there are mixed versions within groups (the countries).
 
 ```{r}
 man_deit <- manure %>% 
   filter(grepl("^DE|^IT", geo)) %>%
   filter(nchar(geo) == 4, ) %>% 
   distinct(geo, .keep_all = T) %>% 
-  classify_nuts(nuts_code = "geo", data = .)
+  nuts_classify(nuts_code = "geo", data = .)
 
 man_deit[["data"]] %>% 
   group_by(country, from_version) %>% 
   tally()
 ```
 
-When proceeding to the conversion with either `convert_nuts_version()` or `convert_nuts_level()`, both functions will throw an error. For convenience, we added the option `multiple_versions` that subsets the supplied data to the dominant version within groups when specified with `most_frequent`. Hence, all codes from other, non-dominant versions are discarded. 
+When proceeding to the conversion with either `nuts_convert_version()` or `nuts_aggregate()`, both functions will throw an error. For convenience, we added the option `multiple_versions` that subsets the supplied data to the dominant version within groups when specified with `most_frequent`. Hence, all codes from other, non-dominant versions are discarded. 
 
 Once we convert this data set, all NUTS regions unrecognized acoording to the 2006 (Germany) and 2021 (Italy) version are dropped automatically. 
 
 ```{r}
-man_deit_converted <- convert_nuts_version(
+man_deit_converted <- nuts_convert_version(
   data = man_deit,
   to_version = 2021,
   variables = c("values" = "relative"),
@@ -865,7 +865,7 @@ pat_n2_nrmhab_12_no <- patents %>%
               values_from = "values")
 
 classification <- pat_n2_nrmhab_12_no %>%
-  classify_nuts(nuts_code = "geo")
+  nuts_classify(nuts_code = "geo")
 
 conversion_m_long <- classification[["data"]] %>%
   filter(!is.na(from_version)) %>%
@@ -941,7 +941,7 @@ kable(converted_abs_calc, "html") %>%
 
 ### Conversion of relative values between versions
 
-To convert **relative** values, such as the number of patent applications per 1000 inhabitants, `convert_nuts_version()` departs again from the conversion table seen above. We focus on the variable `P_MHAB`, patent applications per one million inhabitants. The function summarizes these relative values by computing the **weighted average** with respect to 2018 population flows.
+To convert **relative** values, such as the number of patent applications per 1000 inhabitants, `nuts_convert_version()` departs again from the conversion table seen above. We focus on the variable `P_MHAB`, patent applications per one million inhabitants. The function summarizes these relative values by computing the **weighted average** with respect to 2018 population flows.
 
 ```{r,  include = F}
 convert_rel <- conversion_m_long %>%
@@ -984,11 +984,11 @@ kable(converted_rel_calc, "html") %>%
 
 ### Conversion of absolute values between NUTS levels
 
-The function `convert_nuts_level()` aggregates from lower to higher order **levels**, e.g. from NUTS-3 to NUTS-2. Since higher order regions are perfectly split into lower order regions in the NUTS system, the function takes simply the sum of the values in case of **absolute** variables.
+The function `nuts_aggregate()` aggregates from lower to higher order **levels**, e.g. from NUTS-3 to NUTS-2. Since higher order regions are perfectly split into lower order regions in the NUTS system, the function takes simply the sum of the values in case of **absolute** variables.
 
 ### Conversion of relative values between NUTS levels
 
-**Relative** values are aggregated in `convert_nuts_level()` by computing the weighted mean of all lower order regional **levels**. To convert, for example, the number of patent applications per one million inhabitants from NUTS-3 to NUTS-2, the function adds the population size in 2018.
+**Relative** values are aggregated in `nuts_aggregate()` by computing the weighted mean of all lower order regional **levels**. To convert, for example, the number of patent applications per one million inhabitants from NUTS-3 to NUTS-2, the function adds the population size in 2018.
 
 ```{r,  include = FALSE}
 pat_n3_nrmhab_12_no <- patents %>%
@@ -1004,7 +1004,7 @@ pat_n3_nrmhab_12_no <- patents %>%
   )
 
 classification <- pat_n3_nrmhab_12_no %>%
-  classify_nuts(nuts_code = "geo")
+  nuts_classify(nuts_code = "geo")
 classification[["data"]] %>%
   group_by(from_version) %>%
   tally()

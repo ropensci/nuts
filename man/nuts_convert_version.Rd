@@ -10,7 +10,7 @@ nuts_convert_version(
   variables = variables,
   weight = NULL,
   missing_rm = FALSE,
-  multiple_versions = "break"
+  multiple_versions = c("error", "most_frequent")
 )
 }
 \arguments{
@@ -25,7 +25,7 @@ population in 2011 \code{'pop11'} or 2018 \code{'pop18'}, or artificial surfaces
 
 \item{missing_rm}{Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.}
 
-\item{multiple_versions}{By default equal to \code{'break'}, throwing an error when providing multiple NUTS versions within groups.
+\item{multiple_versions}{By default equal to \code{'error'}, when providing multiple NUTS versions within groups.
 If set to \code{'most_frequent'} data is converted using the best-matching NUTS version.}
 }
 \value{
@@ -33,6 +33,10 @@ A tibble containing NUTS codes, converted variable values, and possibly grouping
 }
 \description{
 \code{nuts_convert_version()} transforms regional NUTS data between NUTS versions.
+}
+\details{
+Console messages can be controlled with \code{rlang::local_options(nuts.verbose = "quiet")} to silence messages and
+\code{nuts.verbose = "verbose"} to switch messages back on.
 }
 \examples{
 library(dplyr)
@@ -51,7 +55,7 @@ manure \%>\%
   filter(time == 2003) \%>\%
   select(-indic_ag, -time) \%>\%
   # Data now only varies at the NUTS code level
-  classify_nuts(nuts_code = "geo") \%>\%
+  nuts_classify(nuts_code = "geo") \%>\%
   nuts_convert_version(to_version = '2021',
                        weight = 'pop18',
                        variables = c('values' = 'absolute'))
@@ -63,7 +67,7 @@ manure \%>\%
   filter(indic_ag == 'I07A_EQ_Y') \%>\%
   select(-indic_ag) \%>\%
   # Data now varies at the year x NUTS code level
-  classify_nuts(nuts_code = 'geo', group_vars = c('time')) \%>\%
+  nuts_classify(nuts_code = 'geo', group_vars = c('time')) \%>\%
   nuts_convert_version(to_version = '2021',
                        weight = 'pop18',
                        variables = c('values' = 'absolute'))
