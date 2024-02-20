@@ -23,10 +23,8 @@ Imports:
     dplyr,
     glue,
     lifecycle,
-    magrittr,
     rlang,
-    stringr,
-    tibble
+    stringr
 Suggests: 
     distill,
     eurostat,

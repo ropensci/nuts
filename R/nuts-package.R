@@ -3,9 +3,9 @@
 
 ## usethis namespace: start
 #' @import cli
-#' @importFrom magrittr %>%
 #' @import rlang
-#' @import tibble
+#' @importFrom dplyr as_tibble
+#' @importFrom dplyr %>%
 #' @importFrom dplyr anti_join
 #' @importFrom dplyr arrange
 #' @importFrom dplyr cross_join
