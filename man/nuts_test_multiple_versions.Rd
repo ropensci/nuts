@@ -6,6 +6,15 @@
 \usage{
 nuts_test_multiple_versions(group_vars, multiple_versions, data_versions, data)
 }
+\arguments{
+\item{group_vars}{Variable name(s) for classification within groups. Always computes overlap within country. \code{NULL} by default.}
+
+\item{multiple_versions}{By default equal to \code{'error'}, when providing multiple NUTS versions within groups.}
+
+\item{data_versions}{Data versions}
+
+\item{data}{A nuts.classified object returned by \code{\link[=nuts_classify]{nuts_classify()}}.}
+}
 \value{
 A tibble containing NUTS codes and a message with the results of the test.
 }
