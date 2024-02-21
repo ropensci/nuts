@@ -3,6 +3,11 @@
 #' `nuts_test_multiple_versions` is called from either `nuts_convert_version` or `nuts_aggregate`
 #' to selects the most frequent version within groups or throw an error.
 #'
+#' @param group_vars Variable name(s) for classification within groups. Always computes overlap within country. `NULL` by default.
+#' @param multiple_versions By default equal to `'error'`, when providing multiple NUTS versions within groups.
+#' @param data_versions Data versions
+#' @param data A nuts.classified object returned by [`nuts_classify()`].
+#'
 #' @return A tibble containing NUTS codes and a message with the results of the test.
 #'
 #' @export
