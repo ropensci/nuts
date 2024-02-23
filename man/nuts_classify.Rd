@@ -5,8 +5,8 @@
 \title{Classify version of NUTS codes}
 \usage{
 nuts_classify(
-  data = data,
-  nuts_code = nuts_code,
+  data,
+  nuts_code,
   group_vars = NULL,
   ties = c("most_recent", "oldest")
 )
@@ -18,7 +18,7 @@ duplicate NUTS codes within groups allowed.}
 
 \item{nuts_code}{Variable name containing NUTS codes}
 
-\item{group_vars}{Variable name(s) for classification within groups. Always computes overlap within country. \code{NULL} by default.}
+\item{group_vars}{Variable name(s) for classification within groups. \code{nuts_classify()} always computes overlap within country. Hence, country variables should not be specified. \code{NULL} by default.}
 
 \item{ties}{Picks \code{'most_recent'} or \code{'oldest'} version when overlap is identical across multiple NUTS versions. \code{'most_recent'}
 by default.}

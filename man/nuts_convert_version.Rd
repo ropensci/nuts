@@ -5,9 +5,9 @@
 \title{Convert between NUTS versions}
 \usage{
 nuts_convert_version(
-  data = data,
-  to_version = to_version,
-  variables = variables,
+  data,
+  to_version,
+  variables,
   weight = NULL,
   missing_rm = FALSE,
   multiple_versions = c("error", "most_frequent")

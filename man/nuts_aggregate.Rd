@@ -5,9 +5,9 @@
 \title{Aggregate to higher order NUTS levels}
 \usage{
 nuts_aggregate(
-  data = data,
-  to_level = to_level,
-  variables = variables,
+  data,
+  to_level,
+  variables,
   weight = NULL,
   missing_rm = FALSE,
   multiple_versions = c("error", "most_frequent")
