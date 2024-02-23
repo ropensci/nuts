@@ -98,16 +98,23 @@ A simple approach is to redistribute manure storage facilities proportional to t
 
 See the Section [*Spatial interpolation in detail*](#method) for an in-depth description of the weighting procedure.
 
+```{r echo = FALSE}
+library(nuts)
+library(stringr)
+library(ggplot2)
+library(ggrepel)
+library(sf)
+library(terra)
+library(raster)
+library(kableExtra)
+library(ggpubr)
+library(formatR)
+library(ggalluvial)
+library(dplyr)
+```
+
 
 ```{r echo = FALSE , warning=F , message=F,results='hide'}
-library(nuts)
-library(sf)
-library(ggplot2)
-library(ggpubr)
-library(dplyr)
-library(stringr)
-library(cli)
-library(formatR)
 
 data(manure, package = "nuts")
 
@@ -254,8 +261,10 @@ knitr::include_graphics("flow.png")
 The `nuts_classify()` function's main purpose is to find the most suitable NUTS **version** and to identify the **level** of the data set. Below, you see an example using patent application data (per one million inhabitants) for Norway in 2012 at the NUTS-2 level. This data is again provided by EUROSTAT.
 
 ```{r}
-# Load package
+# Load packages
 library(nuts)
+library(dplyr)
+library(stringr)
 
 # Loading and subsetting Eurostat data
 data(patents, package = "nuts")
@@ -318,8 +327,6 @@ pat_converted <- nuts_convert_version(
 ```
 
 ```{r,  echo=FALSE,include=FALSE}
-library(terra)
-
 no_2006 <-
   read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(LEVL_CODE == 2 & CNTR_CODE == "NO") %>%
@@ -750,7 +757,6 @@ To keep track of these changes, the `nuts` package uses regional flows between d
 For Norway going from version 2016 to 2021, the table looks as follows:
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE}
-library(kableExtra)
 
 no_walks <- cross_walks %>%
   filter(nchar(from_code) == 4,
@@ -770,8 +776,6 @@ kable(no_walks, "html") %>%
 In addition to tracing the evolution of NUTS codes, the table contains **flows** of area, population and artificial surfaces between regions and versions. These flows were computed by the JRC with granular [100m x 100m] geographic data. The `ggalluvial` plot below visualizes the flows of area size between the NUTS-2 regions mapped above.
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap= "Alluvial plot illustrating area size flows", fig.alt ="The alluvial plot shows population flows from NUTS version 2016 to 2021."}
-library(ggalluvial)
-
 # Add names
 no_2016_names <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   select(from_code = NUTS_ID, from_name = NUTS_NAME) %>%
@@ -809,8 +813,6 @@ gg_pop_flows
 To illustrate the main idea, the map below showcases **population densities** across NUTS-2 regions. As population is not uniformly distributed across space, weighting regions dependent on their area size comes with strong assumptions. For instance, region `NO01` in version 2016, that contains the city of Oslo, makes a relatively modest geographical contribution to the new region `NO08`, but significantly bolsters the population of the latter. Assuming that the variable to be converted is correlated with population across space, the conversion can thus be refined using population weights to account for flows between different versions.
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE, out.width = "100%", fig.width = 7, fig.cap= "Spatial distribution of population and boundary changes", fig.alt ="Two maps of Southern Norway with very granular population density and administrative boundaries of the 2016 and 2021 NUTS version. The region with the capital Olso and its adjacent region are highlighted in version 2016 that both contribute to a larger single region in version 2021."}
-library(raster)
-library(ggrepel)
 
 pop <- raster("JRC_1K_POP_2018.tif")
 no_2016_1 <- no_2016 %>% st_transform(crs(pop))
