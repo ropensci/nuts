@@ -151,7 +151,7 @@ the federate state Saxony.</p>
 </li>
 </ul>
 <p>Since administrative boundaries in Europe change for demographic,
-economic, political or others reasons, there are five different
+economic, political or other reasons, there are five different
 <strong>versions</strong> of the NUTS Nomenclature (2006, 2010, 2013,
 2016, and 2021). The current version, effective from 1 January 2021,
 lists 104 regions at NUTS-1, 283 regions at NUTS-2, 1 345 regions at
@@ -229,7 +229,7 @@ Sequential workflow to convert regional NUTS data
 the most suitable NUTS <strong>version</strong> and to identify the
 <strong>level</strong> of the data set. Below, you see an example using
 patent application data (per one million inhabitants) for Norway in 2012
-at the NUTS-2 level. This data is provided by EUROSTAT.</p>
+at the NUTS-2 level. This data is again provided by EUROSTAT.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://AAoritz.github.io/nuts/" class="external-link">nuts</a></span><span class="op">)</span></span>
@@ -247,9 +247,15 @@ at the NUTS-2 level. This data is provided by EUROSTAT.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">unit</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Classifying the Data</span></span>
-<span><span class="va">pat_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat_n2_mhab_12_no</span>,</span>
-<span>                                nuts_code <span class="op">=</span> <span class="st">"geo"</span><span class="op">)</span></span></code></pre></div>
-<p>The function returns a list with three items:</p>
+<span><span class="va">pat_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">pat_n2_mhab_12_no</span>,</span>
+<span>  nuts_code <span class="op">=</span> <span class="st">"geo"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p>The function returns a list with three items. These items can be
+called directly from the output object (<code>data$...</code>) or
+retrieved using the three helper functions <code><a href="../reference/nuts_get_data.html">nuts_get_data()</a></code>,
+<code><a href="../reference/nuts_get_version.html">nuts_get_version()</a></code>, and
+<code><a href="../reference/nuts_get_missing.html">nuts_get_missing()</a></code>.</p>
 <ol style="list-style-type: decimal">
 <li>The first item gives the <strong>original data set</strong>
 augmented with the columns <code>from_version</code>,
@@ -261,7 +267,8 @@ automatically generated from the provided NUTS codes.</li>
 <p>Below, you see that all data entries correspond to the 2016 NUTS
 version.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pat_classified</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># pat_classified$data # Call list item directly or...</span></span>
+<span><span class="fu"><a href="../reference/nuts_get_data.html">nuts_get_data</a></span><span class="op">(</span><span class="va">pat_classified</span><span class="op">)</span> <span class="co"># ...use helper function</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 6</span></span></span>
 <span><span class="co">##   from_code from_version from_level country  time values</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
@@ -280,7 +287,8 @@ additional groups (if provided via the <code>group_vars</code>
 argument).</li>
 </ol>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pat_classified</span><span class="op">[[</span><span class="st">"versions_data"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># pat_classified$versions_data # Call list item directly or...</span></span>
+<span><span class="fu"><a href="../reference/nuts_get_version.html">nuts_get_version</a></span><span class="op">(</span><span class="va">pat_classified</span><span class="op">)</span> <span class="co"># ...use helper function</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 3</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   country [1]</span></span></span>
 <span><span class="co">##   from_version country overlap_perc</span></span>
@@ -299,7 +307,8 @@ procedures. In our example, no NUTS codes are missing.
 </li>
 </ol>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pat_classified</span><span class="op">[[</span><span class="st">"missing_data"</span><span class="op">]</span><span class="op">]</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># pat_classified$missing_data # Call list item directly or...</span></span>
+<span><span class="fu"><a href="../reference/nuts_get_missing.html">nuts_get_missing</a></span><span class="op">(</span><span class="va">pat_classified</span><span class="op">)</span> <span class="co"># ...use helper function</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 0 × 4</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   from_version, country [0]</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 4 variables: from_code &lt;chr&gt;, from_version &lt;chr&gt;,</span></span></span>
@@ -308,14 +317,14 @@ procedures. In our example, no NUTS codes are missing.
 <div class="section level3">
 <h3 id="converting-data-between-nuts-versions">Converting data between NUTS versions<a class="anchor" aria-label="anchor" href="#converting-data-between-nuts-versions"></a>
 </h3>
-<p>Once the NUTS version and level are identified, you can easily
-<strong>convert</strong> the data to any other <strong>NUTS
-version</strong>. Here is an example of transforming the 2013 Norwegian
-data to the 2021 NUTS version. Between 2016 and 2021, the number of
-NUTS-2 regions in Norway decreased by one as the borders of six regions
-were transformed. The maps below show the affected regions. We provide
-the classified NUTS data, specify the target NUTS version for data
-transformation, and supply the variable containing the values to be
+<p>Once the NUTS version and level of the original data are identified,
+you can easily <strong>convert</strong> the data to any other
+<strong>NUTS version</strong>. Here is an example of transforming the
+2013 Norwegian data to the 2021 NUTS version. Between 2016 and 2021, the
+number of NUTS-2 regions in Norway decreased by one as the borders of
+six regions were transformed. The maps below show the affected regions.
+We provide the classified NUTS data, specify the target NUTS version for
+data transformation, and supply the variable containing the values to be
 interpolated. It is important to indicate the <strong>variable
 type</strong> in the named input-vector since the interpolation
 approaches differ for <a href="https://urban.jrc.ec.europa.eu/nutsconverter/docs/2022_08_04_NUTS_converter.pdf" class="external-link">absolute
@@ -397,10 +406,10 @@ a second variable:</p>
 <p>Longitudinal regional data, as commonly supplied by EUROSTAT, often
 comes with varying NUTS versions across countries and years (and other
 dimensions). It is possible to harmonize data across such
-<strong>groups</strong> using <code><a href="../reference/nuts_convert_version.html">nuts_convert_version()</a></code> with
-the <code>group_vars</code> argument. Below, we transform data within
-country and year groups for Sweden, Slovenia, and Croatia to the 2021
-NUTS version.</p>
+<strong>groups</strong> with the <code>group_vars</code> argument in
+<code><a href="../reference/nuts_classify.html">nuts_classify()</a></code>. Below, we transform data within country
+and year groups for Sweden, Slovenia, and Croatia to the 2021 NUTS
+version.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Classifying grouped data (time)</span></span>
 <span><span class="va">pat_n2_mhab_sesihr</span> <span class="op">&lt;-</span> <span class="va">pat_n2</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -412,7 +421,7 @@ NUTS version.</p>
 <p>Note that the detected best-fitting NUTS versions differ across
 countries:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pat_classified</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/nuts_get_data.html">nuts_get_data</a></span><span class="op">(</span><span class="va">pat_classified</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">from_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 3</span></span></span>
@@ -479,8 +488,10 @@ codes</em></a> for further information.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op">==</span> <span class="fl">2012</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">geo</span>, <span class="st">"^SE"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pat_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat_n3_nr_12_se</span>,</span>
-<span>                                nuts_code <span class="op">=</span> <span class="st">"geo"</span><span class="op">)</span></span>
+<span><span class="va">pat_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">pat_n3_nr_12_se</span>,</span>
+<span>  nuts_code <span class="op">=</span> <span class="st">"geo"</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
 <span><span class="va">pat_level2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_aggregate.html">nuts_aggregate</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">pat_classified</span>,</span>
@@ -506,7 +517,7 @@ Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1
 <h4 id="nuts_not_identified">Non-identified NUTS codes<a class="anchor" aria-label="anchor" href="#nuts_not_identified"></a>
 </h4>
 <p>If the input data contains NUTS codes that cannot be identified in
-any NUTS version, the output of <code>classifiy_nuts</code> lists all of
+any NUTS version, the output of <code>classify_nuts</code> lists all of
 these codes. All conversion procedures
 (<code><a href="../reference/nuts_convert_version.html">nuts_convert_version()</a></code> and <code><a href="../reference/nuts_aggregate.html">nuts_aggregate()</a></code>)
 will work as expected while ignoring values for these regions.</p>
@@ -525,7 +536,10 @@ observations with unknown regions.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op">==</span> <span class="fl">2012</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">geo</span>, <span class="st">"^DK"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pat_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat_n3.nr.12.dk</span>, nuts_code <span class="op">=</span> <span class="st">"geo"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pat_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">pat_n3.nr.12.dk</span>, </span>
+<span>  nuts_code <span class="op">=</span> <span class="st">"geo"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="missing-nuts-codes">Missing NUTS codes<a class="anchor" aria-label="anchor" href="#missing-nuts-codes"></a>
@@ -541,14 +555,16 @@ in the output data.</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">time</span> <span class="op">==</span> <span class="fl">2012</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu">str_detect</span><span class="op">(</span><span class="va">geo</span>, <span class="st">"^SI"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">pat_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat_n3_nr_12_si</span>, nuts_code <span class="op">=</span> <span class="st">"geo"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">pat_classified</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">pat_n3_nr_12_si</span>, </span>
+<span>  nuts_code <span class="op">=</span> <span class="st">"geo"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/nuts_classify.html">nuts_classify()</a></code> returns a warning that NUTS codes are
 missing in the input data. These codes can be inspected by calling
-<code>pat_classified[3]</code>.</p>
+<code>nuts_get_missing(pat_classified)</code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pat_classified</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">## $missing_data</span></span>
-<span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/nuts_get_missing.html">nuts_get_missing</a></span><span class="op">(</span><span class="va">pat_classified</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   from_version, country [1]</span></span></span>
 <span><span class="co">##   from_code from_version from_level country </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
@@ -559,9 +575,11 @@ code <code>SI011</code> transformed into <code>SI031</code> and the
 region <code>SI016</code> was split into <code>SI036</code> and
 <code>SI037</code>.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/nuts_convert_version.html">nuts_convert_version</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pat_classified</span>, </span>
-<span>                     to_version <span class="op">=</span> <span class="st">"2021"</span>, </span>
-<span>                     variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/nuts_convert_version.html">nuts_convert_version</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">pat_classified</span>, </span>
+<span>  to_version <span class="op">=</span> <span class="st">"2021"</span>, </span>
+<span>  variables <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"values"</span> <span class="op">=</span> <span class="st">"absolute"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">values</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
 <span><span class="co">##   to_code to_version country  values</span></span>
@@ -631,7 +649,7 @@ identified versions, we see that there are mixed versions within groups
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">geo</span>, .keep_all <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="../reference/nuts_classify.html">nuts_classify</a></span><span class="op">(</span>nuts_code <span class="op">=</span> <span class="st">"geo"</span>, data <span class="op">=</span> <span class="va">.</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">man_deit</span><span class="op">[[</span><span class="st">"data"</span><span class="op">]</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span><span class="fu"><a href="../reference/nuts_get_data.html">nuts_get_data</a></span><span class="op">(</span><span class="va">man_deit</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">country</span>, <span class="va">from_version</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html" class="external-link">tally</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 3</span></span></span>
@@ -651,7 +669,7 @@ dominant version within groups when specified with
 <code>most_frequent</code>. Hence, all codes from other, non-dominant
 versions are discarded.</p>
 <p>Once we convert this data set, all NUTS regions unrecognized
-acoording to the 2006 (Germany) and 2021 (Italy) version are dropped
+according to the 2006 (Germany) and 2021 (Italy) version are dropped
 automatically.</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">man_deit_converted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/nuts_convert_version.html">nuts_convert_version</a></span><span class="op">(</span></span>
@@ -1177,7 +1195,7 @@ Alluvial plot illustrating area size flows
 <p>To illustrate the main idea, the map below showcases
 <strong>population densities</strong> across NUTS-2 regions. As
 population is not uniformly distributed across space, weighting regions
-dependent on their size might come with strong assumptions. For
+dependent on their area size comes with strong assumptions. For
 instance, region <code>NO01</code> in version 2016, that contains the
 city of Oslo, makes a relatively modest geographical contribution to the
 new region <code>NO08</code>, but significantly bolsters the population
@@ -1205,11 +1223,11 @@ based on the population distribution in 2018.</p>
 <p>The conversion employs the <code>cross_walks</code> table, which
 includes population flow data (expressed in thousands) between two
 NUTS-2 regions from the source version to the target version. The
-function joins the our variable of interest, <code>NR</code>, which
-varies across the departing NUTS-2 codes (<code>from_code</code>). The
-function initially calculates a <strong>weight</strong> (<code>w</code>)
-equal to the population flow’s share of the total population in the
-departing region in version 2016 (<code>from_code</code>):</p>
+function joins the variable of interest, <code>NR</code>, which varies
+across the departing NUTS-2 codes (<code>from_code</code>). The function
+initially calculates a <strong>weight</strong> (<code>w</code>) equal to
+the population flow’s share of the total population in the departing
+region in version 2016 (<code>from_code</code>):</p>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1518,7 +1536,7 @@ NO02
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-5*0.96 = 4.8
+5 x 0.96 = 4.8
 </td>
 </tr>
 <tr>
@@ -1529,7 +1547,7 @@ NO06
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-41<em>0 + 62</em>1 = 62
+41 x 0 + 62 x 1 = 62
 </td>
 </tr>
 <tr>
@@ -1540,7 +1558,7 @@ NO07
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-7*1 = 7
+7 x 1 = 7
 </td>
 </tr>
 <tr>
@@ -1551,7 +1569,7 @@ NO08
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-146<em>1 + 5</em>0.04 + 54*0.59 = 178.06
+146 x 1 + 5 x 0.04 + 54 x 0.59 = 178.06
 </td>
 </tr>
 <tr>
@@ -1562,7 +1580,7 @@ NO09
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-54<em>0.41 + 80</em>0.39 = 53.34
+54 x 0.41 + 80 x 0.39 = 53.34
 </td>
 </tr>
 <tr>
@@ -1573,7 +1591,7 @@ NO0A
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-80<em>0.61 + 41</em>1 = 89.8
+80 x 0.61 + 41 x 1 = 89.8
 </td>
 </tr>
 </tbody>
@@ -1612,7 +1630,7 @@ NO02
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(370*13)/(370) = 13
+(370 x 13)/(370) = 13
 </td>
 </tr>
 <tr>
@@ -1623,7 +1641,7 @@ NO06
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(3<em>48 + 447</em>145)/(3 + 447) = 144
+(3 x 48 + 447 x 145)/(3 + 447) = 144
 </td>
 </tr>
 <tr>
@@ -1634,7 +1652,7 @@ NO07
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(452*16)/(452) = 16
+(452 x 16)/(452) = 16
 </td>
 </tr>
 <tr>
@@ -1645,7 +1663,7 @@ NO08
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(1268<em>125 + 15</em>13 + 575*57)/(1268 + 15 + 575) = 103
+(1268 x 125 + 15 x 13 + 575 x 57)/(1268 + 15 + 575) = 103
 </td>
 </tr>
 <tr>
@@ -1656,7 +1674,7 @@ NO09
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(403<em>57 + 292</em>110)/(403 + 292) = 79
+(403 x 57 + 292 x 110)/(403 + 292) = 79
 </td>
 </tr>
 <tr>
@@ -1667,7 +1685,7 @@ NO0A
 2021
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(451<em>110 + 837</em>48)/(451 + 837) = 70
+(451 x 110 + 837 x 48)/(451 + 837) = 70
 </td>
 </tr>
 </tbody>
@@ -1982,7 +2000,7 @@ P_MHAB
 NO01
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(662<em>145 + 606</em>102)/(662 + 606) = 124
+(662 x 145 + 606 x 102)/(662 + 606) = 124
 </td>
 </tr>
 <tr>
@@ -1990,7 +2008,7 @@ NO01
 NO02
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(196<em>7 + 188</em>18)/(196 + 188) = 12
+(196 x 7 + 188 x 18)/(196 + 188) = 12
 </td>
 </tr>
 <tr>
@@ -1998,8 +2016,8 @@ NO02
 NO03
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(289<em>34 + 279</em>45 + 239<em>106 + 169</em>45)/(289 + 279 + 239 +
-169) = 56
+(289 x 34 + 279 x 45 + 239 x 106 + 169 x 45)/(289 + 279 + 239 + 169) =
+56
 </td>
 </tr>
 <tr>
@@ -2007,7 +2025,7 @@ NO03
 NO04
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(113<em>43 + 178</em>50 + 451*150)/(113 + 178 + 451) = 109
+(113 x 43 + 178 x 50 + 451 x 150)/(113 + 178 + 451) = 109
 </td>
 </tr>
 <tr>
@@ -2015,7 +2033,7 @@ NO04
 NO05
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(495<em>24 + 102</em>58 + 241*91)/(495 + 102 + 241) = 47
+(495 x 24 + 102 x 58 + 241 x 91)/(495 + 102 + 241) = 47
 </td>
 </tr>
 <tr>
@@ -2023,7 +2041,7 @@ NO05
 NO06
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(307<em>208 + 139</em>3)/(307 + 139) = 144
+(307 x 208 + 139 x 3)/(307 + 139) = 144
 </td>
 </tr>
 <tr>
@@ -2031,7 +2049,7 @@ NO06
 NO07
 </td>
 <td style="text-align:left;background-color: rgba(255, 240, 245, 255) !important;">
-(225<em>10 + 154</em>33)/(225 + 154) = 19
+(225 x 10 + 154 x 33)/(225 + 154) = 19
 </td>
 </tr>
 </tbody>
