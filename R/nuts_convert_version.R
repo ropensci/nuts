@@ -53,9 +53,9 @@
 #'
 #' @export
 nuts_convert_version <-
-  function(data = data,
-           to_version = to_version,
-           variables = variables,
+  function(data,
+           to_version,
+           variables,
            weight = NULL,
            missing_rm = FALSE,
            multiple_versions = c("error", "most_frequent")) {

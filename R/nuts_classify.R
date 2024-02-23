@@ -6,7 +6,7 @@
 #' NUTS codes must be of the same level and need to be unique, unless additional grouping variables are specified. No
 #' duplicate NUTS codes within groups allowed.
 #' @param nuts_code Variable name containing NUTS codes
-#' @param group_vars Variable name(s) for classification within groups. Always computes overlap within country. `NULL` by default.
+#' @param group_vars Variable name(s) for classification within groups. `nuts_classify()` always computes overlap within country. Hence, country variables should not be specified. `NULL` by default.
 #' @param ties Picks `'most_recent'` or `'oldest'` version when overlap is identical across multiple NUTS versions. `'most_recent'`
 #' by default.
 #'
@@ -50,8 +50,8 @@
 #'
 #'
 #' @export
-nuts_classify <- function(data = data,
-                          nuts_code = nuts_code,
+nuts_classify <- function(data,
+                          nuts_code,
                           group_vars = NULL,
                           ties = c("most_recent", "oldest")) {
 

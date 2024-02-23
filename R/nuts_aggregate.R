@@ -36,9 +36,9 @@
 #'                  weight = 'pop18')
 #'
 #' @export
-nuts_aggregate <- function(data = data,
-                           to_level = to_level,
-                           variables = variables,
+nuts_aggregate <- function(data,
+                           to_level,
+                           variables,
                            weight = NULL,
                            missing_rm = FALSE,
                            multiple_versions = c("error", "most_frequent")) {
