@@ -31,14 +31,6 @@
 
 nuts_get_data <- function(data){
 
-  # DEFINE CLI DIVs
-  #-----------------------
-  cli_div(theme = list(
-    span.red = list(color = "red"),
-    span.blue = list(color = "blue")
-  )
-  )
-
   # CODE BREAKING CHECKS
   #------------------------
   # Input checks
