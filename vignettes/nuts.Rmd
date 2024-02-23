@@ -82,7 +82,7 @@ For example, the German district *Northern Saxony* (*Nordsachsen*) is located wi
 -   NUTS-3: Districts
     -   DED53: Northern Saxony
 
-Since administrative boundaries in Europe change for demographic, economic, political or others reasons, there are five different **versions** of the NUTS Nomenclature (2006, 2010, 2013, 2016, and 2021). The current version, effective from 1 January 2021, lists 104 regions at NUTS-1, 283 regions at NUTS-2, 1 345 regions at NUTS-3 level[^2].
+Since administrative boundaries in Europe change for demographic, economic, political or other reasons, there are five different **versions** of the NUTS Nomenclature (2006, 2010, 2013, 2016, and 2021). The current version, effective from 1 January 2021, lists 104 regions at NUTS-1, 283 regions at NUTS-2, 1 345 regions at NUTS-3 level[^2].
 
 [^1]: [European Interinstitutional Style Guide](https://publications.europa.eu/code/en/en-5000600.htm) In the case of Greece for instance this code was changed from GR to EL in 2011. 
 
@@ -120,10 +120,17 @@ manure_indic <- manure %>%
 
 class <- manure_indic %>%
   distinct(geo, .keep_all = T) %>%
-  nuts_classify(data = ., nuts_code = "geo")
+  nuts_classify(
+    data = ., 
+    nuts_code = "geo"
+    )
 
 transf <- class %>% 
-  nuts_convert_version( to_version = "2010" , variables = c( 'values' = 'absolute' ) , weight = 'artif_surf12' )
+  nuts_convert_version( 
+    to_version = "2010", 
+    variables = c('values'='absolute'), 
+    weight = 'artif_surf12' 
+    )
 
 small <- manure_indic %>% 
   filter( geo %in% c( 'DED1' , 'DED3' ) )
@@ -244,7 +251,7 @@ knitr::include_graphics("flow.png")
 
 ## Identifying NUTS version and level
 
-The `nuts_classify()` function's main purpose is to find the most suitable NUTS **version** and to identify the **level** of the data set. Below, you see an example using patent application data (per one million inhabitants) for Norway in 2012 at the NUTS-2 level. This data is provided by EUROSTAT.
+The `nuts_classify()` function's main purpose is to find the most suitable NUTS **version** and to identify the **level** of the data set. Below, you see an example using patent application data (per one million inhabitants) for Norway in 2012 at the NUTS-2 level. This data is again provided by EUROSTAT.
 
 ```{r}
 # Load package
@@ -263,37 +270,42 @@ pat_n2_mhab_12_no <- pat_n2 %>%
   select(-unit)
 
 # Classifying the Data
-pat_classified <- nuts_classify(data = pat_n2_mhab_12_no,
-                                nuts_code = "geo")
+pat_classified <- nuts_classify(
+  data = pat_n2_mhab_12_no,
+  nuts_code = "geo"
+  )
 ```
 
-The function returns a list with three items:
+The function returns a list with three items. These items can be called directly from the output object (`data$...`) or retrieved using the three helper functions `nuts_get_data()`, `nuts_get_version()`, and `nuts_get_missing()`.
 
 1. The first item gives the **original data set** augmented with the columns `from_version`, `from_level`, and `country`, indicating the NUTS version that best suits the data. All functions of the package always group NUTS codes across **country names** which are automatically generated from the provided NUTS codes.
 
 Below, you see that all data entries correspond to the 2016 NUTS version.
 
 ```{r}
-pat_classified[["data"]]
+# pat_classified$data # Call list item directly or...
+nuts_get_data(pat_classified) # ...use helper function
 ```
 
 2. The second item provides an overview of the share of matching NUTS codes for each of the five existing NUTS versions. The **overlap** is computed within country and possibly additional groups (if provided via the `group_vars` argument).  
 
 ```{r}
-pat_classified[["versions_data"]]
+# pat_classified$versions_data # Call list item directly or...
+nuts_get_version(pat_classified) # ...use helper function
 ```
 
 3. The third item gives all NUTS codes that are **missing** across groups. Such missing codes might lead to conversion errors and are, by default, omitted from all conversion procedures. In our example, no NUTS codes are missing. 
 <!-- We recommend to check whether missing values for these NUTS codes can be replaced, perhaps with 0.  -->
 
 ```{r}
-pat_classified[["missing_data"]]
+# pat_classified$missing_data # Call list item directly or...
+nuts_get_missing(pat_classified) # ...use helper function
 ```
 
 
 ## Converting data between NUTS versions
 
-Once the NUTS version and level are identified, you can easily **convert** the data to any other **NUTS version**. Here is an example of transforming the 2013 Norwegian data to the 2021 NUTS version. Between 2016 and 2021, the number of NUTS-2 regions in Norway decreased by one as the borders of six regions were transformed. The maps below show the affected regions. 
+Once the NUTS version and level of the original data are identified, you can easily **convert** the data to any other **NUTS version**. Here is an example of transforming the 2013 Norwegian data to the 2021 NUTS version. Between 2016 and 2021, the number of NUTS-2 regions in Norway decreased by one as the borders of six regions were transformed. The maps below show the affected regions. 
 We provide the classified NUTS data, specify the target NUTS version for data transformation, and supply the variable containing the values to be interpolated. It is important to indicate the **variable type** in the named input-vector since the interpolation approaches differ for [absolute and relative values](https://urban.jrc.ec.europa.eu/nutsconverter/docs/2022_08_04_NUTS_converter.pdf).
 
 ```{r}
@@ -405,7 +417,7 @@ pat_n2_mhab_12_no %>%
 
 ### Converting grouped data
 
-Longitudinal regional data, as commonly supplied by EUROSTAT, often comes with varying NUTS versions across countries and years (and other dimensions). It is possible to harmonize data across such **groups** using `nuts_convert_version()` with the `group_vars` argument. Below, we transform data within country and year groups for Sweden, Slovenia, and Croatia to the 2021 NUTS version.
+Longitudinal regional data, as commonly supplied by EUROSTAT, often comes with varying NUTS versions across countries and years (and other dimensions). It is possible to harmonize data across such **groups** with the `group_vars` argument in `nuts_classify()`. Below, we transform data within country and year groups for Sweden, Slovenia, and Croatia to the 2021 NUTS version.
 
 ```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
 # Classifying grouped data (time)
@@ -423,7 +435,7 @@ pat_classified <- nuts_classify(
 Note that the detected best-fitting NUTS versions differ across countries:
 
 ```{r, tidy=TRUE, tidy.opts=list(width.cutoff=60)}
-pat_classified[["data"]] %>%
+nuts_get_data(pat_classified) %>%
   group_by(country, from_version) %>%
   tally()
 ```
@@ -477,8 +489,10 @@ pat_n3_nr_12_se <- pat_n3 %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^SE"))
 
-pat_classified <- nuts_classify(data = pat_n3_nr_12_se,
-                                nuts_code = "geo")
+pat_classified <- nuts_classify(
+  data = pat_n3_nr_12_se,
+  nuts_code = "geo"
+  )
 
 pat_level2 <- nuts_aggregate(
   data = pat_classified,
@@ -553,7 +567,7 @@ annotate_figure(gg, top = text_grob("Patent applications across Swedish NUTS reg
 
 ### Non-identified NUTS codes {#nuts_not_identified}
 
-If the input data contains NUTS codes that cannot be identified in any NUTS version, the output of `classifiy_nuts` lists all of these codes. All conversion procedures (`nuts_convert_version()` and `nuts_aggregate()`) will work as expected while ignoring values for these regions.
+If the input data contains NUTS codes that cannot be identified in any NUTS version, the output of `classify_nuts` lists all of these codes. All conversion procedures (`nuts_convert_version()` and `nuts_aggregate()`) will work as expected while ignoring values for these regions.
 
 The example below classifies 2012 patent data from Denmark. The original EUROSTAT data contains the codes `DKZZZ` and `DKXXX`, which are not part of the conversion matrices. Codes ending with the letter Z refer to "[Extra-Regio](https://stat.gov.pl/en/regional-statistics/classification-of-territorial-units/classification-of-territorial-units-for-statistics-nuts/principles-for-creation-and-development-of-nuts-units/)" territories. These codes collect statistics for territories that cannot be attached to a certain region.[^3] Codes ending with the letter X refer to observations with unknown regions.
 
@@ -565,7 +579,10 @@ pat_n3.nr.12.dk <- pat_n3 %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^DK"))
 
-pat_classified <- nuts_classify(data = pat_n3.nr.12.dk, nuts_code = "geo")
+pat_classified <- nuts_classify(
+  data = pat_n3.nr.12.dk, 
+  nuts_code = "geo"
+  )
 ```
 
 ### Missing NUTS codes
@@ -580,21 +597,26 @@ pat_n3_nr_12_si <- pat_n3 %>%
   filter(time == 2012) %>%
   filter(str_detect(geo, "^SI"))
 
-pat_classified <- nuts_classify(data = pat_n3_nr_12_si, nuts_code = "geo")
+pat_classified <- nuts_classify(
+  data = pat_n3_nr_12_si, 
+  nuts_code = "geo"
+  )
 ```
 
-`nuts_classify()` returns a warning that NUTS codes are missing in the input data. These codes can be inspected by calling `pat_classified[3]`. 
+`nuts_classify()` returns a warning that NUTS codes are missing in the input data. These codes can be inspected by calling `nuts_get_missing(pat_classified)`. 
 
 ```{r}
-pat_classified[3]
+nuts_get_missing(pat_classified)
 ```
 
 The resulting conversion returns three missing values as the source code `SI011` transformed into `SI031` and the region `SI016` was split into `SI036` and `SI037`.
 
 ```{r}
-nuts_convert_version(data = pat_classified, 
-                     to_version = "2021", 
-                     variables = c("values" = "absolute")) %>% 
+nuts_convert_version(
+  data = pat_classified, 
+  to_version = "2021", 
+  variables = c("values" = "absolute")
+  ) %>% 
   filter(is.na(values))
 ```
 
@@ -641,14 +663,14 @@ man_deit <- manure %>%
   distinct(geo, .keep_all = T) %>% 
   nuts_classify(nuts_code = "geo", data = .)
 
-man_deit[["data"]] %>% 
+nuts_get_data(man_deit) %>% 
   group_by(country, from_version) %>% 
   tally()
 ```
 
 When proceeding to the conversion with either `nuts_convert_version()` or `nuts_aggregate()`, both functions will throw an error. For convenience, we added the option `multiple_versions` that subsets the supplied data to the dominant version within groups when specified with `most_frequent`. Hence, all codes from other, non-dominant versions are discarded. 
 
-Once we convert this data set, all NUTS regions unrecognized acoording to the 2006 (Germany) and 2021 (Italy) version are dropped automatically. 
+Once we convert this data set, all NUTS regions unrecognized according to the 2006 (Germany) and 2021 (Italy) version are dropped automatically. 
 
 ```{r}
 man_deit_converted <- nuts_convert_version(
@@ -784,7 +806,7 @@ gg_pop_flows
 ```
 
 
-To illustrate the main idea, the map below showcases **population densities** across NUTS-2 regions. As population is not uniformly distributed across space, weighting regions dependent on their size might come with strong assumptions. For instance, region `NO01` in version 2016, that contains the city of Oslo, makes a relatively modest geographical contribution to the new region `NO08`, but significantly bolsters the population of the latter. Assuming that the variable to be converted is correlated with population across space, the conversion can thus be refined using population weights to account for flows between different versions.
+To illustrate the main idea, the map below showcases **population densities** across NUTS-2 regions. As population is not uniformly distributed across space, weighting regions dependent on their area size comes with strong assumptions. For instance, region `NO01` in version 2016, that contains the city of Oslo, makes a relatively modest geographical contribution to the new region `NO08`, but significantly bolsters the population of the latter. Assuming that the variable to be converted is correlated with population across space, the conversion can thus be refined using population weights to account for flows between different versions.
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE, out.width = "100%", fig.width = 7, fig.cap= "Spatial distribution of population and boundary changes", fig.alt ="Two maps of Southern Norway with very granular population density and administrative boundaries of the 2016 and 2021 NUTS version. The region with the capital Olso and its adjacent region are highlighted in version 2016 that both contribute to a larger single region in version 2021."}
 library(raster)
@@ -852,7 +874,7 @@ The following subsections describe the method used to convert absolute and relat
 
 In this example, we transform **absolute** values, the number of patent applications (`NR`) in Norway, from **version** 2016 to 2021, utilizing spatial interpolation based on the population distribution in 2018.
 
-The conversion employs the `cross_walks` table, which includes population flow data (expressed in thousands) between two NUTS-2 regions from the source version to the target version. The function joins the our variable of interest, `NR`, which varies across the departing NUTS-2 codes (`from_code`). The function initially calculates a **weight** (`w`) equal to the population flow's share of the total population in the departing region in version 2016 (`from_code`):
+The conversion employs the `cross_walks` table, which includes population flow data (expressed in thousands) between two NUTS-2 regions from the source version to the target version. The function joins the variable of interest, `NR`, which varies across the departing NUTS-2 codes (`from_code`). The function initially calculates a **weight** (`w`) equal to the population flow's share of the total population in the departing region in version 2016 (`from_code`):
 
 ```{r,  include = F}
 pat_n2_nrmhab_12_no <- patents %>%
@@ -867,7 +889,7 @@ pat_n2_nrmhab_12_no <- patents %>%
 classification <- pat_n2_nrmhab_12_no %>%
   nuts_classify(nuts_code = "geo")
 
-conversion_m_long <- classification[["data"]] %>%
+conversion_m_long <- nuts_get_data(classification) %>%
   filter(!is.na(from_version)) %>%
   inner_join(filter(cross_walks, to_version == 2021),
              by = c("from_code", "from_version")) %>%
@@ -916,7 +938,7 @@ calcs = list()
 for (i in seq_along(to_code_vec)) {
   convert_abs_sub = convert_abs %>%
     filter(to_code %in% to_code_vec[i])
-  calcs[[i]] = paste(paste0(convert_abs_sub$NR, "*", convert_abs_sub$w),
+  calcs[[i]] = paste(paste0(convert_abs_sub$NR, " x ", convert_abs_sub$w),
                      collapse = " + ")
 }
 calcs <- data.frame(to_code = to_code_vec, NR = unlist(calcs))
@@ -957,7 +979,7 @@ for (i in seq_along(to_code_vec)) {
   print(i)
   convert_abs_sub = convert_abs %>%
     filter(to_code %in% to_code_vec[i])
-  nums[[i]] = paste0(paste0(convert_abs_sub$pop18, "*", convert_abs_sub$P_MHAB) ,
+  nums[[i]] = paste0(paste0(convert_abs_sub$pop18, " x ", convert_abs_sub$P_MHAB) ,
                      collapse = " + ")
   denoms[[i]] = paste0(convert_abs_sub$pop18 , collapse = " + ")
 }
@@ -1005,7 +1027,7 @@ pat_n3_nrmhab_12_no <- patents %>%
 
 classification <- pat_n3_nrmhab_12_no %>%
   nuts_classify(nuts_code = "geo")
-classification[["data"]] %>%
+nuts_get_data(classification) %>%
   group_by(from_version) %>%
   tally()
 
@@ -1052,7 +1074,7 @@ denoms = list()
 for (i in seq_along(nuts_2_vec)) {
   convert_rel_sub = convert_rel %>%
     filter(nuts_2 %in% nuts_2_vec[i])
-  nums[[i]] = paste0(paste0(convert_rel_sub$pop18, "*", convert_rel_sub$P_MHAB) ,
+  nums[[i]] = paste0(paste0(convert_rel_sub$pop18, " x ", convert_rel_sub$P_MHAB) ,
                      collapse = " + ")
   denoms[[i]] = paste0(convert_rel_sub$pop18 , collapse = " + ")
 }
