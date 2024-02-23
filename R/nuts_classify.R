@@ -303,8 +303,8 @@ nuts_classify <- function(data,
     #--------
     output <- list(
       data = data,
-      versions_data = data_all_versions,
-      missing_data = data_missing_nuts
+      versions_data = data_all_versions %>% ungroup( ),
+      missing_data = data_missing_nuts %>% ungroup( )
     )
 
     attr(output, "groups") <- group_vars
