@@ -290,7 +290,6 @@ argument).</li>
 <code class="sourceCode R"><span><span class="co"># pat_classified$versions_data # Call list item directly or...</span></span>
 <span><span class="fu"><a href="../reference/nuts_get_version.html">nuts_get_version</a></span><span class="op">(</span><span class="va">pat_classified</span><span class="op">)</span> <span class="co"># ...use helper function</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 3</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Groups:   country [1]</span></span></span>
 <span><span class="co">##   from_version country overlap_perc</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> 2016         Norway         100  </span></span>
@@ -310,7 +309,6 @@ procedures. In our example, no NUTS codes are missing.
 <code class="sourceCode R"><span><span class="co"># pat_classified$missing_data # Call list item directly or...</span></span>
 <span><span class="fu"><a href="../reference/nuts_get_missing.html">nuts_get_missing</a></span><span class="op">(</span><span class="va">pat_classified</span><span class="op">)</span> <span class="co"># ...use helper function</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 0 × 4</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Groups:   from_version, country [0]</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># ℹ 4 variables: from_code &lt;chr&gt;, from_version &lt;chr&gt;,</span></span></span>
 <span><span class="co">## <span style="color: #949494;">#   from_level &lt;dbl&gt;, country &lt;chr&gt;</span></span></span></code></pre>
 </div>
@@ -565,7 +563,6 @@ missing in the input data. These codes can be inspected by calling
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nuts_get_missing.html">nuts_get_missing</a></span><span class="op">(</span><span class="va">pat_classified</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 4</span></span></span>
-<span><span class="co">## <span style="color: #949494;"># Groups:   from_version, country [1]</span></span></span>
 <span><span class="co">##   from_code from_version from_level country </span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   </span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> SI011     2010                  3 Slovenia</span></span>
