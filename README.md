@@ -16,7 +16,7 @@ The package's main task is to convert data between all NUTS versions in use: 200
 You can install the most recent development version from Github:
 
 ``` r
-pak::pak("AAoritz/nuts/")
+pak::pak("AAoritz/nuts")
 ```
 
 ### Usage
