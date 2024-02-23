@@ -55,8 +55,8 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">nuts_classify</span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
-<span>  nuts_code <span class="op">=</span> <span class="va">nuts_code</span>,</span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">nuts_code</span>,</span>
 <span>  group_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ties <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"most_recent"</span>, <span class="st">"oldest"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -75,7 +75,7 @@ duplicate NUTS codes within groups allowed.</p></dd>
 
 
 <dt>group_vars</dt>
-<dd><p>Variable name(s) for classification within groups. Always computes overlap within country. <code>NULL</code> by default.</p></dd>
+<dd><p>Variable name(s) for classification within groups. <code>nuts_classify()</code> always computes overlap within country. Hence, country variables should not be specified. <code>NULL</code> by default.</p></dd>
 
 
 <dt>ties</dt>

@@ -52,6 +52,15 @@
     <loc>https://aaoritz.github.io/nuts/reference/nuts_convert_version.html</loc>
   </url>
   <url>
+    <loc>https://aaoritz.github.io/nuts/reference/nuts_get_data.html</loc>
+  </url>
+  <url>
+    <loc>https://aaoritz.github.io/nuts/reference/nuts_get_missing.html</loc>
+  </url>
+  <url>
+    <loc>https://aaoritz.github.io/nuts/reference/nuts_get_version.html</loc>
+  </url>
+  <url>
     <loc>https://aaoritz.github.io/nuts/reference/nuts_test_multiple_versions.html</loc>
   </url>
   <url>
