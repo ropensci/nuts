@@ -63,7 +63,7 @@ knitr::include_graphics("logo.png")
 
 -   Ability to convert **multiple** NUTS versions at once when e.g. NUTS versions differ across countries and years. This scenario is common when working with data sourced from EUROSTAT.
 
--   (Dasymetric) **Spatial interpolation** based on five **weights** (regional area size, 2011 and 2018 population size, 2012 and 2018 built-up area) built from granular [100m x 100m] geodata by the European Commission's [Joint Research Center (JRC)](https://urban.jrc.ec.europa.eu/nutsconverter/#/).
+-   (Dasymetric) **Spatial interpolation** based on five **weights** (regional area size, 2011 and 2018 population size, 2012 and 2018 built-up area) built from granular [100m x 100m] geodata by the European Commission's [Joint Research Center (JRC)](https://urban.jrc.ec.europa.eu/tools/nuts-converter).
 
 :::
 
@@ -98,7 +98,7 @@ A simple approach is to redistribute manure storage facilities proportional to t
 
 See the Section [*Spatial interpolation in detail*](#method) for an in-depth description of the weighting procedure.
 
-```{r echo = FALSE}
+```{r echo = FALSE, message=F, warning=F}
 library(nuts)
 library(stringr)
 library(ggplot2)
@@ -1102,7 +1102,7 @@ kable(convert_rel_calc, "html") %>%
 
 Please support the development of open science by citing the JRC and us in your work. 
 
--   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/nutsconverter>
+-   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
 
 -   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 0.0.0.9000,
   <https://AAoritz.github.io/nuts/>
@@ -1114,7 +1114,7 @@ Bibtex Users:
   title = {NUTS converter},
   author = {Joint Research Centre},
   year = {2022},
-  url = {https://urban.jrc.ec.europa.eu/nutsconverter},
+  url = {https://urban.jrc.ec.europa.eu/tools/nuts-converter},
 }
 
 @Manual{,

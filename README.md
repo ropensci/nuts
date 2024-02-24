@@ -32,7 +32,7 @@ Console messages can be controlled with `rlang::local_options(nuts.verbose = "qu
 
 Please support the development of open science and data by citing the JRC and us in your work:
 
--   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/nutsconverter>
+-   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
 
 -   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 0.0.0.9000, <https://AAoritz.github.io/nuts/>.
 
@@ -44,7 +44,7 @@ Bibtex Users:
   title = {NUTS converter},
   author = {Joint Research Centre},
   year = {2022},
-  url = {https://urban.jrc.ec.europa.eu/nutsconverter},
+  url = {https://urban.jrc.ec.europa.eu/tools/nuts-converter},
 }
 
 @Manual{,
