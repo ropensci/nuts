@@ -248,4 +248,3 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(1005, 5)
             )
           })
-

@@ -133,6 +133,7 @@ nuts_aggregate <- function(data,
     # Test for multiple versions
     data <- nuts_test_multiple_versions(group_vars = group_vars, multiple_versions = multiple_versions,
                                         data_versions = data_versions, data = data)
+    n_rows_dropped <- data[["n_rows_dropped"]]
     message_multiple_versions <- data[["message_multiple_versions"]]
     data <- data[["data"]]
 
