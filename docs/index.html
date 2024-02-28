@@ -93,7 +93,7 @@
 </h3>
 <p>You can install the most recent development version from Github:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="st">"AAoritz/nuts/"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu">pak</span><span class="op">(</span><span class="st">"AAoritz/nuts"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -101,11 +101,16 @@
 <p>Check out the <a href="https://aaoritz.github.io/nuts/articles/nuts-vignette.html">website</a> for example usage and further details.</p>
 </div>
 <div class="section level3">
+<h3 id="verbosity-control">Verbosity Control<a class="anchor" aria-label="anchor" href="#verbosity-control"></a>
+</h3>
+<p>Console messages can be controlled with <code>rlang::local_options(nuts.verbose = "quiet")</code> to silence messages and setting <code>nuts.verbose = "verbose"</code> to switch messages back on.</p>
+</div>
+<div class="section level3">
 <h3 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h3>
 <p>Please support the development of open science and data by citing the JRC and us in your work:</p>
 <ul>
-<li><p>Joint Research Centre (2022) NUTS converter. <a href="https://urban.jrc.ec.europa.eu/nutsconverter" class="external-link uri">https://urban.jrc.ec.europa.eu/nutsconverter</a></p></li>
+<li><p>Joint Research Centre (2022) NUTS converter. <a href="https://urban.jrc.ec.europa.eu/tools/nuts-converter" class="external-link uri">https://urban.jrc.ec.europa.eu/tools/nuts-converter</a></p></li>
 <li><p>Hennicke M, Krause W (2024). <em>nuts: Convert European Regional Data</em>. R package version 0.0.0.9000, <a href="https://AAoritz.github.io/nuts/" class="external-link uri">https://AAoritz.github.io/nuts/</a>.</p></li>
 </ul>
 <p>Bibtex Users:</p>
@@ -113,7 +118,7 @@
   title = {NUTS converter},
   author = {Joint Research Centre},
   year = {2022},
-  url = {https://urban.jrc.ec.europa.eu/nutsconverter},
+  url = {https://urban.jrc.ec.europa.eu/tools/nuts-converter},
 }
 
 @Manual{,
