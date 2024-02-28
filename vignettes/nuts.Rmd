@@ -231,7 +231,7 @@ p_final = ggplot() +
         , axis.title = element_blank( ))
 ```
 
-```{r,  echo=FALSE, fig.cap="Holdings with Manure Storage Facilities; BU = Built-Up Area in $m^{2}$", fig.alt ="Maps of NUTS 3 regions Chemnitz and Leipzig in NUTS version 2003, between 2003 and 2006 and 2006. They visualize the example in the text in which Chemnitz contributes a part of its area to Leipzig."}
+```{r,  echo=FALSE, fig.cap="Holdings with Manure Storage Facilities; BU = Built-Up Area in $m^{2}$; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) and [data](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table) are from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) package.", fig.alt ="Maps of NUTS 3 regions Chemnitz and Leipzig in NUTS version 2003, between 2003 and 2006 and 2006. They visualize the example in the text in which Chemnitz contributes a part of its area to Leipzig."}
 gridExtra::grid.arrange( p_initial, p_step , p_final , nrow = 1 )
 ```
 
@@ -258,7 +258,7 @@ knitr::include_graphics("flow.png")
 
 ## Identifying NUTS version and level
 
-The `nuts_classify()` function's main purpose is to find the most suitable NUTS **version** and to identify the **level** of the data set. Below, you see an example using patent application data (per one million inhabitants) for Norway in 2012 at the NUTS-2 level. This data is again provided by EUROSTAT.
+The `nuts_classify()` function's main purpose is to find the most suitable NUTS **version** and to identify the **level** of the data set. Below, you see an example using patent application data (per one million inhabitants) for Norway in 2012 at the NUTS-2 level. This data is again provided by [EUROSTAT](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table?lang=en).
 
 ```{r}
 # Load packages
@@ -387,7 +387,7 @@ gg_2021 = ggplot() +
 
 ```
 
-```{r,  echo=FALSE, fig.cap="Converting patent data between versions", fig.alt ="Two maps of patents per 1M habitants in Norwegian NUTS 2 regions in NUTS version 2016 and converted to NUTS version 2021"}
+```{r,  echo=FALSE, fig.cap="Converting patent data between versions; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) and [data](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table?lang=en) are from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) package.", fig.alt ="Two maps of patents per 1M habitants in Norwegian NUTS 2 regions in NUTS version 2016 and converted to NUTS version 2021"}
 ggarrange( gg_2006 , gg_2021 , nrow = 1 , common.legend = T, legend = "bottom")
 ```
 
@@ -514,7 +514,7 @@ pat_level1 <- nuts_aggregate(
 )
 ```
 
-```{r,  echo=FALSE, fig.cap="Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1", fig.alt = "Three maps of Sweden with patent applications at the NUTS 3 level and aggregated to NUTS level 2 and 1."}
+```{r,  echo=FALSE, fig.cap="Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) and [data](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table?lang=en) are from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) package.", fig.alt = "Three maps of Sweden with patent applications at the NUTS 3 level and aggregated to NUTS level 2 and 1."}
 eu_nuts3 <-
   read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(LEVL_CODE == 3) %>%
@@ -701,7 +701,7 @@ This section describes the spatial interpolation procedure. We first cover the l
 
 Below, Norwegian NUTS-2 regions for the versions 2016 and 2021 are shown. All regions apart from Norway's most Northern region have been reorganized in this period.
 
-```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap="Norwegian NUTS-2 regions with boundary changes", fig.alt ="Two maps of Norwegian NUTS-2 regions in version 2016 and 2021. The most Eastern and Southern regions have been affected most by administrative redistricting."}
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap="Norwegian NUTS-2 regions with boundary changes; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) package.", fig.alt ="Two maps of Norwegian NUTS-2 regions in version 2016 and 2021. The most Eastern and Southern regions have been affected most by administrative redistricting."}
 no_2016 <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   filter(grepl("^NO", NUTS_ID), nchar(NUTS_ID) == 4) %>%
   mutate(nuts = paste0(NUTS_ID, "\n", NUTS_NAME))
@@ -775,7 +775,7 @@ kable(no_walks, "html") %>%
 
 In addition to tracing the evolution of NUTS codes, the table contains **flows** of area, population and artificial surfaces between regions and versions. These flows were computed by the JRC with granular [100m x 100m] geographic data. The `ggalluvial` plot below visualizes the flows of area size between the NUTS-2 regions mapped above.
 
-```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap= "Alluvial plot illustrating area size flows", fig.alt ="The alluvial plot shows population flows from NUTS version 2016 to 2021."}
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap= "Alluvial plot illustrating area size flows; Created using the [ggalluvial](https://corybrunson.github.io/ggalluvial/) package.", fig.alt ="The alluvial plot shows population flows from NUTS version 2016 to 2021."}
 # Add names
 no_2016_names <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
   select(from_code = NUTS_ID, from_name = NUTS_NAME) %>%
@@ -812,7 +812,7 @@ gg_pop_flows
 
 To illustrate the main idea, the map below showcases **population densities** across NUTS-2 regions. As population is not uniformly distributed across space, weighting regions dependent on their area size comes with strong assumptions. For instance, region `NO01` in version 2016, that contains the city of Oslo, makes a relatively modest geographical contribution to the new region `NO08`, but significantly bolsters the population of the latter. Assuming that the variable to be converted is correlated with population across space, the conversion can thus be refined using population weights to account for flows between different versions.
 
-```{r,  echo=FALSE, message = FALSE, warning = FALSE, out.width = "100%", fig.width = 7, fig.cap= "Spatial distribution of population and boundary changes", fig.alt ="Two maps of Southern Norway with very granular population density and administrative boundaries of the 2016 and 2021 NUTS version. The region with the capital Olso and its adjacent region are highlighted in version 2016 that both contribute to a larger single region in version 2021."}
+```{r,  echo=FALSE, message = FALSE, warning = FALSE, out.width = "100%", fig.width = 7, fig.cap= "Spatial distribution of population and boundary changes; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) and [population raster](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/population-distribution-demography/geostat) from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) and the [terra](https://rspatial.github.io/terra/reference/terra-package.html) packages."", fig.alt ="Two maps of Southern Norway with very granular population density and administrative boundaries of the 2016 and 2021 NUTS version. The region with the capital Olso and its adjacent region are highlighted in version 2016 that both contribute to a larger single region in version 2021."}
 
 pop <- raster("JRC_1K_POP_2018.tif")
 no_2016_1 <- no_2016 %>% st_transform(crs(pop))
