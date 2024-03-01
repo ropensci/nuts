@@ -113,7 +113,6 @@ test_that("Converter output spits out correct names", {
   )
 })
 
-
 test_that("Grouped output equal to non-grouped output", {
   expect_equal({
     manure_2_indic() %>%

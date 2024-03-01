@@ -16,9 +16,25 @@ nuts_test_multiple_versions(group_vars, multiple_versions, data_versions, data)
 \item{data}{A nuts.classified object returned by \code{\link[=nuts_classify]{nuts_classify()}}.}
 }
 \value{
-A tibble containing NUTS codes and a message with the results of the test.
+A tibble containing NUTS codes, the potential number of rows dropped and a message with the results of the test.
 }
 \description{
 \code{nuts_test_multiple_versions} is called from either \code{nuts_convert_version} or \code{nuts_aggregate}
 to selects the most frequent version within groups or throw an error.
+}
+\examples{
+library(dplyr)
+df <- manure \%>\%
+  filter(nchar(geo) == 5) \%>\%
+  select(geo, indic_ag, values) \%>\%
+  distinct(geo,  .keep_all = T) \%>\%
+  nuts_classify(nuts_code = "geo",
+                group_vars = "indic_ag",
+                data = .)
+
+nuts_test_multiple_versions(group_vars = "indic_ag",
+                            multiple_versions = "most_frequent",
+                            data_versions = df$versions_data,
+                            data = df$data)
+
 }

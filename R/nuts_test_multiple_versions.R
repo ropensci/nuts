@@ -8,17 +8,17 @@
 #' @param data_versions Data versions
 #' @param data A nuts.classified object returned by [`nuts_classify()`].
 #'
-#' @return A tibble containing NUTS codes and a message with the results of the test.
+#' @return A tibble containing NUTS codes, the potential number of rows dropped and a message with the results of the test.
 #'
 #' @examples
 #' library(dplyr)
 #' df <- manure %>%
-#' filter(nchar(geo) == 5) %>%
-#' select(geo, indic_ag, values) %>%
-#' distinct(geo,  .keep_all = T) %>%
-#' nuts_classify(nuts_code = "geo",
-#'               group_vars = "indic_ag",
-#'               data = .)
+#'   filter(nchar(geo) == 5) %>%
+#'   select(geo, indic_ag, values) %>%
+#'   distinct(geo,  .keep_all = TRUE) %>%
+#'   nuts_classify(nuts_code = "geo",
+#'                 group_vars = "indic_ag",
+#'                 data = .)
 #'
 #' nuts_test_multiple_versions(group_vars = "indic_ag",
 #'                             multiple_versions = "most_frequent",
@@ -27,8 +27,10 @@
 #'
 #' @export
 
-nuts_test_multiple_versions = function(group_vars, multiple_versions, data_versions, data) {
-
+nuts_test_multiple_versions = function(group_vars,
+                                       multiple_versions,
+                                       data_versions,
+                                       data) {
   # Test for multiple versions within groups
   multi_versions_A <- data %>%
     select(all_of(c(group_vars, "from_version"))) %>%
@@ -67,12 +69,14 @@ nuts_test_multiple_versions = function(group_vars, multiple_versions, data_versi
     message_multiple_versions <-
       c("!" =  "{.blue Choosing most frequent version within group and {.red dropping} {n_rows_dropped} row{?s}.}")
   } else {
+    n_rows_dropped <- 0
     message_multiple_versions <-
       c("v" =  "{.blue Version is {.red unique}.}")
   }
 
   data_list <- list(data, n_rows_dropped, message_multiple_versions)
-  names(data_list) <- c("data", "n_rows_dropped", "message_multiple_versions")
+  names(data_list) <-
+    c("data", "n_rows_dropped", "message_multiple_versions")
 
   return(data_list)
 }
