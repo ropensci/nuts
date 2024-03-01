@@ -27,7 +27,7 @@ library(dplyr)
 df <- manure \%>\%
   filter(nchar(geo) == 5) \%>\%
   select(geo, indic_ag, values) \%>\%
-  distinct(geo,  .keep_all = T) \%>\%
+  distinct(geo,  .keep_all = TRUE) \%>\%
   nuts_classify(nuts_code = "geo",
                 group_vars = "indic_ag",
                 data = .)
