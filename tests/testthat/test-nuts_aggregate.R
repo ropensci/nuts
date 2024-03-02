@@ -46,6 +46,7 @@ test_that("variable type not found", {
   )
 })
 
+
 test_that("invalid to_level 1", {
   expect_error(
     manure_2_indic_DE_2003() %>%
@@ -58,6 +59,7 @@ test_that("invalid to_level 1", {
     "Input `to_level` invalid. Must be 1 or 2."
   )
 })
+
 
 test_that("invalid to_level 2", {
   expect_error(
@@ -72,6 +74,20 @@ test_that("invalid to_level 2", {
   )
 })
 
+test_that("multiple to_levels", {
+  expect_error(
+    manure_2_indic_DE_2003() %>%
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
+        data = .,
+        to_level = c(2, 3),
+        variables = c("values" = "absolute")
+      ),
+    "Input `to_level` invalid. Must be 1 or 2."
+  )
+})
+
+
 test_that("weight invalid", {
   expect_error(
     manure_2_indic_DE_2003() %>%
@@ -82,9 +98,24 @@ test_that("weight invalid", {
         variables = c("values" = "absolute"),
         weight = "pop19"
       ),
-    "Input `weight` invalid. Must be 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
   )
 })
+
+test_that("multiple weights supplied", {
+  expect_error(
+    manure_2_indic_DE_2003() %>%
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
+        data = .,
+        to_level = 1,
+        variables = c("values" = "absolute"),
+        weight = c("pop19", "areaKm")
+      ),
+    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+  )
+})
+
 
 
 test_that("NUTS codes already at level 2", {

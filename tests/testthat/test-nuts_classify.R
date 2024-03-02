@@ -60,6 +60,17 @@ test_that("NUTS codes not valid", {
   )
 })
 
+test_that("Multiple strings as variable name", {
+  expect_equal(
+    expect_error(
+      manure_2_indic_DE_2003() %>%
+        nuts_classify(nuts_code = c("geo", "geo_false"))
+      )%>%
+      grepl("only be a single string", .),
+    TRUE
+  )
+})
+
 test_that("Multiple levels", {
   expect_equal(
     expect_error(

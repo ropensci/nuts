@@ -68,14 +68,14 @@ nuts_aggregate <- function(data,
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))
       cli_abort("Variable type(s) not found. Use one of the following: 'absolute' or 'relative'.")
 
-    if (!is.numeric(to_level) | !to_level %in% c(1, 2))
+    if (length(to_level) > 1 |  !any(is.numeric(to_level)) | !any(to_level %in% c(1, 2)))
       cli_abort("Input {.arg to_level} invalid. Must be 1 or 2.")
 
     if (!is.null(weight)) {
-      if (!weight %in% c("areaKm", "pop18", "pop11", "artif_surf18",
-                         "artif_surf12"))
+      if ((!any(weight %in% c("areaKm", "pop18", "pop11", "artif_surf18",
+                         "artif_surf12"))) | length(weight) >  1)
         cli_abort(
-          "Input {.arg weight} invalid. Must be 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+          "Input {.arg weight} invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
         )
     }
 

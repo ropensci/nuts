@@ -85,18 +85,19 @@ nuts_convert_version <-
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))
       cli_abort("Variable type(s) not found. Use one of the following: 'absolute' or 'relative'.")
 
-    if (!to_version %in% c("2006", "2010", "2013", "2016", "2021"))
+    if ((!any(to_version %in% c("2006", "2010", "2013", "2016", "2021"))) | length(to_version) > 1)
       cli_abort(
-        "Input {.arg to_version} invalid. Make sure it is a string and one of the version years 2006, 2010, 2013, 2016 or 2021."
+        "Input {.arg to_version} invalid. Make sure it is a string and only one of the version years 2006, 2010, 2013, 2016 or 2021."
       )
 
     if (!is.null(weight)) {
-      if (!weight %in% c("areaKm", "pop18", "pop11", "artif_surf18",
-                         "artif_surf12"))
+      if ((!any(weight %in% c("areaKm", "pop18", "pop11", "artif_surf18",
+                          "artif_surf12"))) | length(weight) >  1)
         cli_abort(
-          "Input {.arg weight} invalid. Must be 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+          "Input {.arg weight} invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
         )
     }
+
 
     if (!is.logical(missing_rm))
       cli_abort(

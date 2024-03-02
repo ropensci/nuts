@@ -68,10 +68,12 @@ nuts_classify <- function(data,
     # Input checks
     if (!is.data.frame(data))
       cli_abort("Input {.arg data} must be a data frame or tibble, not {.obj_type_friendly {data}}.")
+    if (length(nuts_code) > 1)
+      cli_abort("Input {.arg nuts_code} can only be a single string.")
     if (!is.character(nuts_code))
       cli_abort("Input {.arg nuts_code} must be provided as a string, not {.obj_type_friendly {nuts_code}}.")
     if (!(nuts_code %in% colnames(data)))
-      cli_abort("Input {.arg nuts_code} not found in the provided data frame.")
+        cli_abort("Input {.arg nuts_code} not found in the provided data frame.")
     if (!ties[1] %in% c("most_recent", "oldest"))
       cli_abort("Input {.arg ties} must be 'most_recent' or 'oldest'.")
     if ("version" %in% names(data))
