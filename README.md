@@ -21,7 +21,7 @@ pak::pak("AAoritz/nuts")
 
 ### Usage
 
-Check out the [website](https://aaoritz.github.io/nuts/articles/nuts-vignette.html) for example usage and further details.
+Check out the [website](https://aaoritz.github.io/nuts) for example usage and further details.
 
 ### Verbosity Control
 
