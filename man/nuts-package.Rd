@@ -26,5 +26,12 @@ Authors:
   \item Werner Krause \email{werner.krause@uni-potsdam.de} (\href{https://orcid.org/0000-0002-5069-7964}{ORCID})
 }
 
+Other contributors:
+\itemize{
+  \item Pueyo-Ros Josep (Josep reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1951446662) [reviewer]
+  \item Le Meur Nolwenn (Nolwenn reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1961501137) [reviewer]
+  \item Salmon Maëlle (Maëlle served as an editor for the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1919051113) [reviewer]
+}
+
 }
 \keyword{internal}
