@@ -771,16 +771,19 @@ To keep track of these changes, the `nuts` package uses two data sets:
 
 They are based on [data provided by the JRC](https://urban.jrc.ec.europa.eu/nutsconverter/#/). Both data sets can also be used by the user manually to explore specific conversion patterns more closely. 
 
-For Norway going from version 2016 to 2021, the `cross_walks` look as follows:
+For Norway going from version 2016 to 2021 at NUTS level 2, the `cross_walks` can be easily subset as follows:
 
-```{r,  echo=FALSE, message = FALSE, warning = FALSE}
-
+```{r}
 no_walks <- cross_walks %>%
   filter(nchar(from_code) == 4,
          from_version == 2016,
          to_version == 2021,
          grepl("^NO", from_code))
+```
 
+Which results in the following conversion table:
+
+```{r,  echo=FALSE, message = FALSE, warning = FALSE}
 kable(no_walks, "html") %>%
   kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
   column_spec(1, background = 'azure') %>%
