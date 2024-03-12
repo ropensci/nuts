@@ -594,9 +594,9 @@ pat_classified <- nuts_classify(
 
 ### Missing NUTS codes
 
-`nuts_classify()` also checks whether the NUTS codes provided are complete. Missing values in the input data will, by default, result in missing values for all affected transformed regions in the output data. 
+`nuts_classify()` also checks whether the NUTS codes provided are complete (or values of a variable that the user wants to convert are missing for a region). Missing values in the input data will, by default, result in missing values for all affected transformed regions in the output data. 
 
-The example below illustrates this case.
+The example with Slovenia below illustrates this case.
 
 ```{r}
 pat_n3_nr_12_si <- pat_n3 %>%
@@ -627,22 +627,34 @@ nuts_convert_version(
   filter(is.na(values))
 ```
 
-Users have three options to overcome this problem.
+Users have the option `missing_weights_pct` to investigate the consequences of missing values in the converted data. Setting the argument to `TRUE` returns a variable that indicates the percentage of missing weights due to missing NUTS codes (or missing values in the variable). The data frame below shows three regions that could not be computed due to missing data. Values in region `SI036` could not be computed since 97.9% of the weights are missing. Values for region `SI037` are missing as well even though only 0.8% of its population-weighted area is missing. 
 
-  1. The warning can be ignored and the conversion proceeds while returning `NA`s (see above).
-
-  2. Users check whether the missing values can be replaced by, e.g., using alternative sources or imputing missing values.
-
-  3. The argument `missing_rm` can be set to `TRUE`. In this case, missing values will be removed from the input data. Effectively, the interpolation procedures assume that missing values can be replaced with `0`, which may be a very strong assumption depending on the context.
 
 ```{r}
 nuts_convert_version(
   data = pat_classified, 
   to_version = "2021", 
+  weight = "pop18",
   variables = c("values" = "absolute"),
+  missing_weights_pct = TRUE
+  ) %>% 
+  arrange(desc(values_na_w))
+```
+
+Using the the share of missing weights in combination with the option `missing_rm`, the `nuts` package allows to recover some of the missing regions approximately. We can achieve this by setting `missing_rm` to `TRUE`, effectively assuming 0 for missing values. In the next step we remove regions with a high share of missing weights from the output data again. The data frame below shows that values for `SI037` could still be used assuming 0 patents for 0.8% of the missing population-weighted area to construct the region. 
+
+
+```{r}
+nuts_convert_version(
+  data = pat_classified, 
+  to_version = "2021", 
+  weight = "pop18",
+  variables = c("values" = "absolute"),
+  missing_weights_pct = TRUE,
   missing_rm = TRUE
   ) %>% 
-  filter(to_code %in% c("SI031", "SI036", "SI037"))
+  filter(to_code %in% c("SI031", "SI036", "SI037")) %>% 
+  mutate(values_imp = ifelse(values_na_w < 1, values, NA))
 ```
 
 
@@ -752,9 +764,14 @@ The changes between the two versions can be summarized as follows:
 
 ## Spatial interpolation and conversion tables
 
-To keep track of these changes, the `nuts` package uses regional flows between different NUTS versions. The package ships with a **conversion table** that can be called with `data(cross_walks)` based on [data provided by the JRC](https://urban.jrc.ec.europa.eu/nutsconverter/#/). It documents all boundary changes of NUTS regions.
+To keep track of these changes, the `nuts` package uses two data sets: 
 
-For Norway going from version 2016 to 2021, the table looks as follows:
+1. Stocks: data(`all_nuts_codes`) contains **all historical NUTS codes** by NUTS version and country
+2. Flows: data(`cross_walks`) contains the **conversion tables** between NUTS versions
+
+They are based on [data provided by the JRC](https://urban.jrc.ec.europa.eu/nutsconverter/#/). Both data sets can also be used by the user manually to explore specific conversion patterns more closely. 
+
+For Norway going from version 2016 to 2021, the `cross_walks` look as follows:
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE}
 

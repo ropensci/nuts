@@ -8,6 +8,7 @@
 #' @param weight String with name of the weight used for conversion. Can be area size `'areaKm'` (default),
 #' population in 2011 `'pop11'` or 2018 `'pop18'`, or artificial surfaces in 2012 `'artif_surf12'` and 2018 `'artif_surf18'`.
 #' @param missing_rm Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.
+#' @param missing_weights_pct Boolean that is FALSE by default. TRUE computes the percentage of missing weights due to missing departing NUTS regions for each variable.
 #' @param multiple_versions By default equal to `'error'`, when providing multiple NUTS versions within groups.
 #' If set to `'most_frequent'` data is converted using the best-matching NUTS version.
 #'
@@ -58,6 +59,7 @@ nuts_convert_version <-
            variables,
            weight = NULL,
            missing_rm = FALSE,
+           missing_weights_pct = FALSE,
            multiple_versions = c("error", "most_frequent")) {
 
     # DEFINE CLI DIVs
@@ -214,12 +216,13 @@ nuts_convert_version <-
       group_by(pick(c(
         "from_code", group_vars
       ))) %>%
-      mutate(w = .data$w / sum(.data$w)) %>%
+      mutate(w_sh = .data$w / sum(.data$w)) %>%
       ungroup() %>%
+      select(-.data$w) %>%
       group_by(pick(c(
         "to_code", group_vars
       ))) %>%
-      summarise(across(abs_vars, ~sum(.x * .data$w, na.rm = missing_rm))) %>%
+      summarise(across(abs_vars, ~sum(.x * .data$w_sh, na.rm = missing_rm))) %>%
       ungroup() %>%
       # - Add version
       mutate(to_version = to_version) %>%
@@ -238,10 +241,58 @@ nuts_convert_version <-
       mutate(to_version = to_version) %>%
       relocate(c("to_code", "to_version"))
 
+
+    # - Compute share of missing weights for each variable
+    if(missing_weights_pct){
+      # - For absolute variables
+      abs_missing_weights <- data %>%
+        select(-all_of(rel_vars)) %>%
+        group_by(pick(c(
+          "from_code", group_vars
+        ))) %>%
+        mutate(w_sh = .data$w / sum(.data$w)) %>%
+        ungroup() %>%
+        select(-.data$w) %>%
+        # - Create weight for every variable that is missing when variable is missing
+        mutate(across(abs_vars, ~ifelse(is.na(.x), NA_real_,  .data$w_sh), .names = "{col}_na_w")) %>%
+        group_by(pick(c(
+          "to_code", group_vars
+        ))) %>%
+        # - Summarize across weights
+        summarise(across(matches("w"), sum, na.rm = TRUE)) %>%
+        ungroup() %>%
+        # Compute share of missing weights
+        mutate(across(matches("_na_w"), ~ 100 - .x / w_sh * 100)) %>%
+        select(-.data$w_sh)
+
+      # - For relative variables
+      rel_missing_weights <- data %>%
+        select(-all_of(abs_vars)) %>%
+        mutate(across(rel_vars, ~ifelse(is.na(.x), NA_real_,  .data$w), .names = "{col}_na_w")) %>%
+        group_by(pick(c(
+          "to_code", group_vars
+        ))) %>%
+        summarise(across(matches("w"), sum, na.rm = TRUE)) %>%
+        ungroup() %>%
+        # Compute share of missing weights
+        mutate(across(matches("_na_w"), ~ 100 - .x / w * 100)) %>%
+        select(-.data$w)
+
+    }
+
+    # Overwrite data with absolute and relative values at to_code x group level
     data <- abs_data %>%
       full_join(rel_data, by = c("to_code", "to_version", group_vars))
-    # - done
+    rm(abs_data, rel_data)
 
+    # Add missing weights if requested
+    if(missing_weights_pct){
+      data <- data %>%
+        left_join(abs_missing_weights, by = c("to_code", group_vars)) %>%
+        left_join(rel_missing_weights, by = c("to_code", group_vars))
+      rm(abs_missing_weights, rel_missing_weights)
+    }
+    # - done
 
     # Console Message
     #-----------------

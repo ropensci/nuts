@@ -8,6 +8,7 @@
 #' @param weight String with name of the weight used for conversion. Can be area size `'areaKm'` (default),
 #' population in 2011 `'pop11'` or 2018 `'pop18'`, or artificial surfaces in 2012 `'artif_surf12'` and 2018 `'artif_surf18'`.
 #' @param missing_rm Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.
+#' @param missing_weights_pct Boolean that is FALSE by default. TRUE computes the percentage of missing weights due to missing departing NUTS regions for each variable.
 #' @param multiple_versions By default equal to `'error'`, when providing multiple NUTS versions within groups.
 #' If set to `'most_frequent'` data is converted using the best-matching NUTS version.
 #'
@@ -41,6 +42,7 @@ nuts_aggregate <- function(data,
                            variables,
                            weight = NULL,
                            missing_rm = FALSE,
+                           missing_weights_pct = FALSE,
                            multiple_versions = c("error", "most_frequent")) {
 
     # DEFINE CLI DIVs
@@ -220,8 +222,29 @@ nuts_aggregate <- function(data,
       summarise(across(rel_vars, ~ {sum(.x * .data$w, na.rm = missing_rm) / sum(.data$w)})) %>%
       ungroup()
 
+    # - Compute share of missing weights for each variable
+    if(missing_weights_pct){
+      missing_weights_data <- data %>%
+        mutate(across(c(abs_vars, rel_vars), ~ifelse(is.na(.x), NA_real_,  .data$w), .names = "{col}_na_w")) %>%
+        group_by(pick(c(
+          "to_code", group_vars
+        ))) %>%
+        summarise(across(matches("w"), ~ sum(.x, na.rm = TRUE))) %>%
+        ungroup() %>%
+        # Compute share of missing weights
+        mutate(across(matches("_na_w"), ~ 100 - .x / w * 100)) %>%
+        select(-.data$w)
+      }
+
+    # - Overwrite data with absolute and relative variables at the desired level x group
     data <- abs_data %>%
       full_join(rel_data, by = c("to_code", group_vars))
+
+    # - Add percentage of missing weights
+    if(missing_weights_pct){
+      data <- data %>%
+        full_join(missing_weights_data, by = c("to_code", group_vars))
+    }
     # - Done
 
     # Console Message

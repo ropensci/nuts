@@ -259,7 +259,7 @@ test_that("Additional variables unspecified by the user (here: time)", {
         to_level = 1,
         variables = c("values" = "absolute",
                       "pct" = "relative"),
-        missing_rm = T
+        missing_rm = TRUE
       ) %>%
       names(.),
     c("to_code", "country", "values", "pct")
@@ -272,7 +272,7 @@ test_that("Feeding multiple NUTS versions within groups", {
       manure %>%
         filter(nchar(geo) == 5) %>%
         select(geo, indic_ag, values) %>%
-        distinct(geo,  .keep_all = T) %>%
+        distinct(geo,  .keep_all = TRUE) %>%
         nuts_classify(
           nuts_code = "geo",
           group_vars = "indic_ag",
@@ -281,7 +281,7 @@ test_that("Feeding multiple NUTS versions within groups", {
         nuts_aggregate(
           to_level = 1,
           variables = c("values" = "absolute"),
-          missing_rm = T
+          missing_rm = TRUE
         )
     ) %>%
       grepl("Please make sure...", .),
@@ -295,7 +295,7 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               manure %>%
                 filter(nchar(geo) == 5) %>%
                 select(geo, indic_ag, values) %>%
-                distinct(geo,  .keep_all = T) %>%
+                distinct(geo,  .keep_all = TRUE) %>%
                 nuts_classify(
                   nuts_code = "geo",
                   group_vars = "indic_ag",
@@ -311,3 +311,44 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
               c(52, 4)
             )
           })
+
+test_that("Feeding multiple NUTS versions within groups. Option error.",
+          {
+            expect_error(
+              manure %>%
+                filter(nchar(geo) == 5) %>%
+                select(geo, indic_ag, values) %>%
+                distinct(geo,  .keep_all = TRUE) %>%
+                nuts_classify(
+                  nuts_code = "geo",
+                  group_vars = "indic_ag",
+                  data = .
+                ) %>%
+                nuts_aggregate(
+                  to_level = 1,
+                  variables = c("values" = "absolute"),
+                  multiple_versions = "error"
+                ),
+              "Mixed NUTS versions within groups!"
+            )
+          })
+
+test_that("Missing NUTS codes, reporting share of missing weights", {
+  expect_equal(
+    manure_2_indic() %>%
+      filter(grepl("DE", geo)) %>%
+      filter(!grepl("ZZ", geo)) %>%
+      filter(time %in% c(2000)) %>%
+      nuts_classify(nuts_code = "geo") %>%
+      nuts_aggregate(
+        to_level = 1,
+        variables = c("values" = "absolute",
+                      "pct" = "relative"),
+        missing_weights_pct = TRUE
+      ) %>%
+      names(.),
+    c("to_code", "country", "values", "pct", "values_na_w", "pct_na_w")
+  )
+})
+
+

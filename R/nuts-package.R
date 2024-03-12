@@ -23,6 +23,7 @@
 #' @importFrom dplyr relocate
 #' @importFrom dplyr rename
 #' @importFrom dplyr select
+#' @importFrom dplyr matches
 #' @importFrom dplyr slice
 #' @importFrom dplyr summarize
 #' @importFrom dplyr summarise

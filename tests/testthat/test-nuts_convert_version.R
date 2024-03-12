@@ -209,6 +209,25 @@ test_that("Missing NUTS codes", {
 })
 
 
+test_that("Missing NUTS codes, reporting share of missing weights per variable", {
+  expect_equal({
+    manure_2_indic_DE_2003()  %>%
+      filter(!geo %in% c("DE93", "DED3")) %>%
+      nuts_classify(nuts_code = "geo",
+                    data = .) %>%
+      nuts_convert_version(
+        to_version = "2021",
+        variables = c("values" = "absolute",
+                      "pct" = "relative"),
+        missing_weights_pct = TRUE
+      ) %>%
+      names(.)
+  }
+  ,
+  c("to_code", "to_version","country", "values", "pct", "values_na_w", "pct_na_w"))
+})
+
+
 test_that("Ignoring missing NUTS codes", {
   expect_equal({
     manure_2_indic_DE_2003()  %>%

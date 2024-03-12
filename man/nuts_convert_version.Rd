@@ -10,6 +10,7 @@ nuts_convert_version(
   variables,
   weight = NULL,
   missing_rm = FALSE,
+  missing_weights_pct = FALSE,
   multiple_versions = c("error", "most_frequent")
 )
 }
@@ -24,6 +25,8 @@ nuts_convert_version(
 population in 2011 \code{'pop11'} or 2018 \code{'pop18'}, or artificial surfaces in 2012 \code{'artif_surf12'} and 2018 \code{'artif_surf18'}.}
 
 \item{missing_rm}{Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.}
+
+\item{missing_weights_pct}{Boolean that is FALSE by default. TRUE computes the percentage of missing weights due to missing departing NUTS regions for each variable.}
 
 \item{multiple_versions}{By default equal to \code{'error'}, when providing multiple NUTS versions within groups.
 If set to \code{'most_frequent'} data is converted using the best-matching NUTS version.}
