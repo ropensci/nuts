@@ -31,7 +31,7 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/AAoritz/nuts/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/ropensci/nuts/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -44,7 +44,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Return version overlap of classified NUTS data</h1>
-      <small class="dont-index">Source: <a href="https://github.com/AAoritz/nuts/blob/HEAD/R/nuts_get_version.R" class="external-link"><code>R/nuts_get_version.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ropensci/nuts/blob/HEAD/R/nuts_get_version.R" class="external-link"><code>R/nuts_get_version.R</code></a></small>
       <div class="d-none name"><code>nuts_get_version.Rd</code></div>
     </div>
 
@@ -91,6 +91,12 @@
 <span class="r-in"><span>   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">indic_ag</span>, <span class="op">-</span><span class="va">time</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>   <span class="co"># Data varies at the NUTS code level</span></span></span>
 <span class="r-in"><span>   <span class="fu"><a href="nuts_classify.html">nuts_classify</a></span><span class="op">(</span>nuts_code <span class="op">=</span> <span class="st">'geo'</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Classifying version of NUTS codes</span> <span style="color: #00BBBB;">───────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;">:</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> <span style="color: #0000BB;">These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">DEZZ</span><span style="color: #0000BB;">.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> <span style="color: #BB0000;">Unique</span><span style="color: #0000BB;"> NUTS version classified.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #BB0000;">Missing</span><span style="color: #0000BB;"> NUTS codes detected. See the tibble 'missing_data' in the output.</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">nuts_get_version</span><span class="op">(</span><span class="va">classified</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 6 × 3</span></span>

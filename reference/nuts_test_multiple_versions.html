@@ -33,7 +33,7 @@ to selects the most frequent version within groups or throw an error."><meta pro
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/AAoritz/nuts/" aria-label="github">
+  <a class="external-link nav-link" href="https://github.com/ropensci/nuts/" aria-label="github">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -46,7 +46,7 @@ to selects the most frequent version within groups or throw an error."><meta pro
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Helper function to test for multiple versions</h1>
-      <small class="dont-index">Source: <a href="https://github.com/AAoritz/nuts/blob/HEAD/R/nuts_test_multiple_versions.R" class="external-link"><code>R/nuts_test_multiple_versions.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/ropensci/nuts/blob/HEAD/R/nuts_test_multiple_versions.R" class="external-link"><code>R/nuts_test_multiple_versions.R</code></a></small>
       <div class="d-none name"><code>nuts_test_multiple_versions.Rd</code></div>
     </div>
 
@@ -95,6 +95,13 @@ to selects the most frequent version within groups or throw an error.</p>
 <span class="r-in"><span>  <span class="fu"><a href="nuts_classify.html">nuts_classify</a></span><span class="op">(</span>nuts_code <span class="op">=</span> <span class="st">"geo"</span>,</span></span>
 <span class="r-in"><span>                group_vars <span class="op">=</span> <span class="st">"indic_ag"</span>,</span></span>
 <span class="r-in"><span>                data <span class="op">=</span> <span class="va">.</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">Classifying version of NUTS codes</span> <span style="color: #00BBBB;">───────────────────────────────────────────</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Within </span><span style="color: #BB0000;">groups</span><span style="color: #0000BB;"> defined by </span><span style="color: #BB0000;">country</span><span style="color: #0000BB;"> and </span><span style="color: #BB0000;">indic_ag</span><span style="color: #0000BB;">:</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">!</span> <span style="color: #0000BB;">These NUTS codes cannot be identified or classified: </span><span style="color: #BB0000;">ME000</span><span style="color: #0000BB;">, </span><span style="color: #BB0000;">NOZZZ</span><span style="color: #0000BB;">, and </span><span style="color: #BB0000;">SIZZZ</span><span style="color: #0000BB;">.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #BB0000;">Multiple</span><span style="color: #0000BB;"> NUTS versions classified. See the tibble 'versions_data' in the</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">output.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> <span style="color: #BB0000;">Missing</span><span style="color: #0000BB;"> NUTS codes detected. See the tibble 'missing_data' in the output.</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">nuts_test_multiple_versions</span><span class="op">(</span>group_vars <span class="op">=</span> <span class="st">"indic_ag"</span>,</span></span>
 <span class="r-in"><span>                            multiple_versions <span class="op">=</span> <span class="st">"most_frequent"</span>,</span></span>
