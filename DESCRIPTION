@@ -1,6 +1,6 @@
 Package: nuts
 Title: 'nuts': Convert European Regional Data
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
     person("Moritz", "Hennicke", , "AAoritz@posteo.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6811-1821")),
