@@ -249,7 +249,7 @@ nuts_aggregate <- function(data,
 
     # Console Message
     #-----------------
-    is_verbose_mode <- (getOption("nuts.verbose", "quiet") == "verbose")
+    is_verbose_mode <- (getOption("nuts.verbose", "verbose") == "verbose")
     if (is_verbose_mode) {
       cli_h1("Converting version of NUTS codes")
       cli_bullets(

@@ -288,7 +288,7 @@ nuts_classify <- function(data,
     # Console Message
     #-----------------
     is_verbose_mode <-
-      (getOption("nuts.verbose", "quiet") == "verbose")
+      (getOption("nuts.verbose", "verbose") == "verbose")
     if (is_verbose_mode) {
       cli_h1("Classifying version of NUTS codes")
       cli_bullets(
