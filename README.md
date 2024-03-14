@@ -13,10 +13,10 @@ The package's main task is to convert data between all NUTS versions in use: 200
 
 ### Installation
 
-You can install the most recent development version from Github:
+You can install the package from the rOpenSci repository:
 
 ``` r
-pak::pak("AAoritz/nuts")
+install.packages("nuts", repos = "https://ropensci.r-universe.dev")
 ```
 
 ### Usage
