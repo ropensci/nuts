@@ -14,7 +14,7 @@ Description: Motivated by changing administrative boundaries over time,
     granular (100mx100m) population and land use data provided by the
     European Commission's Joint Research Center.
 License: MIT + file LICENSE
-URL: https://github.com/ropensci/nuts
+URL: https://docs.ropensci.org/nuts, https://github.com/ropensci/nuts
 BugReports: https://github.com/ropensci/nuts
 Depends: 
     R (>= 3.5.0)

@@ -21,7 +21,7 @@ pak::pak("AAoritz/nuts")
 
 ### Usage
 
-Check out the [website](https://aaoritz.github.io/nuts) for example usage and further details.
+Check out the [website](https://docs.ropensci.org/nuts) for example usage and further details.
 
 ### Verbosity Control
 
@@ -34,7 +34,7 @@ Please support the development of open science and data by citing the JRC and us
 
 -   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
 
--   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 0.0.0.9000, <https://AAoritz.github.io/nuts/>.
+-   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 0.0.0.9000, <https://docs.ropensci.org/nuts>.
 
 
 Bibtex Users:
@@ -52,6 +52,6 @@ Bibtex Users:
   author = {Moritz Hennicke and Werner Krause},
   year = {2024},
   note = {R package version 0.0.0.9000},
-  url = {https://AAoritz.github.io/nuts/},
+  url = {https://docs.ropensci.org/nuts},
 }
 ```

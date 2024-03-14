@@ -4,5 +4,5 @@ bibentry(
   author   = "Moritz Hennicke, Werner Krause",
   year     = "2024",
   note 	   = "R package version 0.0.0.9000",
-  url 	   = "https://AAoritz.github.io/nuts/",
+  url 	   = "https://docs.ropensci.org/nuts",
 )
