@@ -3,6 +3,6 @@ bibentry(
   title    = "nuts: Convert European Regional Data",
   author   = "Moritz Hennicke, Werner Krause",
   year     = "2024",
-  note 	   = "R package version 0.0.0.9000",
+  note 	   = "R package version 1.0.0",
   url 	   = "https://docs.ropensci.org/nuts",
 )
