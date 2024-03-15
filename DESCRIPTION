@@ -5,7 +5,7 @@ Authors@R: c(
     person("Moritz", "Hennicke", , "AAoritz@posteo.de", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-6811-1821")),
     person("Werner", "Krause", , "werner.krause@uni-potsdam.de", role = "aut",
-           comment = c(ORCID = "0000-0002-5069-7964"))
+           comment = c(ORCID = "0000-0002-5069-7964")),
     person("Pueyo-Ros", "Josep", role = "rev",
        comment = "Josep reviewed the package for rOpenSci, see 
                   https://github.com/ropensci/software-review/issues/623#issuecomment-1951446662"),
