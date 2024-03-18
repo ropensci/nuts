@@ -8,23 +8,23 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Motivated by changing administrative boundaries over time, the 'nuts' package can convert European regional data with NUTS codes between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1, NUTS 2 and NUTS 3). The package uses spatial interpolation based on granular (100mx100m) population and land use data provided by the European Commission's Joint Research Center.
+Motivated by changing administrative boundaries over time, the 'nuts' package can convert European regional data with NUTS codes between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1, NUTS 2 and NUTS 3). The package uses spatial interpolation based on granular (100m x 100m) population and land use data provided by the European Commission's Joint Research Center.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://docs.ropensci.org/nuts}
+  \item \url{https://docs.ropensci.org/nuts/}
   \item \url{https://github.com/ropensci/nuts}
   \item Report bugs at \url{https://github.com/ropensci/nuts}
 }
 
 }
 \author{
-\strong{Maintainer}: Moritz Hennicke \email{AAoritz@posteo.de} (\href{https://orcid.org/0000-0001-6811-1821}{ORCID})
+\strong{Maintainer}: Moritz Hennicke \email{AAoritz@posteo.de} (\href{https://orcid.org/0000-0001-6811-1821}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
-  \item Werner Krause \email{werner.krause@uni-potsdam.de} (\href{https://orcid.org/0000-0002-5069-7964}{ORCID})
+  \item Werner Krause \email{werner.krause@uni-potsdam.de} (\href{https://orcid.org/0000-0002-5069-7964}{ORCID}) [copyright holder]
 }
 
 Other contributors:

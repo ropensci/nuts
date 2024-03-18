@@ -2,7 +2,7 @@
 
   <!-- badges: start -->
   [![R-CMD-check](https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/ropensci/nuts/graph/badge.svg?token=YK69wCJJHc)](https://codecov.io/gh/ropensci/nuts)  
+[![codecov](https://codecov.io/gh/ropensci/nuts/graph/badge.svg?token=YK69wCJJHc)](https://app.codecov.io/gh/ropensci/nuts)  
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
   [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/155_status.svg)](https://github.com/ropensci/software-review/issues/623)
   <!-- badges: end -->
@@ -21,7 +21,7 @@ install.packages("nuts", repos = "https://ropensci.r-universe.dev")
 
 ### Usage
 
-Check out the [website](https://docs.ropensci.org/nuts) for example usage and further details.
+Check out the [website](https://docs.ropensci.org/nuts/articles/nuts.html) how to get started.
 
 ### Verbosity Control
 
@@ -34,7 +34,7 @@ Please support the development of open science and data by citing the JRC and us
 
 -   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
 
--   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 1.0.0, <https://docs.ropensci.org/nuts>.
+-   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 1.0.0, <https://docs.ropensci.org/nuts/>.
 
 
 Bibtex Users:
@@ -52,6 +52,6 @@ Bibtex Users:
   author = {Moritz Hennicke and Werner Krause},
   year = {2024},
   note = {R package version 1.0.0},
-  url = {https://docs.ropensci.org/nuts},
+  url = {https://docs.ropensci.org/nuts/},
 }
 ```
