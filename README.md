@@ -2,7 +2,7 @@
 
   <!-- badges: start -->
   [![R-CMD-check](https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml)
-  [![codecov](https://codecov.io/gh/AAoritz/nuts/graph/badge.svg?token=UXSUFJOD2U)](https://codecov.io/gh/AAoritz/nuts)
+  [![codecov](https://codecov.io/gh/AAoritz/nuts/graph/badge.svg?token=UXSUFJOD2U)](https://app.codecov.io/gh/AAoritz/nuts)
   [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
   [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/155_status.svg)](https://github.com/ropensci/software-review/issues/623)
   <!-- badges: end -->

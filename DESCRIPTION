@@ -17,10 +17,10 @@ Description: Motivated by changing administrative boundaries over time,
     the 'nuts' package can convert European regional data with NUTS codes
     between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1,
     NUTS 2 and NUTS 3). The package uses spatial interpolation based on
-    granular (100mx100m) population and land use data provided by the
+    granular (100m x 100m) population and land use data provided by the
     European Commission's Joint Research Center.
 License: MIT + file LICENSE
-URL: https://docs.ropensci.org/nuts, https://github.com/ropensci/nuts
+URL: https://docs.ropensci.org/nuts/, https://github.com/ropensci/nuts
 BugReports: https://github.com/ropensci/nuts
 Depends: 
     R (>= 3.5.0)
