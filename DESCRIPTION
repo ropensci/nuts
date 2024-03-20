@@ -1,24 +1,23 @@
 Package: nuts
-Title: 'nuts': Convert European Regional Data
+Title: Convert European Regional Data
 Version: 1.0.0
 Authors@R: c(
     person("Moritz", "Hennicke", , "AAoritz@posteo.de", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0001-6811-1821")),
-    person("Werner", "Krause", , "werner.krause@uni-potsdam.de", role = c("aut","cph"),
+    person("Werner", "Krause", , "werner.krause@uni-potsdam.de", role = c("aut", "cph"),
            comment = c(ORCID = "0000-0002-5069-7964")),
     person("Pueyo-Ros", "Josep", role = "rev",
-       comment = "Josep reviewed the package for rOpenSci, see 
-                  https://github.com/ropensci/software-review/issues/623#issuecomment-1951446662"),
+           comment = "Josep reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1951446662"),
     person("Le Meur", "Nolwenn", role = "rev",
-       comment = "Nolwenn reviewed the package for rOpenSci, see 
-                  https://github.com/ropensci/software-review/issues/623#issuecomment-1961501137")
+           comment = "Nolwenn reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1961501137")
   )
 Description: Motivated by changing administrative boundaries over time,
     the 'nuts' package can convert European regional data with NUTS codes
     between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1,
-    NUTS 2 and NUTS 3). The package uses spatial interpolation based on
-    granular (100m x 100m) population and land use data provided by the
-    European Commission's Joint Research Center.
+    NUTS 2 and NUTS 3). The package uses spatial interpolation as in Lam
+    (1983) <doi:10.1559/152304083783914958> based on granular (100m x
+    100m) area, population and land use data provided by the European
+    Commission's Joint Research Center.
 License: MIT + file LICENSE
 URL: https://docs.ropensci.org/nuts/, https://github.com/ropensci/nuts
 BugReports: https://github.com/ropensci/nuts
