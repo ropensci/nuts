@@ -146,13 +146,13 @@ small <- small %>%
                                              , geo == "DED3" ~ 66786 + 5574
 ))
 
-shape_06_n3 <- read_sf("NUTS_RG_20M_2006_3857.shp/NUTS_RG_20M_2006_3857.shp") %>%
-  filter(LEVL_CODE == 3 & CNTR_CODE == "DE") %>%
+shape_06_n3 <- read_sf("shapefiles/NUTS_RG_20M_2006_3857_DE.shp") %>%
+  filter(LEVL_CODE == 3) %>%
   full_join( manure_indic , by = c("NUTS_ID" = "geo")) %>%
   filter( str_detect( NUTS_ID , '^DED1|^DED3' ))
 
-shape_06_n2 <- read_sf("NUTS_RG_20M_2006_3857.shp/NUTS_RG_20M_2006_3857.shp") %>%
-  filter(LEVL_CODE == 2 & CNTR_CODE == "DE") %>%
+shape_06_n2 <- read_sf("shapefiles/NUTS_RG_20M_2006_3857_DE.shp") %>%
+  filter(LEVL_CODE == 2) %>%
   full_join( manure_indic , by = c("NUTS_ID" = "geo")) %>%
   filter( str_detect( NUTS_ID , '^DED1|^DED3' ))
 
@@ -328,8 +328,8 @@ pat_converted <- nuts_convert_version(
 
 ```{r,  echo=FALSE,include=FALSE}
 no_2006 <-
-  read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
-  filter(LEVL_CODE == 2 & CNTR_CODE == "NO") %>%
+  read_sf("shapefiles/NUTS_RG_20M_2016_3857_NO.shp") %>%
+  filter(LEVL_CODE == 2) %>%
   full_join(pat_n2_mhab_12_no , by = c("NUTS_ID" = "geo"))
 
 no_changes <- cross_walks %>%
@@ -362,8 +362,8 @@ gg_2006 = ggplot() +
   facet_wrap( ~ "Original 2012 data\n\n(NUTS VERSION 2016)")
 
 no_2021 <-
-  read_sf("NUTS_RG_20M_2021_3857.shp/NUTS_RG_20M_2021_3857.shp") %>%
-  filter(LEVL_CODE == 2 & CNTR_CODE == "NO") %>%
+  read_sf("shapefiles/NUTS_RG_20M_2021_3857_NO.shp") %>%
+  filter(LEVL_CODE == 2) %>%
   full_join(pat_converted , by = c("NUTS_ID" = "to_code")) %>%
   filter(NUTS_ID != "NO0B")
 
@@ -516,22 +516,19 @@ pat_level1 <- nuts_aggregate(
 
 ```{r,  echo=FALSE, fig.cap="Aggregating patents from NUTS 3 to NUTS 2 and NUTS 1; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) and [data](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table?lang=en) are from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) package.", fig.alt = "Three maps of Sweden with patent applications at the NUTS 3 level and aggregated to NUTS level 2 and 1."}
 eu_nuts3 <-
-  read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  read_sf("shapefiles/NUTS_RG_20M_2016_3857_SE.shp") %>%
   filter(LEVL_CODE == 3) %>%
-  full_join(pat_n3_nr_12_se , by = c("NUTS_ID" = "geo")) %>%
-  filter(str_detect(NUTS_ID, "^SE"))
+  full_join(pat_n3_nr_12_se , by = c("NUTS_ID" = "geo"))
 
 eu_nuts2 <-
-  read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  read_sf("shapefiles/NUTS_RG_20M_2016_3857_SE.shp") %>%
   filter(LEVL_CODE == 2) %>%
-  full_join(pat_level2 , by = c("NUTS_ID" = "to_code")) %>%
-  filter(str_detect(NUTS_ID, "^SE"))
+  full_join(pat_level2 , by = c("NUTS_ID" = "to_code"))
 
 eu_nuts1 <-
-  read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+  read_sf("shapefiles/NUTS_RG_20M_2016_3857_SE.shp") %>%
   filter(LEVL_CODE == 1) %>%
-  full_join(pat_level1 , by = c("NUTS_ID" = "to_code")) %>%
-  filter(str_detect(NUTS_ID, "^SE"))
+  full_join(pat_level1 , by = c("NUTS_ID" = "to_code"))
 
 gg_nuts3 = ggplot() +
   geom_sf(
@@ -714,12 +711,12 @@ This section describes the spatial interpolation procedure. We first cover the l
 Below, Norwegian NUTS-2 regions for the versions 2016 and 2021 are shown. All regions apart from Norway's most Northern region have been reorganized in this period.
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap="Norwegian NUTS-2 regions with boundary changes; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) package.", fig.alt ="Two maps of Norwegian NUTS-2 regions in version 2016 and 2021. The most Eastern and Southern regions have been affected most by administrative redistricting."}
-no_2016 <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
-  filter(grepl("^NO", NUTS_ID), nchar(NUTS_ID) == 4) %>%
+no_2016 <- read_sf("shapefiles/NUTS_RG_20M_2016_3857_NO.shp") %>%
+  filter(nchar(NUTS_ID) == 4) %>%
   mutate(nuts = paste0(NUTS_ID, "\n", NUTS_NAME))
 
-no_2021 <- read_sf("NUTS_RG_20M_2021_3857.shp/NUTS_RG_20M_2021_3857.shp") %>%
-  filter(grepl("^NO", NUTS_ID), nchar(NUTS_ID) == 4, NUTS_ID != "NO0B") %>%
+no_2021 <- read_sf("shapefiles/NUTS_RG_20M_2021_3857_NO.shp") %>%
+  filter(nchar(NUTS_ID) == 4, NUTS_ID != "NO0B") %>%
   mutate(nuts = paste0(NUTS_ID, "\n", NUTS_NAME))
 
 no_codes <- unique(c(no_2016$NUTS_ID, no_2021$NUTS_ID))
@@ -797,10 +794,10 @@ In addition to tracing the evolution of NUTS codes, the table contains **flows**
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap= "Alluvial plot illustrating area size flows; Created using the [ggalluvial](https://corybrunson.github.io/ggalluvial/) package.", fig.alt ="The alluvial plot shows population flows from NUTS version 2016 to 2021."}
 # Add names
-no_2016_names <- read_sf("NUTS_RG_20M_2016_3857.shp/NUTS_RG_20M_2016_3857.shp") %>%
+no_2016_names <- read_sf("shapefiles/NUTS_RG_20M_2016_3857_NO.shp") %>%
   select(from_code = NUTS_ID, from_name = NUTS_NAME) %>%
   st_set_geometry(NULL)
-no_2021_names <- read_sf("NUTS_RG_20M_2021_3857.shp/NUTS_RG_20M_2021_3857.shp") %>%
+no_2021_names <- read_sf("shapefiles/NUTS_RG_20M_2021_3857_NO.shp") %>%
   select(to_code = NUTS_ID, to_name = NUTS_NAME) %>%
   st_set_geometry(NULL)
 
