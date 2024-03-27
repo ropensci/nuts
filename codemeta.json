@@ -2,9 +2,9 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "nuts",
-  "description": "Motivated by changing administrative boundaries over time, the 'nuts' package can convert European regional data with NUTS codes between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1, NUTS 2 and NUTS 3). The package uses spatial interpolation based on granular (100mx100m) population and land use data provided by the European Commission's Joint Research Center.",
-  "name": "nuts: 'nuts': Convert European Regional Data",
-  "relatedLink": "https://docs.ropensci.org/nuts",
+  "description": "Motivated by changing administrative boundaries over time, the 'nuts' package can convert European regional data with NUTS codes between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1, NUTS 2 and NUTS 3). The package uses spatial interpolation as in Lam (1983) <doi:10.1559/152304083783914958> based on granular (100m x 100m) area, population and land use data provided by the European Commission's Joint Research Center.",
+  "name": "nuts: Convert European Regional Data",
+  "relatedLink": "https://docs.ropensci.org/nuts/",
   "codeRepository": "https://github.com/ropensci/nuts",
   "issueTracker": "https://github.com/ropensci/nuts",
   "license": "https://spdx.org/licenses/MIT",
@@ -15,7 +15,29 @@
     "url": "https://r-project.org"
   },
   "runtimePlatform": "R version 4.2.0 (2022-04-22)",
+  "provider": {
+    "@id": "https://cran.r-project.org",
+    "@type": "Organization",
+    "name": "Comprehensive R Archive Network (CRAN)",
+    "url": "https://cran.r-project.org"
+  },
   "author": [
+    {
+      "@type": "Person",
+      "givenName": "Moritz",
+      "familyName": "Hennicke",
+      "email": "AAoritz@posteo.de",
+      "@id": "https://orcid.org/0000-0001-6811-1821"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Werner",
+      "familyName": "Krause",
+      "email": "werner.krause@uni-potsdam.de",
+      "@id": "https://orcid.org/0000-0002-5069-7964"
+    }
+  ],
+  "copyrightHolder": [
     {
       "@type": "Person",
       "givenName": "Moritz",
@@ -363,7 +385,7 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "10948.383KB",
+  "fileSize": "1866.552KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",
@@ -381,13 +403,16 @@
         }
       ],
       "name": "nuts: Convert European Regional Data",
-      "url": "https://docs.ropensci.org/nuts",
-      "description": "R package version 1.0.0"
+      "identifier": "https://doi.org/10.5281/zenodo.10573057",
+      "url": "https://docs.ropensci.org/nuts/",
+      "description": "R package version 1.0.0",
+      "@id": "https://doi.org/10.5281/zenodo.10573057",
+      "sameAs": "https://doi.org/10.5281/zenodo.10573057"
     }
   ],
   "releaseNotes": "https://github.com/ropensci/nuts/blob/master/NEWS.md",
   "readme": "https://github.com/ropensci/nuts/blob/main/README.md",
-  "contIntegration": ["https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml", "https://codecov.io/gh/AAoritz/nuts"],
+  "contIntegration": ["https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/ropensci/nuts"],
   "developmentStatus": "https://www.repostatus.org/#active",
   "review": {
     "@type": "Review",
