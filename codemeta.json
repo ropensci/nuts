@@ -403,21 +403,11 @@
         }
       ],
       "name": "nuts: Convert European Regional Data",
-      "identifier": "https://doi.org/10.5281/zenodo.10573057",
+      "identifier": "https://doi.org/10.5281/zenodo.10885973",
       "url": "https://docs.ropensci.org/nuts/",
       "description": "R package version 1.0.0",
-      "@id": "https://doi.org/10.5281/zenodo.10573057",
-      "sameAs": "https://doi.org/10.5281/zenodo.10573057"
+      "@id": "https://doi.org/10.5281/zenodo.10885973",
+      "sameAs": "https://doi.org/10.5281/zenodo.10885973"
     }
-  ],
-  "releaseNotes": "https://github.com/ropensci/nuts/blob/master/NEWS.md",
-  "readme": "https://github.com/ropensci/nuts/blob/main/README.md",
-  "contIntegration": ["https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/ropensci/nuts"],
-  "developmentStatus": "https://www.repostatus.org/#active",
-  "review": {
-    "@type": "Review",
-    "url": "https://github.com/ropensci/software-review/issues/623",
-    "provider": "https://ropensci.org"
-  },
-  "keywords": ["europe", "european-union", "nuts", "nuts-regions", "regional-data", "nuts-codes", "eurostat", "nomenclature"]
+  ]
 }
