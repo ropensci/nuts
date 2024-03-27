@@ -5,6 +5,7 @@
 [![codecov](https://codecov.io/gh/ropensci/nuts/graph/badge.svg?token=YK69wCJJHc)](https://app.codecov.io/gh/ropensci/nuts)  
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
   [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/155_status.svg)](https://github.com/ropensci/software-review/issues/623)
+  [![DOI](https://zenodo.org/badge/748601068.svg)](https://zenodo.org/doi/10.5281/zenodo.10573056)
   <!-- badges: end -->
 
 Changing administrative regional boundaries over time complicates the construction of consistent regional panel data. The `nuts` package can transform **European regional data** identified by **NUTS codes** between different **versions** and **subdivision levels** with the aim to harmonize and link data sets. 
@@ -34,7 +35,8 @@ Please support the development of open science and data by citing the JRC and us
 
 -   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
 
--   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. R package version 1.0.0, <https://docs.ropensci.org/nuts/>.
+-   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10573057
+  <https://doi.org/10.5281/zenodo.10573057>, R package version 1.0.0, <https://docs.ropensci.org/nuts/>. 
 
 
 Bibtex Users:
@@ -53,5 +55,6 @@ Bibtex Users:
   year = {2024},
   note = {R package version 1.0.0},
   url = {https://docs.ropensci.org/nuts/},
+  doi = {https://doi.org/10.5281/zenodo.10573057},
 }
 ```
