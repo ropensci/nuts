@@ -94,7 +94,7 @@ When administrative units are restructured, regional data measured within old bo
 
 Let's take the example of the German state Saxony in the figures below. Here, the NUTS-2 regions *Leipzig* (`DED3` &rarr; `DED5`) and *Chemnitz* (`DED1` &rarr; `DED4`) were reorganized. We are interested in the number of manure storage facilities in 2003 provided by [EUROSTAT](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table) based on the 2006 NUTS version. A part of *Leipzig* was reassigned to *Chemnitz* (center plot), prompting us to recalculate the number of storage facilities in the 2010 version (right plot).
 
-A simple approach is to redistribute manure storage facilities proportional to the transferred area, assuming equal distribution of manure storages across space. In a dasymetric approach, we could make use of built-up area, assuming that manure deposits are more likely to be found close to residential areas and economic sites. In our example, *Leipzig* lost about 7.7% ($\frac{5574}{72360}$) of its built-up area. We re-calculate the number of manure storage facilities by computing 7.7% of *Leipzig's* manure storages $\frac{5574}{72360} * 700 = 54$, subtracting them from Leipzig and adding them to *Chemnitz*.
+A simple approach is to redistribute manure storage facilities proportional to the transferred area, assuming equal distribution of manure storages across space. In a dasymetric approach, we could make use of built-up area, assuming that manure deposits are more likely to be found close to residential areas and economic sites. In our example, *Leipzig* lost about 7.7% (\(\frac{5574}{72360}\)) of its built-up area. We re-calculate the number of manure storage facilities by computing 7.7% of *Leipzig's* manure storages \(\frac{5574}{72360} * 700 = 54\), subtracting them from Leipzig and adding them to *Chemnitz*.
 
 See the Section [*Spatial interpolation in detail*](#method) for an in-depth description of the weighting procedure.
 
@@ -231,7 +231,7 @@ p_final = ggplot() +
         , axis.title = element_blank( ))
 ```
 
-```{r,  echo=FALSE, fig.cap="Holdings with Manure Storage Facilities; BU = Built-Up Area in $m^{2}$; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) and [data](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table) are from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) package.", fig.alt ="Maps of NUTS 3 regions Chemnitz and Leipzig in NUTS version 2003, between 2003 and 2006 and 2006. They visualize the example in the text in which Chemnitz contributes a part of its area to Leipzig."}
+```{r,  echo=FALSE, fig.cap="Holdings with Manure Storage Facilities; BU = Built-up area in square meters; Sources: [Shapefiles](https://ec.europa.eu/eurostat/web/gisco/geodata/reference-data/administrative-units-statistical-units/nuts) and [data](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table) are from EUROSTAT; Created using the [sf](https://r-spatial.github.io/sf/) package.", fig.alt ="Maps of NUTS 3 regions Chemnitz and Leipzig in NUTS version 2003, between 2003 and 2006 and 2006. They visualize the example in the text in which Chemnitz contributes a part of its area to Leipzig."}
 gridExtra::grid.arrange( p_initial, p_step , p_final , nrow = 1 )
 ```
 
