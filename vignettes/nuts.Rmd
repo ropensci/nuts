@@ -20,6 +20,9 @@ output:
   toc_float: 
     collapsed: false
     smooth_scroll: true
+template:
+  params:
+    mathjax: true
 ---
 
 ```{r, include = FALSE}
