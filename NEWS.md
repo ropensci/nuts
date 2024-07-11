@@ -1,5 +1,8 @@
 # nuts 1.1.0
 
+* Fixed bug in nuts_aggregate in the check for missing nuts codes
+
+
 # nuts 1.0.0
 
 * First release
