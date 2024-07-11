@@ -1,5 +1,6 @@
 ---
 title: "nuts: Convert European Regional Data in R"
+date: "`r Sys.Date()`"
 author:
   - name: "Moritz Hennicke"
     url: https://hennicke.science/
@@ -11,15 +12,7 @@ vignette: >
   %\VignetteIndexEntry{nuts: Convert European Regional Data in R}
   %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
-output: 
-  distill::distill_article:
-    theme: theme.css
-    toc: true
-    number_sections: true
-    toc_depth: 4
-  toc_float: 
-    collapsed: false
-    smooth_scroll: true
+output: rmarkdown::html_vignette
 ---
 
 ```{r, include = FALSE}
