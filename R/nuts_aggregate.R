@@ -255,7 +255,7 @@ nuts_aggregate <- function(data,
     #-----------------
     is_verbose_mode <- (getOption("nuts.verbose", "verbose") == "verbose")
     if (is_verbose_mode) {
-      cli_h1("Converting version of NUTS codes")
+      cli_h1("Aggregating level of NUTS codes")
       cli_bullets(
         c(
           "{.blue Within {.red groups} defined by {.red {group_vars}}:}",
