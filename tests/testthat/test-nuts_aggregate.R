@@ -133,6 +133,45 @@ test_that("NUTS codes already at level 2", {
 
 # Run positive tests
 #---------------------
+test_that("No missing NUTS in output, aggregation should go smooth", {
+  expect_equal(
+    all_nuts_codes %>%
+      filter(country == "France", version == 2021, nchar(code) == 4) %>%
+      select(nuts_code = code) %>%
+      mutate(val = rnorm(nrow(.), 0, 1)) %>%
+      nuts_classify(nuts_code = "nuts_code") %>%
+      nuts_aggregate(
+        to_level = 1,
+        variables = c('val' = 'absolute')
+      ) %>%
+      filter(is.na(val)) %>%
+      nrow(.),
+    0
+  )
+})
+
+test_that("Converter output spits out correct names", {
+  expect_equal(
+    manure %>%
+      filter(nchar(geo) == 5) %>%
+      filter(!grepl("EU|ME|ZZ", geo)) %>%
+      nuts_classify(
+        nuts_code = "geo",
+        group_vars = c("indic_ag", "time")
+      ) %>%
+      nuts_aggregate(
+        to_level = 2,
+        variables = c("values" = "absolute")
+      ) %>%
+      names(.),
+    c("to_code", "country", "indic_ag", "time", "values")
+  )
+})
+
+
+
+
+
 test_that("Converter output spits out correct names", {
   expect_equal(
     manure %>%
@@ -308,7 +347,7 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
                 ) %>%
                 filter(!is.na(values)) %>%
                 dim(),
-              c(52, 4)
+              c(46, 4)
             )
           })
 

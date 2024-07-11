@@ -113,6 +113,7 @@ nuts_aggregate <- function(data,
     if (nr_nuts_codes_recognized == 0)
       cli_abort("NUTS codes are not recognized and cannot be converted.")
 
+
     # CONVERSION POSSIBLE
     #----------------------
     # CONVERSION BETWEEN DIFFERENT NUTS LEVELS
@@ -138,6 +139,7 @@ nuts_aggregate <- function(data,
     n_rows_dropped <- data[["n_rows_dropped"]]
     message_multiple_versions <- data[["message_multiple_versions"]]
     data <- data[["data"]]
+    from_version_string <- data$from_version[1]
 
     # Prepare join with regional indicator stocks such that missing NUTS codes within groups are kept
     # - Create group structure
@@ -149,6 +151,9 @@ nuts_aggregate <- function(data,
     # - Prepare stocks from cross_walks for subsetting and matching
     cross_walks <- get("cross_walks")
     stocks <- cross_walks %>%
+      # Subset to desired version
+      filter(.data$from_version == from_version_string) %>%
+      # Keep only stocks
       filter(.data$from_version == .data$to_version) %>%
       select(-c("from_version", "to_version", "to_code")) %>%
       distinct(.data$from_code, .keep_all = TRUE)
@@ -161,7 +166,6 @@ nuts_aggregate <- function(data,
         distinct()
       stocks_groups <- stocks %>% cross_join(groups)
     }
-
 
     # - Subset cross walks to desired countries, levels and versions
     stocks_groups <- stocks_groups %>%
@@ -184,7 +188,7 @@ nuts_aggregate <- function(data,
       message_missing_codes <- c("x" = "{.blue {.red Missing} NUTS codes in data. No values are calculated for regions associated with missing NUTS codes. Ensure that the input data is complete.}")
 
     } else if (nrow(missing) == 0) {
-      message_missing_codes <- c("v" = "{.blue No {.red missing} NUTS codes.}")
+      message_missing_codes <- c("v" = "{.blue No missing NUTS codes.}")
     }
     rm(missing)
 
