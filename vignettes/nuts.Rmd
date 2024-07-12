@@ -77,7 +77,7 @@ For example, the German district *Northern Saxony* (*Nordsachsen*) is located wi
 
 Since administrative boundaries in Europe change for demographic, economic, political or other reasons, there are five different **versions** of the NUTS Nomenclature (2006, 2010, 2013, 2016, and 2021). The current version, effective from 1 January 2021, lists 104 regions at NUTS-1, 283 regions at NUTS-2, 1 345 regions at NUTS-3 level[^2].
 
-[^1]: [European Interinstitutional Style Guide](https://publications.europa.eu/code/en/en-5000600.htm) In the case of Greece for instance this code was changed from GR to EL in 2011. 
+[^1]: [Eurostat](https://ec.europa.eu/eurostat/web/nuts/history) In the case of Greece this code was changed from GR to EL in 2011. 
 
 [^2]: [2022 report of the European Union](https://ec.europa.eu/eurostat/documents/3859598/15193590/KS-GQ-22-010-EN-N.pdf)
 
@@ -308,7 +308,7 @@ nuts_get_missing(pat_classified) # ...use helper function
 ## Converting data between NUTS versions
 
 Once the NUTS version and level of the original data are identified, you can easily **convert** the data to any other **NUTS version**. Here is an example of transforming the 2013 Norwegian data to the 2021 NUTS version. Between 2016 and 2021, the number of NUTS-2 regions in Norway decreased by one as the borders of six regions were transformed. The maps below show the affected regions. 
-We provide the classified NUTS data, specify the target NUTS version for data transformation, and supply the variable containing the values to be interpolated. It is important to indicate the **variable type** in the named input-vector since the interpolation approaches differ for [absolute and relative values](https://urban.jrc.ec.europa.eu/nutsconverter/docs/2022_08_04_NUTS_converter.pdf).
+We provide the classified NUTS data, specify the target NUTS version for data transformation, and supply the variable containing the values to be interpolated. It is important to indicate the **variable type** in the named input-vector since the interpolation approaches differ for [absolute and relative values](https://urban.jrc.ec.europa.eu/static/sites/nutsconverter/2022_08_04_NUTS_converter.pdf).
 
 ```{r}
 # Converting Data to 2021 NUTS version
@@ -759,7 +759,7 @@ To keep track of these changes, the `nuts` package uses two data sets:
 1. Stocks: data(`all_nuts_codes`) contains **all historical NUTS codes** by NUTS version and country
 2. Flows: data(`cross_walks`) contains the **conversion tables** between NUTS versions
 
-They are based on [data provided by the JRC](https://urban.jrc.ec.europa.eu/nutsconverter/#/). Both data sets can also be used by the user manually to explore specific conversion patterns more closely. 
+They are based on [data provided by the JRC](https://urban.jrc.ec.europa.eu/tools/nuts-converter?lng=en). Both data sets can also be used by the user manually to explore specific conversion patterns more closely. 
 
 For Norway going from version 2016 to 2021 at NUTS level 2, the `cross_walks` can be easily subset as follows:
 
@@ -1119,8 +1119,8 @@ Please support the development of open science and data by citing the JRC and us
 
 -   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
 
--   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10885973
-  <https://doi.org/10.5281/zenodo.10573057>, R package version 1.0.0, <https://docs.ropensci.org/nuts/>. 
+-   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10573056
+  <https://doi.org/10.5281/zenodo.10573056>, R package version 1.1.0, <https://docs.ropensci.org/nuts/>. 
 
 
 Bibtex Users:
@@ -1137,8 +1137,8 @@ Bibtex Users:
   title = {nuts: Convert European Regional Data},
   author = {Moritz Hennicke and Werner Krause},
   year = {2024},
-  note = {R package version 1.0.0},
+  note = {R package version 1.1.0},
   url = {https://docs.ropensci.org/nuts/},
-  doi = {https://doi.org/10.5281/zenodo.10885973},
+  doi = "https://doi.org/10.5281/zenodo.10573056",
 }
 ```
