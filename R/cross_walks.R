@@ -19,5 +19,5 @@
 #'   \item{artif_surf18}{2018 artificial surfaces flow}
 #'   \item{artif_surf12}{2012 artificial surfaces flow}
 #' }
-#' @source <https://urban.jrc.ec.europa.eu/nutsconverter/#/>
+#' @source <https://urban.jrc.ec.europa.eu/tools/nuts-converter?lng=en#/>
 "cross_walks"

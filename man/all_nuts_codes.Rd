@@ -16,7 +16,7 @@ A data frame with 8,896 rows and 2 columns:
 }
 }
 \source{
-\url{https://urban.jrc.ec.europa.eu/nutsconverter/#/}
+\url{https://urban.jrc.ec.europa.eu/tools/nuts-converter?lng=en#/}
 }
 \usage{
 all_nuts_codes

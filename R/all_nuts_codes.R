@@ -10,5 +10,5 @@
 #'   \item{version}{NUTS versions}
 #'   \item{country}{Country name}
 #' }
-#' @source <https://urban.jrc.ec.europa.eu/nutsconverter/#/>
+#' @source <https://urban.jrc.ec.europa.eu/tools/nuts-converter?lng=en#/>
 "all_nuts_codes"

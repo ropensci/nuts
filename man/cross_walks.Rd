@@ -24,7 +24,7 @@ A data frame with 47,340 rows and 9 columns:
 }
 }
 \source{
-\url{https://urban.jrc.ec.europa.eu/nutsconverter/#/}
+\url{https://urban.jrc.ec.europa.eu/tools/nuts-converter?lng=en#/}
 }
 \usage{
 cross_walks
