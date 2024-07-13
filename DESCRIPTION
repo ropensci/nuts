@@ -30,7 +30,6 @@ Imports:
     lifecycle,
     rlang
 Suggests: 
-    distill,
     eurostat,
     formatR,
     ggalluvial,
