@@ -1,1 +1,2 @@
 data-raw/**/*.shp filter=lfs diff=lfs merge=lfs -text
+data-raw/own-conversion-matrices/* filter=lfs diff=lfs merge=lfs -text
