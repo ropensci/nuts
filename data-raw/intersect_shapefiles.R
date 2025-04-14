@@ -89,27 +89,61 @@ intersect_for_nuts_level_version = function(shapes, level, version){
 
 }
 
+
+
 # Create grid to loop over
 df_lev_vers <- expand.grid(levels = 1:3, versions = versions)
+df_lev_vers
 
 # Loop over all levels and versions
 nr_loops <- nrow(df_lev_vers)
 
-cross_walks_shapes <-
-  lapply(cli_progress_along(1:nr_loops, "Looping over all combinations"), function(i) {
+map(1:nr_loops, \(i) {
 
-    df <- intersect_for_nuts_level_version(
-      shapes = shapes,
-      level = df_lev_vers$levels[i],
-      version = df_lev_vers$versions[i]
-    )
+    level_i <- df_lev_vers$levels[i]
+    version_i <- df_lev_vers$versions[i]
+    file_path <- paste0('data-raw/own-conversion-matrices/intersections_lev_',
+      level_i, '_vers_', version_i, '.rda')
 
-  return(df)
+    if (file.exists(file_path)) {
+    cli_alert_success('Intersections created for level {level_i} and version {version_i}')
+    } else {
 
-}) %>% bind_rows()
+      shape_inter <- intersect_for_nuts_level_version(
+        shapes = shapes,
+        level = level_i,
+        version = version_i
+      )
+
+      save(shape_inter, file = file_path)
+      cli_alert_success('Intersections created for level {level_i} and version {version_i}')
+    }
+
+})
 
 
-save(cross_walks_shapes, file = "data-raw/cross_walks_shapes.rda")
+
+# # Create grid to loop over
+# df_lev_vers <- expand.grid(levels = 1:3, versions = versions)
+#
+# # Loop over all levels and versions
+# nr_loops <- nrow(df_lev_vers)
+#
+# cross_walks_shapes <-
+#   lapply(cli_progress_along(1:nr_loops, "Looping over all combinations"), function(i) {
+#
+#     df <- intersect_for_nuts_level_version(
+#       shapes = shapes,
+#       level = df_lev_vers$levels[i],
+#       version = df_lev_vers$versions[i]
+#     )
+#
+#   return(df)
+#
+# }) %>% bind_rows()
+#
+#
+# save(cross_walks_shapes, file = "data-raw/own-conversion-matrices/cross_walks_shapes.rda")
 
 
 
