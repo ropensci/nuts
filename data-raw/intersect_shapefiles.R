@@ -44,10 +44,10 @@ library(cli)
 #
 # names(shapes) <- versions
 #
-# save(shapes, file = "data-raw/shapes.rda")
+# save(shapes, file = "data-raw/own-conversion-matrices/shapes.rda")
 
 
-load("data-raw/shapes.rda")
+load("data-raw/own-conversion-matrices/shapes.rda")
 versions <- names(shapes)
 
 # Function to intersect shapes
