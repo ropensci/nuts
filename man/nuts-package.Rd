@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Motivated by changing administrative boundaries over time, the 'nuts' package can convert European regional data with NUTS codes between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1, NUTS 2 and NUTS 3). The package uses spatial interpolation as in Lam (1983) \doi{10.1559/152304083783914958} based on granular (100m x 100m) area, population and land use data provided by the European Commission's Joint Research Center.
+Motivated by changing administrative boundaries over time, the 'nuts' package can convert European regional data with NUTS codes between versions (2006, 2010, 2013, 2016, 2021 and 2024) and levels (NUTS 1, NUTS 2 and NUTS 3). The package uses spatial interpolation as in Lam (1983) \doi{10.1559/152304083783914958} based on granular (100m x 100m) area, population and land use data provided by the European Commission's Joint Research Center.
 }
 \seealso{
 Useful links:
