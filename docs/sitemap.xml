@@ -1,75 +1,25 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://aaoritz.github.io/nuts/404.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/CONTRIBUTING.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/articles/nuts.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/index.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/all_nuts_codes.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/cross_walks.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/manure.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts-package (conflicted copy 2024-03-18 212553).html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts-package (conflicted copy 2024-03-20 103059).html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts-package.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts_aggregate.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts_classify.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts_convert_version.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts_get_data.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts_get_missing.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts_get_version.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/nuts_test_multiple_versions.html</loc>
-  </url>
-  <url>
-    <loc>https://aaoritz.github.io/nuts/reference/patents.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://aaoritz.github.io/nuts/404.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/CONTRIBUTING.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/LICENSE-text.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/LICENSE.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/articles/index.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/articles/nuts.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/authors.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/index.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/news/index.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/all_nuts_codes.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/cross_walks.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/index.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/manure.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/nuts-package.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/nuts_aggregate.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/nuts_classify.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/nuts_convert_version.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/nuts_get_data.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/nuts_get_missing.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/nuts_get_version.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/nuts_test_multiple_versions.html</loc></url>
+<url><loc>https://aaoritz.github.io/nuts/reference/patents.html</loc></url>
 </urlset>
+

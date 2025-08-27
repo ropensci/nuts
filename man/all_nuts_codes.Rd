@@ -7,7 +7,7 @@
 \format{
 \subsection{\code{all_nuts_codes}}{
 
-A data frame with 8,896 rows and 2 columns:
+A data frame with 10,465 rows and 3 columns:
 \describe{
 \item{code}{NUTS code}
 \item{version}{NUTS versions}
@@ -23,6 +23,6 @@ all_nuts_codes
 }
 \description{
 The data frame stores all NUTS codes in hierarchical levels 1, 2 and 3 by
-NUTS classification versions 2006, 2010, 2013, 2016 and 2021.
+NUTS classification versions 2006, 2010, 2013, 2016, 2021 and 2024.
 }
 \keyword{datasets}

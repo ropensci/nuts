@@ -98,7 +98,7 @@ test_that("weight invalid", {
         variables = c("values" = "absolute"),
         weight = "pop19"
       ),
-    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop21', 'artif_surf12', 'artif_surf18' or 'bu_vol'."
   )
 })
 
@@ -112,7 +112,7 @@ test_that("multiple weights supplied", {
         variables = c("values" = "absolute"),
         weight = c("pop19", "areaKm")
       ),
-    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop21', 'artif_surf12', 'artif_surf18' or 'bu_vol'."
   )
 })
 
@@ -347,7 +347,7 @@ test_that("Feeding multiple NUTS versions within groups. Option most frequent.",
                 ) %>%
                 filter(!is.na(values)) %>%
                 dim(),
-              c(46, 4)
+              c(39, 4)
             )
           })
 

@@ -2,22 +2,22 @@
 
   <!-- badges: start -->
   [![R-CMD-check](https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/nuts/actions/workflows/R-CMD-check.yaml)
-[![codecov](https://codecov.io/gh/ropensci/nuts/graph/badge.svg?token=YK69wCJJHc)](https://app.codecov.io/gh/ropensci/nuts)  
-[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+  [![codecov](https://codecov.io/gh/ropensci/nuts/graph/badge.svg?token=YK69wCJJHc)](https://app.codecov.io/gh/ropensci/nuts)  
+  [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
   [![Status at rOpenSci Software Peer Review](https://badges.ropensci.org/155_status.svg)](https://github.com/ropensci/software-review/issues/623)
   [![DOI](https://zenodo.org/badge/748601068.svg)](https://zenodo.org/doi/10.5281/zenodo.10573056)
   <!-- badges: end -->
 
 Changing administrative regional boundaries over time complicates the construction of consistent regional panel data. The `nuts` package can transform **European regional data** identified by **NUTS codes** between different **versions** and **subdivision levels** with the aim to harmonize and link data sets. 
 
-The package's main task is to convert data between all NUTS versions in use: 2006, 2010, 2013, 2016 and 2021. These conversions can be performed in any direction based on **spatial interpolation** using five different weights (regional area in square kilometers, 2011 and 2018 population size, 2012 and 2018 built-up area). The weights are based on conversion tables provided by the [Joint Research Center (JRC) of the European Commission (EC)](https://urban.jrc.ec.europa.eu/tools/nuts-converter) that are used in their online converter. The `nuts` package permits to do the same conversion offline with additional advantages such as the conversion within groups, enabling the conversion of datasets with multiple NUTS versions efficiently.
+The package's main task is to convert data between all NUTS versions in use: 2006, 2010, 2013, 2016, 2021 and 2024. These conversions can be performed in any direction based on **spatial interpolation** using six different weights (regional area in square kilometers, 2011 and 2021 population size, 2012 and 2018 artificial surfaces and 2021 residential built-up volume). The weights are based on conversion tables provided by the [Joint Research Center (JRC) of the European Commission (EC)](https://urban.jrc.ec.europa.eu/tools/nuts-converter) that are used in their online converter. The `nuts` package permits to do the same conversion offline with additional advantages such as the conversion within groups, enabling the conversion of datasets with multiple NUTS versions efficiently.
 
 ### Installation
 
-You can install the package from the rOpenSci repository:
+You can install the package from CRAN:
 
 ``` r
-install.packages("nuts", repos = "https://ropensci.r-universe.dev")
+install.packages("nuts")
 ```
 
 ### Usage

@@ -26,5 +26,5 @@ test_that("Dimensions of ouput", {
                   nuts_code = "geo") %>%
       nuts_get_version()
   ),
-  c(6, 3))
+  c(7, 3))
 })

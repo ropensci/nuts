@@ -22,7 +22,7 @@ nuts_aggregate(
 \item{variables}{Named character specifying variable names and variable type (\code{'absolute'} or \code{'relative'}), e.g. \code{c('var_name' = 'absolute')}.}
 
 \item{weight}{String with name of the weight used for conversion. Can be area size \code{'areaKm'} (default),
-population in 2011 \code{'pop11'} or 2018 \code{'pop18'}, or artificial surfaces in 2012 \code{'artif_surf12'} and 2018 \code{'artif_surf18'}.}
+population in 2011 \code{'pop11'} or 2021 \code{'pop21'}, artificial surfaces in 2012 \code{'artif_surf12'} and 2018 \code{'artif_surf18'} or residential built-up volume 2021 \code{'bu_vol'}.}
 
 \item{missing_rm}{Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.}
 
@@ -58,6 +58,6 @@ manure \%>\%
   # Group vars are automatically passed on
   nuts_aggregate(to_level = 2,
                  variables = c('values'= 'absolute'),
-                 weight = 'pop18')
+                 weight = 'pop21')
 
 }

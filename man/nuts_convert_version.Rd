@@ -22,7 +22,7 @@ nuts_convert_version(
 \item{variables}{Named character specifying variable names and variable type (\code{'absolute'} or \code{'relative'}) e.g. \code{c('var_name' = 'absolute')}}
 
 \item{weight}{String with name of the weight used for conversion. Can be area size \code{'areaKm'} (default),
-population in 2011 \code{'pop11'} or 2018 \code{'pop18'}, or artificial surfaces in 2012 \code{'artif_surf12'} and 2018 \code{'artif_surf18'}.}
+population in 2011 \code{'pop11'} or 2021 \code{'pop21'}, artificial surfaces in 2012 \code{'artif_surf12'} and 2018 \code{'artif_surf18'} or residential built-up volume 2021 \code{'bu_vol'}.}
 
 \item{missing_rm}{Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.}
 
@@ -60,7 +60,7 @@ manure \%>\%
   # Data now only varies at the NUTS code level
   nuts_classify(nuts_code = "geo") \%>\%
   nuts_convert_version(to_version = '2021',
-                       weight = 'pop18',
+                       weight = 'pop21',
                        variables = c('values' = 'absolute'))
 
 
@@ -72,7 +72,7 @@ manure \%>\%
   # Data now varies at the year x NUTS code level
   nuts_classify(nuts_code = 'geo', group_vars = c('time')) \%>\%
   nuts_convert_version(to_version = '2021',
-                       weight = 'pop18',
+                       weight = 'pop21',
                        variables = c('values' = 'absolute'))
 
 

@@ -55,7 +55,7 @@ test_that("to_version invalid", {
         to_version = "2020",
         variables = c("values" = "absolute")
       ),
-    "Input `to_version` invalid. Make sure it is a string and only one of the version years 2006, 2010, 2013, 2016 or 2021."
+    "Input `to_version` invalid. Make sure it is a string and only one of the version years 2006, 2010, 2013, 2016, 2021 or 2024."
   )
 })
 
@@ -68,7 +68,7 @@ test_that("multiple to_versions provided", {
         to_version = c("2006", "2020"),
         variables = c("values" = "absolute")
       ),
-    "Input `to_version` invalid. Make sure it is a string and only one of the version years 2006, 2010, 2013, 2016 or 2021."
+    "Input `to_version` invalid. Make sure it is a string and only one of the version years 2006, 2010, 2013, 2016, 2021 or 2024."
   )
 })
 
@@ -82,7 +82,7 @@ test_that("weight invalid", {
         variables = c("values" = "absolute"),
         weight = "pop19"
       ),
-    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop21', 'artif_surf12', 'artif_surf18' or 'bu_vol'."
   )
 })
 
@@ -97,7 +97,7 @@ test_that("multiple weights provided", {
         variables = c("values" = "absolute"),
         weight = c("pop19", "areaKm")
       ),
-    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+    "Input `weight` invalid. Must be either 'areaKm', 'pop11', 'pop21', 'artif_surf12', 'artif_surf18' or 'bu_vol'."
   )
 })
 

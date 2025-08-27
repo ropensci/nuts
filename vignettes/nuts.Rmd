@@ -8,6 +8,11 @@ author:
   - name: "Werner Krause"
     url: https://krausewe.github.io/ 
     orcid_id: 0000-0002-5069-7964
+  - name: "Filipe Batista e Silva"
+    orcid_id: 0000-0002-8752-6464
+  - name: "Carmelo Attardo"
+  - name: "Cristian Pigaiani"
+  - name: "Michele Tucci"
 vignette: >
   %\VignetteIndexEntry{nuts: Convert European Regional Data in R}
   %\VignetteEngine{knitr::knitr}
@@ -56,7 +61,7 @@ knitr::include_graphics("logo.png")
 
 -   Ability to convert **multiple** NUTS versions at once when e.g. NUTS versions differ across countries and years. This scenario is common when working with data sourced from EUROSTAT.
 
--   (Dasymetric) **Spatial interpolation** based on five **weights** (regional area size, 2011 and 2018 population size, 2012 and 2018 built-up area) built from granular [100m x 100m] geodata by the European Commission's [Joint Research Center (JRC)](https://urban.jrc.ec.europa.eu/tools/nuts-converter).
+-   (Dasymetric) **Spatial interpolation** based on six **weights** (regional area size, 2011 and 2021 population size, 2012 and 2018 artificial surfaces, and 2021 residential built-up volume) built from granular [100m x 100m] geodata by the European Commission's [Joint Research Center (JRC)](https://urban.jrc.ec.europa.eu/tools/nuts-converter).
 
 :::
 
@@ -75,11 +80,10 @@ For example, the German district *Northern Saxony* (*Nordsachsen*) is located wi
 -   NUTS-3: Districts
     -   DED53: Northern Saxony
 
-Since administrative boundaries in Europe change for demographic, economic, political or other reasons, there are five different **versions** of the NUTS Nomenclature (2006, 2010, 2013, 2016, and 2021). The current version, effective from 1 January 2021, lists 104 regions at NUTS-1, 283 regions at NUTS-2, 1 345 regions at NUTS-3 level[^2].
+Since administrative boundaries in Europe change for demographic, economic, political or other reasons, there are six different **versions** of the NUTS Nomenclature (2006, 2010, 2013, 2016, 2021, and 2024). 
 
 [^1]: [Eurostat](https://ec.europa.eu/eurostat/web/nuts/history) In the case of Greece this code was changed from GR to EL in 2011. 
 
-[^2]: [2022 report of the European Union](https://ec.europa.eu/eurostat/documents/3859598/15193590/KS-GQ-22-010-EN-N.pdf)
 
 ## Spatial interpolation in a nutshell
 
@@ -87,7 +91,7 @@ When administrative units are restructured, regional data measured within old bo
 
 Let's take the example of the German state Saxony in the figures below. Here, the NUTS-2 regions *Leipzig* (`DED3` &rarr; `DED5`) and *Chemnitz* (`DED1` &rarr; `DED4`) were reorganized. We are interested in the number of manure storage facilities in 2003 provided by [EUROSTAT](https://ec.europa.eu/eurostat/databrowser/view/PAT_EP_RTOT/default/table) based on the 2006 NUTS version. A part of *Leipzig* was reassigned to *Chemnitz* (center plot), prompting us to recalculate the number of storage facilities in the 2010 version (right plot).
 
-A simple approach is to redistribute manure storage facilities proportional to the transferred area, assuming equal distribution of manure storages across space. In a dasymetric approach, we could make use of built-up area, assuming that manure deposits are more likely to be found close to residential areas and economic sites. In our example, *Leipzig* lost about 7.7% (\(\frac{5574}{72360}\)) of its built-up area. We re-calculate the number of manure storage facilities by computing 7.7% of *Leipzig's* manure storages \(\frac{5574}{72360} * 700 = 54\), subtracting them from Leipzig and adding them to *Chemnitz*.
+A simple approach is to redistribute manure storage facilities proportional to the transferred area, assuming equal distribution of manure storages across space. In a dasymetric approach, we could make use of built-up area, assuming that manure deposits are more likely to be found close to residential areas and economic sites. In our example, *Leipzig* lost about 7.7% ($\frac{5574}{72360}$) of its built-up area. We re-calculate the number of manure storage facilities by computing 7.7% of *Leipzig's* manure storages $\frac{5574}{72360} * 700 = 54$, subtracting them from Leipzig and adding them to *Chemnitz*.
 
 See the Section [*Spatial interpolation in detail*](#method) for an in-depth description of the weighting procedure.
 
@@ -235,7 +239,7 @@ The package comes with three main functions:
 
 -   `nuts_classify()` detects the NUTS version(s) and level(s) of a data set. Its output can be directly fed into the two other functions.
 
--   `nuts_convert_version()` converts your data to a desired NUTS version (2006, 2010, 2013, 2016, 2021). This transformation works in any direction.
+-   `nuts_convert_version()` converts your data to a desired NUTS version (2006, 2010, 2013, 2016, 2021 and 2024). This transformation works in any direction.
 
 -   `nuts_aggregate()` aggregates data to some upper-level NUTS code, i.e., it transforms NUTS-3 data to the NUTS-2 or NUTS-1 level (but not vice versa).
 
@@ -624,7 +628,7 @@ Users have the option `missing_weights_pct` to investigate the consequences of m
 nuts_convert_version(
   data = pat_classified, 
   to_version = "2021", 
-  weight = "pop18",
+  weight = "pop21",
   variables = c("values" = "absolute"),
   missing_weights_pct = TRUE
   ) %>% 
@@ -638,7 +642,7 @@ Using the the share of missing weights in combination with the option `missing_r
 nuts_convert_version(
   data = pat_classified, 
   to_version = "2021", 
-  weight = "pop18",
+  weight = "pop21",
   variables = c("values" = "absolute"),
   missing_weights_pct = TRUE,
   missing_rm = TRUE
@@ -910,13 +914,13 @@ conversion_m_long <- nuts_get_data(classification) %>%
   filter(!is.na(from_version)) %>%
   inner_join(filter(cross_walks, to_version == 2021),
              by = c("from_code", "from_version")) %>%
-  mutate(pop18 = round(pop18 / 1000, 2)) %>%
-  mutate_at(vars(NR, P_MHAB, pop18), list(~as.integer(.))) %>%
-  dplyr::select(from_code, to_code, from_version , to_version, NR, P_MHAB, pop18)
+  mutate(pop21 = round(pop21 / 1000, 2)) %>%
+  mutate_at(vars(NR, P_MHAB, pop21), list(~as.integer(.))) %>%
+  dplyr::select(from_code, to_code, from_version , to_version, NR, P_MHAB, pop21)
 
 convert_abs <- conversion_m_long %>%
   group_by(from_code, from_version) %>%
-  mutate(w = round(pop18 / sum(pop18), 2)) %>%
+  mutate(w = round(pop21 / sum(pop21), 2)) %>%
   ungroup()
 
 # Illustrate calculation
@@ -926,12 +930,12 @@ for(i in seq_along(from_code_vec)){
   print(i)
   convert_abs_sub = convert_abs %>%
   filter(from_code %in% from_code_vec[i])
-  calcs[[i]] = paste(convert_abs_sub$pop18, collapse = " + ")
+  calcs[[i]] = paste(convert_abs_sub$pop21, collapse = " + ")
 }
 calcs <- data.frame(from_code = from_code_vec, denom = unlist(calcs))
 convert_abs_calc <- convert_abs %>%
   inner_join(calcs) %>%
-  mutate(w = paste0(pop18, "/(", denom, ") = ", w)) %>%
+  mutate(w = paste0(pop21, "/(", denom, ") = ", w)) %>%
   dplyr::select(-denom, -P_MHAB)
 ```
 
@@ -985,7 +989,7 @@ To convert **relative** values, such as the number of patent applications per 10
 ```{r,  include = F}
 convert_rel <- conversion_m_long %>%
   group_by(to_code, to_version) %>%
-  summarise(P_MHAB_conv = round(sum(P_MHAB * pop18) / sum(pop18), 0)) %>%
+  summarise(P_MHAB_conv = round(sum(P_MHAB * pop21) / sum(pop21), 0)) %>%
   ungroup()
 
 # Illustrate calculation
@@ -996,9 +1000,9 @@ for (i in seq_along(to_code_vec)) {
   print(i)
   convert_abs_sub = convert_abs %>%
     filter(to_code %in% to_code_vec[i])
-  nums[[i]] = paste0(paste0(convert_abs_sub$pop18, " x ", convert_abs_sub$P_MHAB) ,
+  nums[[i]] = paste0(paste0(convert_abs_sub$pop21, " x ", convert_abs_sub$P_MHAB) ,
                      collapse = " + ")
-  denoms[[i]] = paste0(convert_abs_sub$pop18 , collapse = " + ")
+  denoms[[i]] = paste0(convert_abs_sub$pop21 , collapse = " + ")
 }
 
 calcs <- data.frame(to_code = to_code_vec,
@@ -1052,19 +1056,19 @@ conversion_m_long <- classification[["data"]] %>%
   filter(!is.na(from_version)) %>%
   inner_join(filter(cross_walks, to_version == 2021),
              by = c("from_code", "from_version")) %>%
-  mutate(pop18 = round(pop18 / 1000, 2)) %>%
-  mutate_at(vars(NR, P_MHAB, pop18), list( ~ as.integer(.))) %>%
-  dplyr::select(from_code, to_code, from_version, to_version, NR, P_MHAB, pop18)
+  mutate(pop21 = round(pop21 / 1000, 2)) %>%
+  mutate_at(vars(NR, P_MHAB, pop21), list( ~ as.integer(.))) %>%
+  dplyr::select(from_code, to_code, from_version, to_version, NR, P_MHAB, pop21)
 
 convert_rel <- conversion_m_long %>%
   group_by(from_code) %>%
-  summarise(pop18 = sum(pop18)) %>%
+  summarise(pop21 = sum(pop21)) %>%
   ungroup() %>%
   mutate(nuts_3 = from_code,
          nuts_2 = substr(from_code, 1, 4)) %>%
-  dplyr::select(nuts_3, nuts_2, pop18) %>%
+  dplyr::select(nuts_3, nuts_2, pop21) %>%
   inner_join(dplyr::select(pat_n3_nrmhab_12_no, nuts_3 = geo, P_MHAB)) %>%
-  mutate_at(vars(P_MHAB, pop18), list( ~ as.integer(.)))
+  mutate_at(vars(P_MHAB, pop21), list( ~ as.integer(.)))
 ```
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE}
@@ -1081,7 +1085,7 @@ The number of patent applications at the NUTS-2 level is computed by the **weigh
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE}
 converted_rel <- convert_rel %>%
   group_by(nuts_2) %>%
-  summarize(P_MHAB_conv = as.integer(sum(P_MHAB * pop18) / sum(pop18))) %>%
+  summarize(P_MHAB_conv = as.integer(sum(P_MHAB * pop21) / sum(pop21))) %>%
   ungroup()
 
 # Illustrate calculation
@@ -1091,9 +1095,9 @@ denoms = list()
 for (i in seq_along(nuts_2_vec)) {
   convert_rel_sub = convert_rel %>%
     filter(nuts_2 %in% nuts_2_vec[i])
-  nums[[i]] = paste0(paste0(convert_rel_sub$pop18, " x ", convert_rel_sub$P_MHAB) ,
+  nums[[i]] = paste0(paste0(convert_rel_sub$pop21, " x ", convert_rel_sub$P_MHAB) ,
                      collapse = " + ")
-  denoms[[i]] = paste0(convert_rel_sub$pop18 , collapse = " + ")
+  denoms[[i]] = paste0(convert_rel_sub$pop21 , collapse = " + ")
 }
 
 calcs <- data.frame(nuts_2 = nuts_2_vec,

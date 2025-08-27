@@ -9,11 +9,16 @@ Authors@R: c(
     person("Pueyo-Ros", "Josep", role = "rev",
            comment = "Josep reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1951446662"),
     person("Le Meur", "Nolwenn", role = "rev",
-           comment = "Nolwenn reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1961501137")
+           comment = "Nolwenn reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1961501137"),
+    person("Filipe", "Batista e Silva", role = "ctb",
+           comment = c(ORCID = "0000-0002-8752-6464")),
+    person("Carmelo", "Attardo", role = "ctb"),
+    person("Cristian", "Pigaiani", role = "ctb"),
+    person("Michele", "Tucci", role = "ctb")
   )
 Description: Motivated by changing administrative boundaries over time,
     the 'nuts' package can convert European regional data with NUTS codes
-    between versions (2006, 2010, 2013, 2016 and 2021) and levels (NUTS 1,
+    between versions (2006, 2010, 2013, 2016, 2021 and 2024) and levels (NUTS 1,
     NUTS 2 and NUTS 3). The package uses spatial interpolation as in Lam
     (1983) <doi:10.1559/152304083783914958> based on granular (100m x
     100m) area, population and land use data provided by the European
@@ -56,4 +61,4 @@ Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.2

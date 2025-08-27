@@ -31,6 +31,10 @@ Other contributors:
 \itemize{
   \item Pueyo-Ros Josep (Josep reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1951446662) [reviewer]
   \item Le Meur Nolwenn (Nolwenn reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1961501137) [reviewer]
+  \item Filipe Batista e Silva (\href{https://orcid.org/0000-0002-8752-6464}{ORCID}) [contributor]
+  \item Carmelo Attardo [contributor]
+  \item Cristian Pigaiani [contributor]
+  \item Michele Tucci [contributor]
 }
 
 }

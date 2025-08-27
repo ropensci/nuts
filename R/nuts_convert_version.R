@@ -6,7 +6,7 @@
 #' @param to_version String with desired NUTS version the function should convert to. Possible versions: `'2006'`, `'2010'`, `'2013'`, `'2016'` or `'2021'`
 #' @param variables Named character specifying variable names and variable type (`'absolute'` or `'relative'`) e.g. `c('var_name' = 'absolute')`
 #' @param weight String with name of the weight used for conversion. Can be area size `'areaKm'` (default),
-#' population in 2011 `'pop11'` or 2018 `'pop18'`, or artificial surfaces in 2012 `'artif_surf12'` and 2018 `'artif_surf18'`.
+#' population in 2011 `'pop11'` or 2021 `'pop21'`, artificial surfaces in 2012 `'artif_surf12'` and 2018 `'artif_surf18'` or residential built-up volume 2021 `'bu_vol'`.
 #' @param missing_rm Boolean that is FALSE by default. TRUE removes regional flows that depart from missing NUTS codes.
 #' @param missing_weights_pct Boolean that is FALSE by default. TRUE computes the percentage of missing weights due to missing departing NUTS regions for each variable.
 #' @param multiple_versions By default equal to `'error'`, when providing multiple NUTS versions within groups.
@@ -36,7 +36,7 @@
 #'   # Data now only varies at the NUTS code level
 #'   nuts_classify(nuts_code = "geo") %>%
 #'   nuts_convert_version(to_version = '2021',
-#'                        weight = 'pop18',
+#'                        weight = 'pop21',
 #'                        variables = c('values' = 'absolute'))
 #'
 #'
@@ -48,7 +48,7 @@
 #'   # Data now varies at the year x NUTS code level
 #'   nuts_classify(nuts_code = 'geo', group_vars = c('time')) %>%
 #'   nuts_convert_version(to_version = '2021',
-#'                        weight = 'pop18',
+#'                        weight = 'pop21',
 #'                        variables = c('values' = 'absolute'))
 #'
 #'
@@ -87,16 +87,16 @@ nuts_convert_version <-
     if (any(!(unlist(variables) %in% c("absolute", "relative"))))
       cli_abort("Variable type(s) not found. Use one of the following: 'absolute' or 'relative'.")
 
-    if ((!any(to_version %in% c("2006", "2010", "2013", "2016", "2021"))) | length(to_version) > 1)
+    if ((!any(to_version %in% c("2006", "2010", "2013", "2016", "2021", "2024"))) | length(to_version) > 1)
       cli_abort(
-        "Input {.arg to_version} invalid. Make sure it is a string and only one of the version years 2006, 2010, 2013, 2016 or 2021."
+        "Input {.arg to_version} invalid. Make sure it is a string and only one of the version years 2006, 2010, 2013, 2016, 2021 or 2024."
       )
 
     if (!is.null(weight)) {
-      if ((!any(weight %in% c("areaKm", "pop18", "pop11", "artif_surf18",
-                          "artif_surf12"))) | length(weight) >  1)
+      if ((!any(weight %in% c("areaKm", "pop21", "pop11", "artif_surf18",
+                          "artif_surf12", "bu_vol"))) | length(weight) >  1)
         cli_abort(
-          "Input {.arg weight} invalid. Must be either 'areaKm', 'pop11', 'pop18', 'artif_surf12' or 'artif_surf18'."
+          "Input {.arg weight} invalid. Must be either 'areaKm', 'pop11', 'pop21', 'artif_surf12', 'artif_surf18' or 'bu_vol'."
         )
     }
 

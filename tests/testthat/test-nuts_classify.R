@@ -140,7 +140,7 @@ test_that("Dimensions of within group overlap classification output when using g
                 group_vars = "time"
               )[[2]]
             ),
-            c(346, 4))
+            c(410, 4))
           })
 
 test_that("Names of NUTS version classified output when using groups", {

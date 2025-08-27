@@ -1,3 +1,11 @@
+# nuts (development version)
+
+* 2024 NUTS version now included
+* 2018 population weight replaced for 2021 population weight
+* 2021 residential built-up volume added as a weight
+* Fixed version 2016 NUTS-3 codes for UK
+
+
 # nuts 1.1.0
 
 * Fixed bug in nuts_aggregate in the check for missing nuts codes

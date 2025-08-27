@@ -10,41 +10,41 @@ library(cli)
 
 
 # # Load all shapes
-# shapes <- list.files("data-raw", pattern="*.shp", full.names=TRUE, recursive = TRUE)
-#
-# # Keep shapes with best resolution
-# shapes <- shapes[grepl("01M", shapes)]
-# #shapes <- shapes[1:3]
-#
-# # Get versions
-# versions <- str_extract(shapes, "20\\d{2}" )
-#
-# # Read all shapes
-# shapes <- map(shapes, \(x) read_sf(x))
-#
-# # Rename
-# shapes <- map(shapes, \(x) x %>%
-#   select(from_code = NUTS_ID, country = CNTR_CODE))
-#
-# # Add versions
-# shapes <- map(1:length(versions), \(i) shapes[[i]]  %>%
-#                 mutate(from_version = versions[i]))
-#
-# # Work only with selection
-# shapes <- map(shapes, \(x) x %>%
-#                 #filter(country %in% c("BE")) %>%
-#                 st_make_valid())
-#
-# # Aggregate polygons at correct level
-# shapes <- map(shapes, \(x) x %>%
-#                 group_by(from_code, country, from_version) %>%
-#                 summarise(geometry = st_union(geometry)) %>%
-#                 ungroup() %>%
-#                 st_make_valid())
-#
-# names(shapes) <- versions
-#
-# save(shapes, file = "data-raw/own-conversion-matrices/shapes.rda")
+shapes <- list.files("data-raw", pattern="*.shp", full.names=TRUE, recursive = TRUE)
+
+# Keep shapes with best resolution
+shapes <- shapes[grepl("01M", shapes)]
+#shapes <- shapes[1:3]
+
+# Get versions
+versions <- str_extract(shapes, "20\\d{2}" )
+
+# Read all shapes
+shapes <- map(shapes, \(x) read_sf(x))
+
+# Rename
+shapes <- map(shapes, \(x) x %>%
+  select(from_code = NUTS_ID, country = CNTR_CODE))
+
+# Add versions
+shapes <- map(1:length(versions), \(i) shapes[[i]]  %>%
+                mutate(from_version = versions[i]))
+
+# Work only with selection
+shapes <- map(shapes, \(x) x %>%
+                #filter(country %in% c("BE")) %>%
+                st_make_valid())
+
+# Aggregate polygons at correct level
+shapes <- map(shapes, \(x) x %>%
+                group_by(from_code, country, from_version) %>%
+                summarise(geometry = st_union(geometry)) %>%
+                ungroup() %>%
+                st_make_valid())
+
+names(shapes) <- versions
+
+save(shapes, file = "data-raw/own-conversion-matrices/shapes.rda")
 
 
 load("data-raw/own-conversion-matrices/shapes.rda")
