@@ -14,10 +14,11 @@ The package's main task is to convert data between all NUTS versions in use: 200
 
 ### Installation
 
-You can install the package from CRAN:
-
+You can install the current development version from GitHub:
+  
 ``` r
-install.packages("nuts")
+# install.packages("remotes")
+remotes::install_github("ropensci/nuts")
 ```
 
 ### Usage
