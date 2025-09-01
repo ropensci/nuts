@@ -10,11 +10,11 @@ Authors@R: c(
            comment = "Josep reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1951446662"),
     person("Le Meur", "Nolwenn", role = "rev",
            comment = "Nolwenn reviewed the package for rOpenSci, see https://github.com/ropensci/software-review/issues/623#issuecomment-1961501137"),
-    person("Filipe", "Batista e Silva", role = "ctb",
+    person("Filipe", "Batista e Silva", role = "aut",
            comment = c(ORCID = "0000-0002-8752-6464")),
-    person("Carmelo", "Attardo", role = "ctb"),
-    person("Cristian", "Pigaiani", role = "ctb"),
-    person("Michele", "Tucci", role = "ctb")
+    person("Carmelo", "Attardo", role = "aut"),
+    person("Cristian", "Pigaiani", role = "aut"),
+    person("Michele", "Tucci", role = "aut")
   )
 Description: Motivated by changing administrative boundaries over time,
     the 'nuts' package can convert European regional data with NUTS codes
