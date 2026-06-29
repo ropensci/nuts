@@ -141,7 +141,8 @@ nuts_classify <- function(data,
     # CLASSIFICATION POSSIBLE
     #-------------------------
     # Check for NUTS codes that cannot be classified
-    all_nuts_codes <- get("all_nuts_codes")
+    all_nuts_codes <- getExportedValue("nuts", "all_nuts_codes")
+
     codes_not_found <-
       data$from_code[!data$from_code %in% all_nuts_codes$code]
     if (length(codes_not_found) > 0) {

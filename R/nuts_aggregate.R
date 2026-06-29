@@ -106,7 +106,7 @@ nuts_aggregate <- function(data,
       cli_abort("NUTS codes already at level {to_level}.")
 
     # Check if NUTS codes can be converted
-    all_nuts_codes <- get("all_nuts_codes")
+    all_nuts_codes <- getExportedValue("nuts", "all_nuts_codes")
     check_nuts_codes <- data$from_code %in% all_nuts_codes$code
     nr_nuts_codes_recognized <-
       length(data$from_code[check_nuts_codes])
@@ -149,7 +149,7 @@ nuts_aggregate <- function(data,
       arrange(.data$from_level)
 
     # - Prepare stocks from cross_walks for subsetting and matching
-    cross_walks <- get("cross_walks")
+    cross_walks <- getExportedValue("nuts", "cross_walks")
     stocks <- cross_walks %>%
       # Subset to desired version
       filter(.data$from_version == from_version_string) %>%

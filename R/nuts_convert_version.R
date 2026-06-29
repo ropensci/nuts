@@ -115,7 +115,7 @@ nuts_convert_version <-
     data <- data[["data"]]
 
     # Check if NUTS codes can be converted
-    all_nuts_codes <- get("all_nuts_codes")
+    all_nuts_codes <- getExportedValue("nuts", "all_nuts_codes")
     check_nuts_codes <- data$from_code %in% all_nuts_codes$code
     nr_nuts_codes_recognized <-
       length(data$from_code[check_nuts_codes])
@@ -151,7 +151,8 @@ nuts_convert_version <-
 
     # Prepare join with cross walk such that missing NUTS codes within groups are kept
     # - Filter cross walks to desired version
-    cross_walks <- get("cross_walks")[cross_walks$to_version == to_version, ]
+    cross_walks <- getExportedValue("nuts", "cross_walks")
+    cross_walks <- cross_walks[cross_walks$to_version == to_version, ]
 
     # - Create group structure
     group_structure <- data %>%
