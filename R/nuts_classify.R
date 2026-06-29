@@ -271,7 +271,7 @@ nuts_classify <- function(data,
       inner_join(group_structure,
                  by = c("from_version", "from_level" ,  group_vars)) %>%
       anti_join(data,
-                by = c("from_code", "from_version", "from_level", group_vars)) %>%
+                by = c("from_code", "from_level", group_vars)) %>%
       select(c("from_code", "from_version", "from_level", group_vars)) %>%
       group_by(pick(c(
         "from_version", group_vars

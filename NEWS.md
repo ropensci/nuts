@@ -5,6 +5,7 @@
 * 2021 residential built-up volume added as a weight
 * Fixed version 2016 NUTS-3 codes for UK
 * Fixed `object 'all_nuts_codes' not found` and `object 'cross_walks' not found` errors when calling `nuts_classify()`, `nuts_convert_version()`, and related functions via `nuts::` without first attaching the package with `library(nuts)` (#9)
+* Fixed `missing_data` incorrectly reporting NUTS codes as missing when they were present in the input but classified under a different NUTS version than the row being checked (#11)
 
 
 # nuts 1.1.0
