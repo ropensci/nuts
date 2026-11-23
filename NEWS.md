@@ -1,4 +1,4 @@
-# nuts (development version)
+# nuts 1.2.0
 
 * 2024 NUTS version now included
 * 2018 population weight replaced for 2021 population weight
@@ -10,7 +10,7 @@
 
 # nuts 1.1.0
 
-* Fixed bug in nuts_aggregate in the check for missing nuts codes
+* Fixed bug in `nuts_aggregate` in the check for missing nuts codes
 
 
 # nuts 1.0.0
