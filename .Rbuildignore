@@ -12,3 +12,4 @@
 ^codemeta\.json$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^\.zenodo\.json$

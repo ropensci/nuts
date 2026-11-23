@@ -1,0 +1,44 @@
+{
+  "title": "nuts: Convert European Regional Data",
+  "description": "<p>The <code>nuts</code> R package converts European regional data with NUTS codes between versions (2006, 2010, 2013, 2016, 2021 and 2024) and levels (NUTS 1, NUTS 2 and NUTS 3) using spatial interpolation weights based on area, population, artificial surfaces and built-up volume.</p><p>This record also contains the underlying conversion tables described in the data descriptor \"Conversion Weights for European Regional NUTS Data\": 45 CSV files in the folder <code>data-raw/_JRC_NUTSconverter_Matrices_rel.2025.08</code>.</p>",
+  "upload_type": "software",
+  "license": "MIT",
+  "creators": [
+    {
+      "name": "Hennicke, Moritz",
+      "affiliation": "Maastricht University; Université libre de Bruxelles",
+      "orcid": "0000-0001-6811-1821"
+    },
+    {
+      "name": "Batista e Silva, Filipe",
+      "affiliation": "European Commission, Joint Research Centre",
+      "orcid": "0000-0002-8752-6464"
+    },
+    {
+      "name": "Pigaiani, Cristian",
+      "affiliation": "European Commission, Joint Research Centre"
+    },
+    {
+      "name": "Tucci, Michele",
+      "affiliation": "European Commission, Joint Research Centre"
+    },
+    {
+      "name": "Attardo, Carmelo",
+      "affiliation": "European Commission, Joint Research Centre"
+    },
+    {
+      "name": "Krause, Werner",
+      "affiliation": "University of Potsdam",
+      "orcid": "0000-0002-5069-7964"
+    }
+  ],
+  "keywords": [
+    "NUTS",
+    "regional data",
+    "Europe",
+    "spatial interpolation",
+    "conversion weights",
+    "administrative boundaries",
+    "R package"
+  ]
+}
