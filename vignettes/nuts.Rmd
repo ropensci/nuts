@@ -1161,13 +1161,6 @@ Bibtex Users:
 
 ```         
 @Manual{,
-  title = {NUTS converter},
-  author = {{Joint Research Centre}},
-  year = {2022},
-  url = {https://urban.jrc.ec.europa.eu/tools/nuts-converter},
-}
-
-@Manual{,
   title = {nuts: Convert European Regional Data},
   author = {Moritz Hennicke and Werner Krause and Filipe {Batista e Silva} and Cristian Pigaiani and Michele Tucci and Carmelo Attardo},
   year = {2026},
