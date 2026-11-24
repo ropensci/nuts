@@ -35,7 +35,7 @@ Console messages can be controlled with `rlang::local_options(nuts.verbose = "qu
 Please support the development of open science and data by citing us in your work:
 
 -   Hennicke M, Krause W, Batista e Silva F, Pigaiani C, Tucci M, Attardo C (2026). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10573056
-  <https://doi.org/10.5281/zenodo.10573056>, R package version 1.2.0, <https://docs.ropensci.org/nuts/>. 
+  <https://doi.org/10.5281/zenodo.10573056>, R package version 1.3.0, <https://docs.ropensci.org/nuts/>. 
 
 
 Bibtex Users:
@@ -45,7 +45,7 @@ Bibtex Users:
   title = {nuts: Convert European Regional Data},
   author = {Moritz Hennicke and Werner Krause and Filipe {Batista e Silva} and Cristian Pigaiani and Michele Tucci and Carmelo Attardo},
   year = {2026},
-  note = {R package version 1.2.0},
+  note = {R package version 1.3.0},
   url = {https://docs.ropensci.org/nuts/},
   doi = {10.5281/zenodo.10573056},
 }
