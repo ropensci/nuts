@@ -15,13 +15,64 @@ csv_files = list.files("data-raw/_JRC_NUTSconverter_Matrices_rel.2025.08", patte
 
 read_csv(csv_files[2])
 
+# PATCHES FOR VERSION 2016, see ropensci/nuts#7
+#-----------------------------------------------
+# In the 2016 version of the tables of release 2025.08, two regions of the
+# official NUTS 2016 classification (GISCO boundaries) are split in two:
+#
+# - Trøndelag (Norway, NUTS 3) is coded as NO061 and NO062 instead of NO060.
+#   The two-region geometry also assigns the former municipality of Rissa
+#   (about 621 km2) to NO062 instead of NO061, which creates a spurious flow
+#   NO061 <-> NO062 between versions 2013 and 2016.
+# - Northern Ireland (United Kingdom, NUTS 2) is coded as UKN0 and UKN1
+#   instead of UKN0.
+#
+# Fix: recode the wrong codes in the 2016 code column and sum the flows of the
+# rows that then share a pair of codes. Flows are additive, so this is exact.
+# The csv files supplied by the JRC are left untouched.
+patch_2016 <- function(d, old_codes, new_code) {
+  flow_cols <- c("areaKm", "pop11", "pop21", "artif_surf12", "artif_surf18", "bu_vol")
+  code_cols <- grep("^code_v\\d{4}$", names(d), value = TRUE)
+  stopifnot(length(code_cols) == 2, all(flow_cols %in% names(d)))
+
+  # Nothing to do for tables without version 2016 or without the region
+  if (!"code_v2016" %in% code_cols || !any(d$code_v2016 %in% old_codes)) {
+    return(d)
+  }
+
+  col_order <- names(d)
+  out <- d %>%
+    mutate(code_v2016 = if_else(code_v2016 %in% old_codes, new_code, code_v2016),
+           .row = row_number()) %>%
+    group_by(across(all_of(code_cols))) %>%
+    summarise(across(all_of(flow_cols), sum), .row = min(.row), .groups = "drop") %>%
+    mutate(uniqueID = paste0(.data[[code_cols[1]]], .data[[code_cols[2]]])) %>%
+    # keep the original row order, so that only the patched rows differ
+    arrange(.row) %>%
+    select(all_of(col_order))
+
+  # The patch must not create or destroy any area, population, etc.
+  stopifnot(isTRUE(all.equal(colSums(d[flow_cols]), colSums(out[flow_cols]))),
+            !any(out$code_v2016 %in% old_codes))
+  out
+}
+
 cross_walks <- list()
+n_patched <- c(NO = 0, UK = 0)
 for( i in seq_along(csv_files) ){
 
   #i = 1
 
   # read conversion matrix supplied by the JRC
   t <- read_csv( csv_files[i] )
+
+  # recode Trøndelag and Northern Ireland in version 2016 (ropensci/nuts#7)
+  n_before <- nrow(t)
+  t <- patch_2016(t, old_codes = c("NO061", "NO062"), new_code = "NO060")
+  n_patched["NO"] <- n_patched["NO"] + (nrow(t) < n_before)
+  n_before <- nrow(t)
+  t <- patch_2016(t, old_codes = "UKN1", new_code = "UKN0")
+  n_patched["UK"] <- n_patched["UK"] + (nrow(t) < n_before)
   from_year = str_extract( names(t)[1], "[0-9]{4}" )
   to_year = str_extract( names(t)[2], "[0-9]{4}" )
   # level = if (nchar(t[1, 1]) == 3) {
@@ -94,6 +145,12 @@ for( i in seq_along(csv_files) ){
   cross_walks[[i]] <- t4
 }
 
+# The Trøndelag patch applies to the five NUTS 3 tables that pair 2016 with
+# 2006, 2010, 2013, 2021 and 2024. The Northern Ireland patch applies to the
+# four NUTS 2 tables that pair 2016 with 2006, 2010, 2013 and 2021 (the United
+# Kingdom is not part of version 2024).
+stopifnot(n_patched["NO"] == 5, n_patched["UK"] == 4)
+
 # maintain in one df at the from-to classification and from-to code level
 cross_walks <- cross_walks %>%
   bind_rows() %>%
@@ -141,6 +198,61 @@ all_nuts_codes <- cross_walks %>%
 all_nuts_codes %>%
   group_by(version) %>%
   tally()
+
+# CHECK CODES AGAINST THE GISCO BOUNDARIES
+#------------------------------------------
+# GISCO publishes the attribute table of the NUTS boundaries of every version.
+# For the countries covered by the matrices, the codes of each version should
+# be identical to the codes in these tables. Requires an internet connection.
+gisco_url <- "https://gisco-services.ec.europa.eu/distribution/v2/nuts/csv/NUTS_AT_%s.csv"
+
+gisco_diff <- all_nuts_codes %>%
+  distinct(version) %>%
+  pull(version) %>%
+  map_dfr(function(v) {
+    matrices <- all_nuts_codes %>% filter(version == v) %>% pull(code)
+    gisco <- read_csv(sprintf(gisco_url, v), show_col_types = FALSE) %>%
+      # levels 1 to 3 of the countries covered by the matrices
+      filter(nchar(NUTS_ID) %in% 3:5,
+             substr(NUTS_ID, 1, 2) %in% substr(matrices, 1, 2)) %>%
+      pull(NUTS_ID)
+    bind_rows(
+      tibble(version = v, code = setdiff(matrices, gisco), only_in = "matrices"),
+      tibble(version = v, code = setdiff(gisco, matrices), only_in = "gisco")
+    )
+  }) %>%
+  arrange(version, code)
+
+# Deviations in release 2025.08 that are known and not (yet) fixed:
+# - ELZ, ELZZ, ELZZZ: extra-regio codes of Greece without GISCO geometry
+#   (336 km2, probably Mount Athos), see ropensci/nuts#7
+# - NO0B2: Svalbard is missing in the matrices
+gisco_diff_known <- tribble(
+  ~version, ~code, ~only_in,
+  "2013", "ELZ", "matrices",
+  "2013", "ELZZ", "matrices",
+  "2013", "ELZZZ", "matrices",
+  "2016", "ELZ", "matrices",
+  "2016", "ELZZ", "matrices",
+  "2016", "ELZZZ", "matrices",
+  "2021", "NO0B2", "gisco",
+  "2024", "NO0B2", "gisco"
+)
+
+# Known deviations
+gisco_diff %>% print(n = 50)
+
+# Any other deviation stops the script, e.g. Trøndelag and Northern Ireland
+# without the patches above
+gisco_diff_new <- anti_join(gisco_diff, gisco_diff_known,
+                            by = c("version", "code", "only_in"))
+if (nrow(gisco_diff_new) > 0) {
+  print(gisco_diff_new, n = 100)
+  stop("Codes differ from the GISCO boundaries, see above.")
+}
+# Known deviations that have disappeared should be removed from the list
+stopifnot(nrow(anti_join(gisco_diff_known, gisco_diff,
+                         by = c("version", "code", "only_in"))) == 0)
 
 # We might want to add aggregate gains and losses of each region:
 # changes <- cross_walks %>%

@@ -1,5 +1,10 @@
 # nuts (development version)
 
+* Fixed version 2016 NUTS-3 codes for Trøndelag (Norway): `NO061` and `NO062` are recoded to `NO060`, which also removes a spurious flow between the two former counties (#7)
+* Fixed version 2016 NUTS-2 codes for Northern Ireland (UK): `UKN1` is recoded to `UKN0` (#7)
+* `cross_walks` and `all_nuts_codes` rebuilt accordingly
+* NUTS codes of all versions are now checked against the GISCO boundaries when building the package data
+
 # nuts 1.2.0
 
 * 2024 NUTS version now included
