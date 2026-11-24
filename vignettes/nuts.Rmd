@@ -1146,16 +1146,14 @@ kable(convert_rel_calc, "html") %>%
 
 # Citation {#citation}
 
-Data converted with this package are the result of a spatial interpolation that relies on conversion tables built by the European Commission's Joint Research Centre (JRC). If you use the package or the converted data in a scientific article, report or any other publication, please cite the package and the JRC data:
-
--   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
+Data converted with this package are the result of a spatial interpolation that relies on conversion tables built by the European Commission's Joint Research Centre (JRC). If you use the package or the converted data in a scientific article, report or any other publication, please cite the package and the data:
 
 -   Hennicke M, Krause W, Batista e Silva F, Pigaiani C, Tucci M, Attardo C (2026). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10573056
   <https://doi.org/10.5281/zenodo.10573056>, R package version 1.2.0, <https://docs.ropensci.org/nuts/>. 
 
 We also recommend stating in the text that the data were spatially interpolated, for example:
 
-> Regional data were harmonized to the NUTS 2021 classification using the R package `nuts` (Hennicke et al. 2026), which interpolates values across changed regional boundaries using 2021 population weights provided by the Joint Research Centre (2022).
+> Regional data were harmonized to the NUTS 2021 classification using the R package `nuts` (Hennicke et al. 2026), which interpolates values across changed regional boundaries using 2021 population weights.
 
 Bibtex Users:
 
