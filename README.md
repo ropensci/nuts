@@ -32,30 +32,21 @@ Console messages can be controlled with `rlang::local_options(nuts.verbose = "qu
 
 ### Citation
 
-Please support the development of open science and data by citing the JRC and us in your work:
+Please support the development of open science and data by citing us in your work:
 
--   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
-
--   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10573056
-  <https://doi.org/10.5281/zenodo.10573056>, R package version 1.1.0, <https://docs.ropensci.org/nuts/>. 
+-   Hennicke M, Krause W, Batista e Silva F, Pigaiani C, Tucci M, Attardo C (2026). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10573056
+  <https://doi.org/10.5281/zenodo.10573056>, R package version 1.2.0, <https://docs.ropensci.org/nuts/>. 
 
 
 Bibtex Users:
 
 ```         
 @Manual{,
-  title = {NUTS converter},
-  author = {Joint Research Centre},
-  year = {2022},
-  url = {https://urban.jrc.ec.europa.eu/tools/nuts-converter},
-}
-
-@Manual{,
   title = {nuts: Convert European Regional Data},
-  author = {Moritz Hennicke and Werner Krause},
-  year = {2024},
-  note = {R package version 1.1.0},
+  author = {Moritz Hennicke and Werner Krause and Filipe {Batista e Silva} and Cristian Pigaiani and Michele Tucci and Carmelo Attardo},
+  year = {2026},
+  note = {R package version 1.2.0},
   url = {https://docs.ropensci.org/nuts/},
-  doi = "https://doi.org/10.5281/zenodo.10573056",
+  doi = {10.5281/zenodo.10573056},
 }
 ```

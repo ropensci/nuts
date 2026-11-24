@@ -55,7 +55,7 @@ knitr::include_graphics("logo.png")
 
 -   Efficient **offline conversion** of European regional data.
 
--   Conversion between five NUTS **versions**: 2006, 2010, 2013, 2016, 2021.
+-   Conversion between six NUTS **versions**: 2006, 2010, 2013, 2016, 2021, 2024.
 
 -   Conversion between three regional **levels**: NUTS-1, NUTS-2, NUTS-3.
 
@@ -94,6 +94,20 @@ Let's take the example of the German state Saxony in the figures below. Here, th
 A simple approach is to redistribute manure storage facilities proportional to the transferred area, assuming equal distribution of manure storages across space. In a dasymetric approach, we could make use of built-up area, assuming that manure deposits are more likely to be found close to residential areas and economic sites. In our example, *Leipzig* lost about 7.7% ($\frac{5574}{72360}$) of its built-up area. We re-calculate the number of manure storage facilities by computing 7.7% of *Leipzig's* manure storages $\frac{5574}{72360} * 700 = 54$, subtracting them from Leipzig and adding them to *Chemnitz*.
 
 See the Section [*Spatial interpolation in detail*](#method) for an in-depth description of the weighting procedure.
+
+## Converted values are estimates {#estimates}
+
+Whenever you call `nuts_convert_version()`, or `nuts_aggregate()` with relative values, you are conducting a **spatial interpolation**. Keep the following in mind when working with the output:
+
+-   Values of regions whose boundaries changed are **estimates, not observed data**. Only regions with unchanged boundaries keep their original values.
+
+-   The estimates rest on the assumption that the variable is distributed across space **like the chosen weight** within the affected regions. The default weight is area size (`areaKm`), which assumes a uniform distribution across space. Choose the weight that is most plausibly related to your variable, e.g. population for socio-economic outcomes, and consider checking whether your results are robust to alternative weights.
+
+-   The interpolation error grows with the share of a region that is reassigned and with the spatial concentration of the variable. Regions that are split are more affected than regions that are merged, since the sum over merged regions is exact for absolute values.
+
+-   The weights are measured at fixed points in time (e.g. population in 2011 or 2021). Converting data from years far away from these reference years adds further uncertainty.
+
+When you use converted data in a publication, please **report the conversion**: the source and target NUTS versions, the weight used, and how missing values were handled. Please also **cite the package and the underlying JRC data**, see [*Citation*](#citation).
 
 ```{r echo = FALSE, message=F, warning=F}
 library(nuts)
@@ -293,7 +307,7 @@ Below, you see that all data entries correspond to the 2016 NUTS version.
 nuts_get_data(pat_classified) # ...use helper function
 ```
 
-2. The second item provides an overview of the share of matching NUTS codes for each of the five existing NUTS versions. The **overlap** is computed within country and possibly additional groups (if provided via the `group_vars` argument).  
+2. The second item provides an overview of the share of matching NUTS codes for each of the six NUTS versions covered by the package. The **overlap** is computed within country and possibly additional groups (if provided via the `group_vars` argument).  
 
 ```{r}
 # pat_classified$versions_data # Call list item directly or...
@@ -311,7 +325,7 @@ nuts_get_missing(pat_classified) # ...use helper function
 
 ## Converting data between NUTS versions
 
-Once the NUTS version and level of the original data are identified, you can easily **convert** the data to any other **NUTS version**. Here is an example of transforming the 2013 Norwegian data to the 2021 NUTS version. Between 2016 and 2021, the number of NUTS-2 regions in Norway decreased by one as the borders of six regions were transformed. The maps below show the affected regions. 
+Once the NUTS version and level of the original data are identified, you can easily **convert** the data to any other **NUTS version**. Here is an example of transforming the 2012 Norwegian data from the 2016 to the 2021 NUTS version. Between 2016 and 2021, the number of NUTS-2 regions in Norway decreased by one as the borders of six regions were transformed. The maps below show the affected regions. 
 We provide the classified NUTS data, specify the target NUTS version for data transformation, and supply the variable containing the values to be interpolated. It is important to indicate the **variable type** in the named input-vector since the interpolation approaches differ for [absolute and relative values](https://urban.jrc.ec.europa.eu/static/sites/nutsconverter/2022_08_04_NUTS_converter.pdf).
 
 ```{r}
@@ -397,6 +411,19 @@ pat_n2_mhab_12_no
 ```{r}
 pat_converted
 ```
+
+Conversions are not restricted to adjacent versions. The same data can be converted directly to the most recent NUTS version 2024, or back to any earlier version:
+
+```{r}
+# Converting Data to 2024 NUTS version
+nuts_convert_version(
+  data = pat_classified,
+  to_version = "2024",
+  variables = c("values" = "relative")
+)
+```
+
+Remember that the converted values of regions with changed boundaries are [interpolated estimates](#estimates) that depend on the chosen `weight`. The default is area size; the alternatives are `'pop11'`, `'pop21'`, `'artif_surf12'`, `'artif_surf18'` and `'bu_vol'`.
 
 
 ### Converting multiple variables simultaneously
@@ -568,7 +595,7 @@ annotate_figure(gg, top = text_grob("Patent applications across Swedish NUTS reg
 
 ### Non-identified NUTS codes {#nuts_not_identified}
 
-If the input data contains NUTS codes that cannot be identified in any NUTS version, the output of `classify_nuts` lists all of these codes. All conversion procedures (`nuts_convert_version()` and `nuts_aggregate()`) will work as expected while ignoring values for these regions.
+If the input data contains NUTS codes that cannot be identified in any NUTS version, the output of `nuts_classify()` lists all of these codes. All conversion procedures (`nuts_convert_version()` and `nuts_aggregate()`) will work as expected while ignoring values for these regions.
 
 The example below classifies 2012 patent data from Denmark. The original EUROSTAT data contains the codes `DKZZZ` and `DKXXX`, which are not part of the conversion matrices. Codes ending with the letter Z refer to "[Extra-Regio](https://stat.gov.pl/en/regional-statistics/classification-of-territorial-units/classification-of-territorial-units-for-statistics-nuts/principles-for-creation-and-development-of-nuts-units/)" territories. These codes collect statistics for territories that cannot be attached to a certain region.[^3] Codes ending with the letter X refer to observations with unknown regions.
 
@@ -683,7 +710,7 @@ nuts_get_data(man_deit) %>%
 
 When proceeding to the conversion with either `nuts_convert_version()` or `nuts_aggregate()`, both functions will throw an error. For convenience, we added the option `multiple_versions` that subsets the supplied data to the dominant version within groups when specified with `most_frequent`. Hence, all codes from other, non-dominant versions are discarded. 
 
-Once we convert this data set, all NUTS regions unrecognized according to the 2006 (Germany) and 2021 (Italy) version are dropped automatically. 
+Once we convert this data set, all NUTS regions unrecognized according to the 2006 (Germany) and 2024 (Italy) version are dropped automatically. 
 
 ```{r}
 man_deit_converted <- nuts_convert_version(
@@ -701,7 +728,7 @@ man_deit_converted %>%
 
 # Spatial interpolation in detail {#method}
 
-This section describes the spatial interpolation procedure. We first cover the logic of conversion tables and then explain the methods used in the package for converting versions and levels.
+This section describes the spatial interpolation procedure, which follows the areal weighting logic of [Lam (1983)](https://doi.org/10.1559/152304083783914958). We first cover the logic of conversion tables and then explain the methods used in the package for converting versions and levels.
 
 ## Changes in administrative boundaries
 
@@ -787,7 +814,7 @@ kable(no_walks, "html") %>%
   scroll_box(width = "100%") 
 ```
 
-In addition to tracing the evolution of NUTS codes, the table contains **flows** of area, population and artificial surfaces between regions and versions. These flows were computed by the JRC with granular [100m x 100m] geographic data. The `ggalluvial` plot below visualizes the flows of area size between the NUTS-2 regions mapped above.
+In addition to tracing the evolution of NUTS codes, the table contains **flows** of area, population (2011 and 2021), artificial surfaces (2012 and 2018) and residential built-up volume (2021) between regions and versions. These flows were computed by the JRC with granular [100m x 100m] geographic data. The `ggalluvial` plot below visualizes the flows of area size between the NUTS-2 regions mapped above.
 
 ```{r,  echo=FALSE, message = FALSE, warning = FALSE, fig.cap= "Alluvial plot illustrating area size flows; Created using the [ggalluvial](https://corybrunson.github.io/ggalluvial/) package.", fig.alt ="The alluvial plot shows population flows from NUTS version 2016 to 2021."}
 # Add names
@@ -893,7 +920,7 @@ The following subsections describe the method used to convert absolute and relat
 
 ### Conversion of absolute values between versions
 
-In this example, we transform **absolute** values, the number of patent applications (`NR`) in Norway, from **version** 2016 to 2021, utilizing spatial interpolation based on the population distribution in 2018.
+In this example, we transform **absolute** values, the number of patent applications (`NR`) in Norway, from **version** 2016 to 2021, utilizing spatial interpolation based on the population distribution in 2021 (`weight = "pop21"`).
 
 The conversion employs the `cross_walks` table, which includes population flow data (expressed in thousands) between two NUTS-2 regions from the source version to the target version. The function joins the variable of interest, `NR`, which varies across the departing NUTS-2 codes (`from_code`). The function initially calculates a **weight** (`w`) equal to the population flow's share of the total population in the departing region in version 2016 (`from_code`):
 
@@ -984,7 +1011,7 @@ kable(converted_abs_calc, "html") %>%
 
 ### Conversion of relative values between versions
 
-To convert **relative** values, such as the number of patent applications per 1000 inhabitants, `nuts_convert_version()` departs again from the conversion table seen above. We focus on the variable `P_MHAB`, patent applications per one million inhabitants. The function summarizes these relative values by computing the **weighted average** with respect to 2018 population flows.
+To convert **relative** values, such as the number of patent applications per 1000 inhabitants, `nuts_convert_version()` departs again from the conversion table seen above. We focus on the variable `P_MHAB`, patent applications per one million inhabitants. The function summarizes these relative values by computing the **weighted average** with respect to 2021 population flows.
 
 ```{r,  include = F}
 convert_rel <- conversion_m_long %>%
@@ -1031,7 +1058,7 @@ The function `nuts_aggregate()` aggregates from lower to higher order **levels**
 
 ### Conversion of relative values between NUTS levels
 
-**Relative** values are aggregated in `nuts_aggregate()` by computing the weighted mean of all lower order regional **levels**. To convert, for example, the number of patent applications per one million inhabitants from NUTS-3 to NUTS-2, the function adds the population size in 2018.
+**Relative** values are aggregated in `nuts_aggregate()` by computing the weighted mean of all lower order regional **levels**. To convert, for example, the number of patent applications per one million inhabitants from NUTS-3 to NUTS-2, the function adds the population size in 2021.
 
 ```{r,  include = FALSE}
 pat_n3_nrmhab_12_no <- patents %>%
@@ -1117,31 +1144,34 @@ kable(convert_rel_calc, "html") %>%
   scroll_box(width = "100%")
 ```
 
-# Citation
+# Citation {#citation}
 
-Please support the development of open science and data by citing the JRC and us in your work:
+Data converted with this package are the result of a spatial interpolation that relies on conversion tables built by the European Commission's Joint Research Centre (JRC). If you use the package or the converted data in a scientific article, report or any other publication, please cite the package and the JRC data:
 
 -   Joint Research Centre (2022) NUTS converter. <https://urban.jrc.ec.europa.eu/tools/nuts-converter>
 
--   Hennicke M, Krause W (2024). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10573056
-  <https://doi.org/10.5281/zenodo.10573056>, R package version 1.1.0, <https://docs.ropensci.org/nuts/>. 
+-   Hennicke M, Krause W, Batista e Silva F, Pigaiani C, Tucci M, Attardo C (2026). _nuts: Convert European Regional Data_. doi:10.5281/zenodo.10573056
+  <https://doi.org/10.5281/zenodo.10573056>, R package version 1.2.0, <https://docs.ropensci.org/nuts/>. 
 
+We also recommend stating in the text that the data were spatially interpolated, for example:
+
+> Regional data were harmonized to the NUTS 2021 classification using the R package `nuts` (Hennicke et al. 2026), which interpolates values across changed regional boundaries using 2021 population weights provided by the Joint Research Centre (2022).
 
 Bibtex Users:
 
 ```         
 @Manual{,
   title = {NUTS converter},
-  author = {Joint Research Centre},
+  author = {{Joint Research Centre}},
   year = {2022},
   url = {https://urban.jrc.ec.europa.eu/tools/nuts-converter},
 }
 
 @Manual{,
   title = {nuts: Convert European Regional Data},
-  author = {Moritz Hennicke and Werner Krause},
-  year = {2024},
-  note = {R package version 1.1.0},
+  author = {Moritz Hennicke and Werner Krause and Filipe {Batista e Silva} and Cristian Pigaiani and Michele Tucci and Carmelo Attardo},
+  year = {2026},
+  note = {R package version 1.2.0},
   url = {https://docs.ropensci.org/nuts/},
   doi = {10.5281/zenodo.10573056},
 }

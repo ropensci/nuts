@@ -1,9 +1,16 @@
 bibentry(
   bibtype  = "Manual",
   title    = "nuts: Convert European Regional Data",
-  author   = "Moritz Hennicke, Werner Krause",
-  year     = "2024",
-  note 	   = "R package version 1.1.0",
+  author   = c(
+    person("Moritz", "Hennicke"),
+    person("Werner", "Krause"),
+    person("Filipe", "Batista e Silva"),
+    person("Cristian", "Pigaiani"),
+    person("Michele", "Tucci"),
+    person("Carmelo", "Attardo")
+  ),
+  year     = "2026",
+  note 	   = "R package version 1.2.0",
   url 	   = "https://docs.ropensci.org/nuts/",
-  doi      = "10.5281/zenodo.10573056",
+  doi      = "10.5281/zenodo.10573056"
 )
